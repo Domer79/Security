@@ -3,13 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
-using System.Data.Entity.Infrastructure; 
+using System.Data.Entity.Core.Objects;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Linq.Expressions;
-using TaxorgRepository.Interfaces;
-using TaxorgRepository.Models;
+using DataRepository.Interfaces;
+using DataRepository.Tools;
 
-namespace TaxorgRepository.Repositories
+namespace DataRepository
 {
     public abstract class RepositoryBase<T> : IRepository<T>, IQueryable<T>
 //        ICollection<T> 
@@ -83,7 +84,7 @@ namespace TaxorgRepository.Repositories
             if (item == null)
                 throw new ArgumentNullException("item");
 
-            var pi = typeof(T).GetProperties().FirstOrDefault(p => Attribute.IsDefined(p, typeof(KeyAttribute))) ?? Context.GetEntityInfo<T>().GetKeyInfo();
+            var pi = typeof(T).GetProperties().FirstOrDefault(p => Attribute.IsDefined(p, typeof(KeyAttribute))) ?? GetEntityInfo<T>().GetKeyInfo();
 
             return pi.GetValue(item, null);
         }
@@ -121,11 +122,69 @@ namespace TaxorgRepository.Repositories
             get { return _context ?? (_context = GetContext()); }
         }
 
+        protected abstract DbContext GetContext();
+
         #endregion
+
+        public ObjectContext GetObjectContext()
+        {
+            return ((IObjectContextAdapter) Context).ObjectContext;
+        }
 
         public string GetKeyName()
         {
-            return Context.GetKeyName<T>();
+            return GetKeyName<T>();
         }
+
+        public string GetKeyName<TEntity>() where TEntity : class
+        {
+            if (_entityInfos.Keys.Contains(typeof(TEntity)))
+                return ((EntityInfo<TEntity>)_entityInfos[typeof(TEntity)]).KeyName;
+
+            var entityInfo = new EntityInfo<TEntity>(Context);
+            _entityInfos.Add(typeof(TEntity), entityInfo);
+
+            return entityInfo.KeyName;
+        }
+
+        public Expression<Func<TEntity, TKey>> GetExpression<TEntity, TKey>() where TEntity : class
+        {
+            return GetExpression<TEntity, TKey>(null);
+        }
+
+        public Expression<Func<TEntity, TKey>> GetExpression<TEntity, TKey>(string columnName) where TEntity : class
+        {
+            if (_entityInfos.Keys.Contains(typeof(TEntity)))
+                return ((EntityInfo<TEntity>)_entityInfos[typeof(TEntity)]).GetMemberAccess<TKey>(columnName);
+
+            var entityInfo = new EntityInfo<TEntity>(Context);
+            _entityInfos.Add(typeof(TEntity), entityInfo);
+
+            return entityInfo.GetMemberAccess<TKey>(columnName);
+        }
+
+        public Expression<Func<TEntity, object>> GetExpression<TEntity>(string columnName) where TEntity : class
+        {
+            if (_entityInfos.Keys.Contains(typeof(TEntity)))
+                return ((EntityInfo<TEntity>)_entityInfos[typeof(TEntity)]).GetMemberAccess(columnName);
+
+            var entityInfo = new EntityInfo<TEntity>(Context);
+            _entityInfos.Add(typeof(TEntity), entityInfo);
+
+            return entityInfo.GetMemberAccess(columnName);
+        }
+
+        public EntityInfo<TEntity> GetEntityInfo<TEntity>() where TEntity : class
+        {
+            if (_entityInfos.Keys.Contains(typeof(TEntity)))
+                return ((EntityInfo<TEntity>)_entityInfos[typeof(TEntity)]);
+
+            var entityInfo = new EntityInfo<TEntity>(Context);
+            _entityInfos.Add(typeof(TEntity), entityInfo);
+
+            return entityInfo;
+        }
+
+        private readonly Dictionary<Type, object> _entityInfos = new Dictionary<Type, object>();
     }
 }

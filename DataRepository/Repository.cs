@@ -1,14 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaxorgRepository.Models;
+﻿using System.Data.Entity;
 
-namespace TaxorgRepository.Repositories
+namespace DataRepository
 {
     public class Repository<TEntity> : RepositoryBase<TEntity> 
         where TEntity : ModelBase
     {
+        private readonly DbContext _dbContext;
+
+        public Repository(DbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
+        protected override DbContext GetContext()
+        {
+            return _dbContext;
+        }
     }
 }

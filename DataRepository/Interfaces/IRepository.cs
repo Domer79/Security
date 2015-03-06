@@ -1,8 +1,6 @@
-using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 
-namespace TaxorgRepository.Interfaces
+namespace DataRepository.Interfaces
 {
     public interface IRepository<T> where T : class
     {

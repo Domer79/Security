@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 
-namespace TaxorgRepository.Models
+namespace DataRepository
 {
     public abstract class ModelBase
     {
