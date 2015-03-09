@@ -9,13 +9,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataRepository", "DataRepos
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interfaces", "Interfaces\Interfaces.csproj", "{BB755FD0-EF16-40E0-8466-FA851BCCDE12}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecurityDataModel", "SecurityDataModel\SecurityDataModel.csproj", "{970B9170-F1B0-4AE3-B257-F6848B58768A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecurityDataModel", "DataModel\SecurityDataModel.csproj", "{970B9170-F1B0-4AE3-B257-F6848B58768A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemTools", "..\Taxorg\WebTools\SystemTools.csproj", "{8FB401C3-7285-4F17-A192-41F6CB77FC61}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Security.TestProject", "Security.TestProject\Security.TestProject.csproj", "{41D1343A-73BD-4A2B-A455-D0269C221DCF}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSecurity", "WebSecurity\WebSecurity.csproj", "{1268F61D-55E0-4428-83A5-F543C929AC6D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,10 +45,6 @@ Global
 		{41D1343A-73BD-4A2B-A455-D0269C221DCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{41D1343A-73BD-4A2B-A455-D0269C221DCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{41D1343A-73BD-4A2B-A455-D0269C221DCF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1268F61D-55E0-4428-83A5-F543C929AC6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1268F61D-55E0-4428-83A5-F543C929AC6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1268F61D-55E0-4428-83A5-F543C929AC6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1268F61D-55E0-4428-83A5-F543C929AC6D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

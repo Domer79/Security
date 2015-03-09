@@ -7,6 +7,7 @@ using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Linq.Expressions;
+using DataRepository.Exceptions;
 using DataRepository.Interfaces;
 using DataRepository.Tools;
 
@@ -23,6 +24,12 @@ namespace DataRepository
 
         public virtual void SaveChanges()
         {
+            var validationErrors = Context.GetValidationErrors();
+            
+            foreach (var validationError in validationErrors.SelectMany(entityValidationResult => entityValidationResult.ValidationErrors))
+            {
+                throw new RepositoryValidationException(validationError.ErrorMessage, validationError.PropertyName);
+            }
             if (HasChanges)
                 Context.SaveChanges();
         }
@@ -47,9 +54,25 @@ namespace DataRepository
             return Set.Find(GetKeyValue(editObject));
         }
 
+        public T Find(params object[] keys)
+        {
+            if (keys == null) 
+                throw new ArgumentNullException("keys");
+
+            if (keys.Length == 0)
+                throw new ArgumentNullException("keys");
+
+            return Set.Find(keys);
+        }
+
         public T Create()
         {
             return Set.Create();
+        }
+
+        public virtual IQueryable<T> Include<TProperty>(Expression<Func<T, TProperty>> path)
+        {
+            return Set.Include(path);
         }
 
         public virtual void InsertOrUpdate(T item)
@@ -117,7 +140,7 @@ namespace DataRepository
             get { return ((IQueryable) Set).Provider; }
         }
 
-        protected DbContext Context
+        public DbContext Context
         {
             get { return _context ?? (_context = GetContext()); }
         }
