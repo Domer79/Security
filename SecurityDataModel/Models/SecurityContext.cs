@@ -27,6 +27,7 @@ namespace SecurityDataModel.Models
         public virtual DbSet<RoleOfMember> RoleOfMembers { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserGroupsDetail> UserGroupsDetails { get; set; }
+        public virtual DbSet<Member> Members { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -38,6 +39,7 @@ namespace SecurityDataModel.Models
             modelBuilder.Configurations.Add(new RoleOfMemberConfiguration());
             modelBuilder.Configurations.Add(new UserConfiguration());
             modelBuilder.Configurations.Add(new UserGroupsDetailConfiguration());
+            modelBuilder.Configurations.Add(new MemberConfiguration());
             SecObjectDbSetInit();
         }
 

@@ -33,20 +33,40 @@ namespace SecurityDataModel.Repositories
             _repo.SaveChanges();
         }
 
-        public void Edit(IUser user)
+        public void Edit(string login, string displayName, string email, string usersid)
         {
-            var usr = CheckUser(user.Login, user.Email, user.Usersid, () =>
+            var user = _repo.FirstOrDefault(u => u.Login == login || u.Usersid == usersid);
+
+            if (user == null)
+                throw new MemberNotFoundException(login, displayName, email, usersid);
+
+            Edit(user.IdUser, login, displayName, email, usersid);
+        }
+
+        public void Edit(int idUser, string login, string displayName, string email, string usersid)
+        {
+            var usr = CheckUser(login, email, usersid, () =>
             {
-                var findUser = _repo.Find(user.IdUser);
+                var findUser = _repo.Find(idUser);
                 if (findUser == null)
-                    throw new MemberNotFoundException(user);
+                    throw new MemberNotFoundException(idUser, login, displayName, email, usersid);
                 return findUser;
             });
 
-            usr.DisplayName = user.DisplayName;
-            usr.Email = user.Email;
+            usr.DisplayName = displayName;
+            usr.Email = email;
 
             _repo.SaveChanges();
+        }
+
+        public void Delete(string loginOrSid)
+        {
+            var user = _repo.FirstOrDefault(u => u.Login == loginOrSid || u.Usersid == loginOrSid);
+
+            if (user == null)
+                throw new MemberNotFoundException("Login: ", loginOrSid);
+
+            Delete(user.IdUser);
         }
 
         public void Delete(int idUser)

@@ -29,34 +29,44 @@ namespace SecurityDataModel.Repositories
             _repo.SaveChanges();
         }
 
-        public void Edit(IRole role)
+        public void Edit(string roleName, string newRoleName)
         {
-            var r = CheckAndFindRole(role);
+            var role = _repo.FirstOrDefault(r => r.RoleName == roleName);
+            if (role == null)
+                throw new RoleNotFoundException(roleName);
 
-            r.RoleName = role.RoleName;
-
+            role.RoleName = newRoleName;
             _repo.SaveChanges();
         }
 
-        public void Delete(IRole role)
+        public void Edit(int idRole, string roleName)
         {
-            var r = CheckAndFindRole(role);
-            _repo.Delete(r);
+            var role = _repo.Find(idRole);
+            if (role == null)
+                throw new RoleNotFoundException(idRole, roleName);
+
+            role.RoleName = roleName;
+            _repo.SaveChanges();
         }
 
-        private Role CheckAndFindRole(IRole role)
+        public void Delete(string roleName)
         {
+            var role = _repo.FirstOrDefault(r => r.RoleName == roleName);
+
             if (role == null)
-                throw new ArgumentNullException("role");
+                throw new RoleNotFoundException(roleName);
 
-            if (role.IdRole == default(int))
-                throw new RoleIsNotValidException("Неправильный идентификатор роли");
+            Delete(role.IdRole);
+        }
 
-            var r = _repo.Find(role.IdRole);
-            if (r == null)
-                throw new ModelNotFoundException(role.RoleName);
+        public void Delete(int idRole)
+        {
+            var role = _repo.Find(idRole);
+            if (role == null)
+                throw new RoleNotFoundException(idRole);
 
-            return r;
+            _repo.Delete(role);
+            _repo.SaveChanges();
         }
 
         public IQueryable<IRole> GetQueryableCollection()

@@ -19,38 +19,56 @@ namespace SecurityDataModel.Repositories
             _repo = new Repository<Group>(context);
         }
 
-        public void Add(string name, string description = null)
+        public void Add(string groupName, string description = null)
         {
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentException("name");
+            if (string.IsNullOrEmpty(groupName))
+                throw new ArgumentException("groupName");
 
-            if (_repo.Any(g => g.GroupName == name))
+            if (_repo.Any(g => g.GroupName == groupName))
                 throw new GroupExistsException();
 
-            _repo.InsertOrUpdate(new Group {GroupName = name, Description = description});
+            _repo.InsertOrUpdate(new Group {GroupName = groupName, Description = description});
             _repo.SaveChanges();
         }
 
-        public void Edit(int idGroup, string name, string description)
+        public void Edit(string groupName, string newGroupName, string description)
         {
-            if(string.IsNullOrEmpty(name))
-                throw new ArgumentException("name");
+            var group = _repo.FirstOrDefault(g => g.GroupName == groupName);
+            if (group == null)
+                throw new MemberNotFoundException("[Is group]", groupName, "newGroupName=" + newGroupName, description);
+
+            Edit(group.IdGroup, newGroupName, description);
+        }
+
+        public void Edit(int idGroup, string groupName, string description)
+        {
+            if(string.IsNullOrEmpty(groupName))
+                throw new ArgumentException("groupName");
 
             var group = _repo.Find(idGroup);
             if (group == null)
-                throw new MemberNotFoundException(idGroup, name, description);
+                throw new MemberNotFoundException("[Is group]", idGroup, groupName, description);
 
-            group.GroupName = name;
+            group.GroupName = groupName;
             group.Description = description;
 
             _repo.SaveChanges();
+        }
+
+        public void Delete(string groupName)
+        {
+            var group = _repo.FirstOrDefault(g => g.GroupName == groupName);
+            if (group == null)
+                throw new MemberNotFoundException("[Is group]", groupName);
+            
+            Delete(group.IdGroup);
         }
 
         public void Delete(int idGroup)
         {
             var group = _repo.Find(idGroup);
             if (group == null)
-                throw new MemberNotFoundException(idGroup);
+                throw new MemberNotFoundException("Is group", idGroup);
 
             _repo.Delete(group);
             _repo.SaveChanges();

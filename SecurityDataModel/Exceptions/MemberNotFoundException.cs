@@ -22,7 +22,7 @@ namespace SecurityDataModel.Exceptions
         }
 
         public MemberNotFoundException(params object[] args)
-            : base(string.Format("Участник безопасности не найден: {0}", args.SplitReverse()))
+            : base("Участник безопасности не найден: {0}", args.SplitReverse())
         {
         }
     }

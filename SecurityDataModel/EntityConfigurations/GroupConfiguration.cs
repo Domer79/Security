@@ -10,7 +10,7 @@ namespace SecurityDataModel.EntityConfigurations
             Property(e => e.GroupName)
                 .IsUnicode(false);
 
-            Property(e => e.GroupDescription)
+            Property(e => e.Description)
                 .IsUnicode(false);
 
             MapToStoredProcedures(InsertConfiguration);

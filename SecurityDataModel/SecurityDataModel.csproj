@@ -63,6 +63,7 @@
     <Compile Include="EntityConfigurations\BaseConfiguration.cs" />
     <Compile Include="EntityConfigurations\GrantConfiguration.cs" />
     <Compile Include="EntityConfigurations\GroupConfiguration.cs" />
+    <Compile Include="EntityConfigurations\MemberConfiguration.cs" />
     <Compile Include="EntityConfigurations\RoleConfiguration.cs" />
     <Compile Include="EntityConfigurations\RoleOfMemberConfiguration.cs" />
     <Compile Include="EntityConfigurations\SecObjectConfiguration.cs" />
@@ -77,8 +78,10 @@
     <Compile Include="Exceptions\ModelNotFoundException.cs" />
     <Compile Include="Exceptions\RoleIsNotValidException.cs" />
     <Compile Include="Exceptions\MemberExistsException.cs" />
+    <Compile Include="Exceptions\RoleNotFoundException.cs" />
     <Compile Include="Exceptions\UserGroupExistsException.cs" />
     <Compile Include="Models\AccessType.cs" />
+    <Compile Include="Models\Member.cs" />
     <Compile Include="Models\Role.cs" />
     <Compile Include="Models\Grant.cs" />
     <Compile Include="Models\Group.cs" />

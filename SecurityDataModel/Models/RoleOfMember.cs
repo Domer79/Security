@@ -17,7 +17,7 @@ namespace SecurityDataModel.Models
         public string RoleName { get; set; }
 
         [Key]
-        [Column(Order = 2)]
+        [Column(Order = 1)]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int IdMember { get; set; }
 
