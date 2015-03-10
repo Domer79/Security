@@ -26,6 +26,9 @@ namespace SecurityDataModel.Repositories
         {
             var user = CheckUser(login, email, usersid, () => new User {Login = login, DisplayName = displayName, Email = email, Usersid = usersid});
 
+            if (_repo.Any(u => u.Login == login))
+                throw new MemberExistsException();
+
             _repo.InsertOrUpdate(user);
             _repo.SaveChanges();
         }

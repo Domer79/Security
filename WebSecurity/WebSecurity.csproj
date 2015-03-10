@@ -51,6 +51,7 @@
     <Compile Include="Data\WebMvcSecurityContext.cs" />
     <Compile Include="Data\TableObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\GroupRepository.cs" />
     <Compile Include="Repositories\RoleOfMemberRepository.cs" />
     <Compile Include="Repositories\RoleRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />

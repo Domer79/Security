@@ -65,6 +65,10 @@
       <Project>{8FB401C3-7285-4F17-A192-41F6CB77FC61}</Project>
       <Name>SystemTools</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Interfaces\Interfaces.csproj">
+      <Project>{BB755FD0-EF16-40E0-8466-FA851BCCDE12}</Project>
+      <Name>Interfaces</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SecurityDataModel\SecurityDataModel.csproj">
       <Project>{970B9170-F1B0-4AE3-B257-F6848B58768A}</Project>
       <Name>SecurityDataModel</Name>

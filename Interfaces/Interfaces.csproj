@@ -50,6 +50,7 @@
     <Compile Include="IRoleRepository.cs" />
     <Compile Include="ISecObject.cs" />
     <Compile Include="IUser.cs" />
+    <Compile Include="IUserGroupsDetail.cs" />
     <Compile Include="IUserRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

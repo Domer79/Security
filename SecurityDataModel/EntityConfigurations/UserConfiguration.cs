@@ -19,8 +19,6 @@ namespace SecurityDataModel.EntityConfigurations
             Property(e => e.Usersid)
                 .IsUnicode(false);
 
-//            Property(e => e.login).HasColumnAnnotation(IndexAnnotation.AnnotationName, new IndexAttribute())
-
             MapToStoredProcedures(InsertConfiguration);
             MapToStoredProcedures(UpdateConfiguration);
             MapToStoredProcedures(DeleteConfiguration);

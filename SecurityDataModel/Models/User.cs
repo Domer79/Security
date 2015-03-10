@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using DataRepository;
@@ -6,7 +7,7 @@ using Interfaces;
 namespace SecurityDataModel.Models
 {
     [Table("sec.Users")]
-    public class User : ModelBase, IUser
+    public class User : ModelBase, IUser, IMember
     {
         [Key]
         [Column(Order = 0)]

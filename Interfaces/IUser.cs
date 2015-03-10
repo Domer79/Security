@@ -1,6 +1,6 @@
 namespace Interfaces
 {
-    public interface IUser : IMember
+    public interface IUser
     {
         int IdUser { get; set; }
 

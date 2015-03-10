@@ -1,9 +1,10 @@
 using System;
+using SystemTools.Extensions;
 using Interfaces;
 
 namespace SecurityDataModel.Exceptions
 {
-    public class MemberNotFoundException : Exception
+    public class MemberNotFoundException : BaseException
     {
         /// <summary>
         /// ¬ыполн€ет инициализацию нового экземпл€ра класса <see cref="T:System.Exception"/>, использу€ указанное сообщение об ошибке.
@@ -18,6 +19,11 @@ namespace SecurityDataModel.Exceptions
             : this(string.Format("”частник безопасности IdMember = {0}, Name = {1} не найден", member.IdMember, member.Name))
         {
             
+        }
+
+        public MemberNotFoundException(params object[] args)
+            : base(string.Format("”частник безопасности не найден: {0}", args.SplitReverse()))
+        {
         }
     }
 }
