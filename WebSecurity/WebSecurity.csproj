@@ -54,6 +54,7 @@
     <Compile Include="Repositories\GroupRepository.cs" />
     <Compile Include="Repositories\RoleOfMemberRepository.cs" />
     <Compile Include="Repositories\RoleRepository.cs" />
+    <Compile Include="Repositories\SecurityRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
     <Compile Include="Tests\Test1.cs" />
   </ItemGroup>
