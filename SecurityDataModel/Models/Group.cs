@@ -14,6 +14,7 @@ namespace SecurityDataModel.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int IdGroup { get; set; }
 
+        [Required]
         [StringLength(200)]
         [Column("name")]
         public string GroupName { get; set; }

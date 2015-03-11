@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,53 +10,75 @@ using SecurityDataModel.Models;
 
 namespace SecurityDataModel.Repositories
 {
-    public interface IUserGroupsDetailRepository : IQueryableCollection<IUserGroupsDetail>
-    {
-        void AddToGroup(int idUser, int idGroup);
-        void DeleteFromGroup(int idUser, int idGroup);
-    }
-
     public class UserGroupsDetailRepository : IUserGroupsDetailRepository
     {
-        private readonly Repository<UserGroupsDetail> _repo;
+        private readonly UserGroupsDetailRepositoryLocal _repo;
         private readonly Repository<User> _userRepo;
         private readonly Repository<Group> _groupRepo;
 
-
         public UserGroupsDetailRepository(SecurityContext context)
         {
-            _repo = new Repository<UserGroupsDetail>(context);
+            _repo = new UserGroupsDetailRepositoryLocal(context);
             _userRepo = new Repository<User>(context);
             _groupRepo = new Repository<Group>(context);
         }
 
         public void AddToGroup(int idUser, int idGroup)
         {
-            if (!_userRepo.Any(u => u.IdUser == idUser))
+            var user = _userRepo.FirstOrDefault(u => u.IdUser == idUser);
+            if (user == null)
                 throw new MemberNotFoundException("IdUser", idUser);
 
-            if (!_groupRepo.Any(g => g.IdGroup == idGroup))
+            var group = _groupRepo.FirstOrDefault(g => g.IdGroup == idGroup);
+            if (group == null)
                 throw new MemberNotFoundException("IdGroup", idGroup);
 
-            var ug = _repo.Find(idUser, idGroup);
-            if (ug != null)
-                throw new UserGroupExistsException("Пользователь уже имеется в этой группе. IdUser={0}, IdGroup={1}", idUser, idGroup);
+            AddToGroup(user, group);
+        }
 
-            _repo.InsertOrUpdate(new UserGroupsDetail{IdUser = idUser, IdGroup = idGroup});
+        public void AddToGroup(IUser user, IGroup group)
+        {
+            if (user == null) 
+                throw new ArgumentNullException("user");
+
+            if (group == null) 
+                throw new ArgumentNullException("group");
+
+            var ug = _repo.Find(user.IdUser, group.IdGroup);
+            if (ug != null)
+                throw new UserGroupExistsException("Пользователь уже имеется в этой группе. IdUser={0}, IdGroup={1}", user.IdUser, group.IdGroup);
+
+            _repo.InsertOrUpdate(new UserGroupsDetail(){IdUser = user.IdUser, IdGroup = group.IdGroup});
             _repo.SaveChanges();
         }
 
         public void DeleteFromGroup(int idUser, int idGroup)
         {
-            if (!_userRepo.Any(u => u.IdUser == idUser))
+            var user = _userRepo.FirstOrDefault(u => u.IdUser == idUser);
+            if (user == null)
                 throw new MemberNotFoundException("IdUser", idUser);
 
-            if (!_groupRepo.Any(g => g.IdGroup == idGroup))
+            var group = _groupRepo.FirstOrDefault(g => g.IdGroup == idGroup);
+            if (group == null)
                 throw new MemberNotFoundException("IdGroup", idGroup);
 
-            var ug = _repo.Find(idUser, idGroup);
-            if (ug != null)
-                throw new UserGroupExistsException("Пользователь уже имеется в этой группе. IdUser={0}, IdGroup={1}", idUser, idGroup);
+            DeleteFromGroup(user, group);
+        }
+
+        public void DeleteFromGroup(IUser user, IGroup group)
+        {
+            if (user == null)
+                throw new ArgumentNullException("user");
+
+            if (@group == null)
+                throw new ArgumentNullException("group");
+
+            var ug = _repo.Find(user.IdUser, group.IdGroup);
+            if (ug == null)
+                throw new UserGroupNotFoundException("Отсутствует пользователь в группе или сама группа. IdUser={0}, IdGroup={1}", user.IdUser, group.IdGroup);
+
+            _repo.Delete(ug);
+            _repo.SaveChanges();
         }
 
         public IQueryable<IUserGroupsDetail> GetQueryableCollection()

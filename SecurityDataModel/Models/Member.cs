@@ -11,6 +11,7 @@ namespace SecurityDataModel.Models
         [Key]
         public int IdMember { get; set; }
 
+        [Required]
         [Column("name")]
         public string MemberName { get; set; }
 

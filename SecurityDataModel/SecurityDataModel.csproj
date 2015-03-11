@@ -69,9 +69,11 @@
     <Compile Include="EntityConfigurations\SecObjectConfiguration.cs" />
     <Compile Include="EntityConfigurations\UserConfiguration.cs" />
     <Compile Include="EntityConfigurations\UserGroupsDetailConfiguration.cs" />
+    <Compile Include="Exceptions\AccessTypeDeleteException.cs" />
+    <Compile Include="Exceptions\AccessTypeNotFoundException.cs" />
+    <Compile Include="Exceptions\AccessTypeValidException.cs" />
     <Compile Include="Exceptions\BaseException.cs" />
     <Compile Include="Exceptions\GroupExistsException.cs" />
-    <Compile Include="Exceptions\IGroupRepository.cs" />
     <Compile Include="Exceptions\InvalidSecObjectPropertyType.cs" />
     <Compile Include="Exceptions\MemberNotFoundException.cs" />
     <Compile Include="Exceptions\MemberIsNotValidException.cs" />
@@ -80,6 +82,7 @@
     <Compile Include="Exceptions\MemberExistsException.cs" />
     <Compile Include="Exceptions\RoleNotFoundException.cs" />
     <Compile Include="Exceptions\UserGroupExistsException.cs" />
+    <Compile Include="Exceptions\UserGroupNotFoundException.cs" />
     <Compile Include="Models\AccessType.cs" />
     <Compile Include="Models\Member.cs" />
     <Compile Include="Models\Role.cs" />
@@ -91,11 +94,15 @@
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserGroupsDetail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\AccessTypeRepository.cs" />
+    <Compile Include="Repositories\GrantRepository.cs" />
     <Compile Include="Repositories\GroupRepository.cs" />
     <Compile Include="Repositories\RoleOfMemberRepository.cs" />
+    <Compile Include="Repositories\RoleOfMemberRepositoryLocal.cs" />
     <Compile Include="Repositories\RoleRepository.cs" />
     <Compile Include="Repositories\SecurityRepositoryBase.cs" />
     <Compile Include="Repositories\UserGroupsDetailRepository.cs" />
+    <Compile Include="Repositories\UserGroupsDetailRepositoryLocal.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
   </ItemGroup>
   <ItemGroup>

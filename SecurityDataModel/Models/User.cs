@@ -14,6 +14,7 @@ namespace SecurityDataModel.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int IdUser { get; set; }
 
+        [Required]
         [StringLength(200)]
         public string Login { get; set; }
 

@@ -1,20 +1,29 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity.Infrastructure;
+using DataRepository;
+using Interfaces;
 
 namespace SecurityDataModel.Models
 {
     [Table("sec.AccessType")]
-    public partial class AccessType
+    public class AccessType : ModelBase, IAccessType
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int idAccessType { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int IdAccessType { get; set; }
 
         [Required]
         [StringLength(300)]
-        public string name { get; set; }
+        [Column("name")]
+        public string AccessName { get; set; }
 
         public HashSet<Grant> Grants { get; set; }
+
+        public override string ToString()
+        {
+            return AccessName;
+        }
     }
 }

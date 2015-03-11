@@ -21,6 +21,7 @@ namespace DataRepository
 //        private readonly TaxorgContext _context = TaxorgContext.Context;
         private DbContext _context;
         private DbSet<T> _set;
+        private readonly Dictionary<Type, object> _entityInfos = new Dictionary<Type, object>();
 
         public virtual void SaveChanges()
         {
@@ -208,6 +209,9 @@ namespace DataRepository
             return entityInfo;
         }
 
-        private readonly Dictionary<Type, object> _entityInfos = new Dictionary<Type, object>();
+        public void ExecuteNonQuery(string query, params object[] parameters)
+        {
+            Context.Database.ExecuteSqlCommand(query, parameters);
+        }
     }
 }

@@ -9,7 +9,7 @@ namespace SecurityDataModel.EntityConfigurations
         /// </summary>
         public AccessTypeConfiguration()
         {
-            Property(e => e.name)
+            Property(e => e.AccessName)
                 .IsUnicode(false);
 
             HasMany(e => e.Grants).WithRequired(e => e.AccessType);

@@ -1,6 +1,4 @@
-﻿using Interfaces;
-
-namespace SecurityDataModel.Exceptions
+namespace Interfaces
 {
     public interface IGroupRepository : IQueryableCollection<IGroup>
     {

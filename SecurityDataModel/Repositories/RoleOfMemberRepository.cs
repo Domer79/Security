@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data.Entity;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,22 +9,17 @@ using SecurityDataModel.Models;
 
 namespace SecurityDataModel.Repositories
 {
-    public class RoleOfMemberRepository : RepositoryBase<RoleOfMember>, IRoleOfMemberRepository
+    public class RoleOfMemberRepository : IRoleOfMemberRepository
     {
         private readonly Repository<Member> _repoMember;
         private readonly Repository<Role> _repoRole;
-        private readonly SecurityContext _localContext;
+        private readonly RoleOfMemberRepositoryLocal _repo;
 
         public RoleOfMemberRepository(SecurityContext context)
         {
-            _localContext = context;
+            _repo = new RoleOfMemberRepositoryLocal(context);
             _repoMember = new Repository<Member>(context);
             _repoRole = new Repository<Role>(context);
-        }
-
-        public sealed override void InsertOrUpdate(RoleOfMember item)
-        {
-            Set.Add(item);
         }
 
         public void AddMemberToRole(int idMember, int idRole)
@@ -44,8 +38,8 @@ namespace SecurityDataModel.Repositories
         public void AddMemberToRole(IMember member, IRole role)
         {
             var roleOfMember = CheckMemberRole(member, role, () => new RoleOfMember() { IdMember = member.IdMember, IdRole = role.IdRole });
-            InsertOrUpdate(roleOfMember);
-            SaveChanges();
+            _repo.InsertOrUpdate(roleOfMember);
+            _repo.SaveChanges();
         }
 
         public async void AddMemberToRoleAsync(IMember member, IRole role)
@@ -59,19 +53,32 @@ namespace SecurityDataModel.Repositories
             return new Task(() => AddMemberToRole(member, role));
         }
 
+        public void DeleteMemberFromRole(int idMember, int idRole)
+        {
+            var member = _repoMember.Find(idMember);
+            if (member == null)
+                throw new MemberNotFoundException(idMember);
+
+            var role = _repoRole.Find(idRole);
+            if (role == null)
+                throw new RoleNotFoundException(idRole);
+
+            DeleteMemberFromRole(member, role);
+        }
+
         public void DeleteMemberFromRole(IMember member, IRole role)
         {
             var mr = CheckMemberRole(member, role, () =>
             {
-                var memberRole = Find(role.IdRole, member.IdMember);
+                var memberRole = _repo.Find(role.IdRole, member.IdMember);
                 if (memberRole == null)
                     throw new ModelNotFoundException(string.Format("Связь {0}-{1}, для удаления не найдена", member.Name,
                         role.RoleName));
                 return memberRole;
             });
 
-            Delete(mr);
-            SaveChanges();
+            _repo.Delete(mr);
+            _repo.SaveChanges();
         }
 
         public async void DeleteMemberFromRoleAsync(IMember member, IRole role)
@@ -103,12 +110,7 @@ namespace SecurityDataModel.Repositories
 
         public IQueryable<IRoleOfMember> GetQueryableCollection()
         {
-            return this;
-        }
-
-        protected override DbContext GetContext()
-        {
-            return _localContext;
+            return _repo;
         }
     }
 }
