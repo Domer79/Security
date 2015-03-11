@@ -35,6 +35,10 @@ namespace SecurityDataModel.EntityConfigurations
 
             Property(e => e.AccessName)
                 .IsUnicode(false);
+
+            MapToStoredProcedures(p => p.Insert(i => i.HasName("sec.AddGrant")));
+            MapToStoredProcedures(p => p.Update(u => u.HasName("sec.UpdateGrant")));
+            MapToStoredProcedures(p => p.Delete(d => d.HasName("sec.DeleteGrant")));
         }
     }
 }

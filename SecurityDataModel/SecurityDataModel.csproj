@@ -73,6 +73,7 @@
     <Compile Include="Exceptions\AccessTypeNotFoundException.cs" />
     <Compile Include="Exceptions\AccessTypeValidException.cs" />
     <Compile Include="Exceptions\BaseException.cs" />
+    <Compile Include="Exceptions\GrantNotFoundException.cs" />
     <Compile Include="Exceptions\GroupExistsException.cs" />
     <Compile Include="Exceptions\InvalidSecObjectPropertyType.cs" />
     <Compile Include="Exceptions\MemberNotFoundException.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="Exceptions\RoleIsNotValidException.cs" />
     <Compile Include="Exceptions\MemberExistsException.cs" />
     <Compile Include="Exceptions\RoleNotFoundException.cs" />
+    <Compile Include="Exceptions\SecObjectNotFoundException.cs" />
     <Compile Include="Exceptions\UserGroupExistsException.cs" />
     <Compile Include="Exceptions\UserGroupNotFoundException.cs" />
     <Compile Include="Models\AccessType.cs" />
@@ -96,6 +98,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\AccessTypeRepository.cs" />
     <Compile Include="Repositories\GrantRepository.cs" />
+    <Compile Include="Repositories\GrantRepositoryLocal.cs" />
     <Compile Include="Repositories\GroupRepository.cs" />
     <Compile Include="Repositories\RoleOfMemberRepository.cs" />
     <Compile Include="Repositories\RoleOfMemberRepositoryLocal.cs" />

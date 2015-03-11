@@ -45,7 +45,6 @@ namespace SecurityDataModel.Repositories
         public async void AddMemberToRoleAsync(IMember member, IRole role)
         {
             await AddMemberToRoleTask(member, role);
-            Thread.Sleep(3000);
         }
 
         private Task AddMemberToRoleTask(IMember member, IRole role)

@@ -213,5 +213,10 @@ namespace DataRepository
         {
             Context.Database.ExecuteSqlCommand(query, parameters);
         }
+
+        public DbRawSqlQuery<TElement> SqlQuery<TElement>(string query, params object[] parameters)
+        {
+            return Context.Database.SqlQuery<TElement>(query, parameters);
+        }
     }
 }

@@ -13,8 +13,8 @@ namespace WebSecurity.Tests
     {
         public Test1()
         {
-            ApplicationCustomizer.SecurityConnectionString = "data source=cito1;initial catalog=Taxorg_Temp;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework";
-//            ApplicationCustomizer.SecurityConnectionString = "data source=Domer-pc;initial catalog=Taxorg_Temp;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework";
+//            ApplicationCustomizer.SecurityConnectionString = "data source=cito1;initial catalog=Taxorg_Temp;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework";
+            ApplicationCustomizer.SecurityConnectionString = "data source=Domer-pc;initial catalog=Taxorg_Temp;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework";
         }
 
         #region User test
@@ -318,6 +318,51 @@ namespace WebSecurity.Tests
             foreach (var accessType in query)
             {
                 Debug.WriteLine(accessType);
+            }
+        }
+
+        #endregion
+
+        #region Grant test
+
+        [TestMethod]
+        public void GetGrantCollectionTest()
+        {
+            var repo = new GrantRepository();
+            var query = repo.GetQueryableCollection();
+
+            foreach (var grant in query)
+            {
+                Debug.WriteLine("IdSecObject = {0}, IdRole = {1}, IdAccessType = {2}", grant.IdSecObject, grant.IdRole, grant.IdAccessType);
+            }
+        }
+
+        [TestMethod]
+        public void AddGrantTest()
+        {
+            var repo = new GrantRepository();
+            repo.AddGrant(6, 1, 11);
+            repo.AddGrant(6, 1, 12);
+            repo.AddGrant(6, 1, 13);
+            repo.AddGrant(6, 1, 14);
+            var query = repo.GetQueryableCollection();
+
+            foreach (var grant in query)
+            {
+                Debug.WriteLine("IdSecObject = {0}, IdRole = {1}, IdAccessType = {2}", grant.IdSecObject, grant.IdRole, grant.IdAccessType);
+            }
+        }
+
+        [TestMethod]
+        public void RemoveGrantTest()
+        {
+            var repo = new GrantRepository();
+            repo.RemoveGrant(6, 1, 11);
+            var query = repo.GetQueryableCollection();
+
+            foreach (var grant in query)
+            {
+                Debug.WriteLine("IdSecObject = {0}, IdRole = {1}, IdAccessType = {2}", grant.IdSecObject, grant.IdRole, grant.IdAccessType);
             }
         }
 
