@@ -1,8 +1,10 @@
 ﻿using System.Data.Entity;
 using System.Diagnostics;
 using SystemTools;
+using SystemTools.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SecurityDataModel.Attributes;
+using SecurityDataModel.Infrastructure;
 using SecurityDataModel.Models;
 using SecurityDataModel.Repositories;
 
@@ -14,6 +16,13 @@ namespace Security.TestProject
         public DataModelTest1()
         {
             ApplicationCustomizer.SecurityConnectionString = "data source=cito1;initial catalog=Taxorg_Temp;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework";
+        }
+
+        [TestMethod]
+        public void MemberTypeDescriptionTest()
+        {
+            Debug.WriteLine(MemberType.User.GetDescription());
+            Assert.AreEqual("Пользователь", MemberType.User.GetDescription());
         }
     }
 

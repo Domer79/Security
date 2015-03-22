@@ -1,13 +1,14 @@
-﻿using WebSecurity.Data;
+﻿using System.Runtime.InteropServices;
+using WebSecurity.Data;
 
 namespace WebSecurity.Repositories
 {
-    public class UserRepository : SecurityDataModel.Repositories.UserRepository
+    internal class CommonUserRepository : SecurityDataModel.Repositories.CommonUserRepository
     {
         /// <summary>
         /// Инициализирует новый экземпляр класса <see cref="T:System.Object"/>.
         /// </summary>
-        public UserRepository() 
+        public CommonUserRepository() 
             : base(new WebMvcSecurityContext())
         {
         }

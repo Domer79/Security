@@ -2,7 +2,7 @@
 
 namespace WebSecurity.Repositories
 {
-    public class AccessTypeRepository : SecurityDataModel.Repositories.AccessTypeRepository
+    internal class AccessTypeRepository : SecurityDataModel.Repositories.AccessTypeRepository
     {
         public AccessTypeRepository() 
             : base(new WebMvcSecurityContext())

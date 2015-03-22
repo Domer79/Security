@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Linq;
 using SystemTools;
-using Interfaces;
+using SystemTools.Interfaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SecurityDataModel.Models;
 using WebSecurity.Repositories;
@@ -9,9 +9,9 @@ using WebSecurity.Repositories;
 namespace WebSecurity.Tests
 {
     [TestClass]
-    public class Test1
+    public class WebSecurityTest1
     {
-        public Test1()
+        public WebSecurityTest1()
         {
 //            ApplicationCustomizer.SecurityConnectionString = "data source=cito1;initial catalog=Taxorg_Temp;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework";
             ApplicationCustomizer.SecurityConnectionString = "data source=Domer-pc;initial catalog=Taxorg_Temp;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework";
@@ -22,7 +22,7 @@ namespace WebSecurity.Tests
         [TestMethod]
         public void GetIUserCollectionTest()
         {
-            var repo = new UserRepository();
+            var repo = new CommonUserRepository();
             var query = repo.GetQueryableCollection();
             foreach (var model in query)
             {
@@ -33,13 +33,13 @@ namespace WebSecurity.Tests
         [TestMethod]
         public void AddUserTest()
         {
-            var repo = new UserRepository();
-            repo.Add("User1", "Пользователь 1", "user1@email.ru", "sdfsdf-sdafasdf-sdfwe-fghfh-cvdf-dfgsger");
+            var repo = new CommonUserRepository();
+            repo.Add("User1", "password", "Пользователь 1", "user1@email.ru", "sdfsdf-sdafasdf-sdfwe-fghfh-cvdf-dfgsger");
 
             var query = repo.GetQueryableCollection();
             foreach (var model in query)
             {
-                Debug.WriteLine(model.Login);
+                Debug.WriteLine(model.Login, ((User)model).Password);
                 Debug.WriteLine("");
             }
         }
@@ -47,8 +47,8 @@ namespace WebSecurity.Tests
         [TestMethod]
         public void EditUserTest()
         {
-            var repo = new UserRepository();
-            repo.Edit("User11", "Пользователь 1. Изменен", "User1@email.ru", "sdfsdf-sdafasdf-sdfwe-fghfh-cvdf-dfgsger");
+            var repo = new CommonUserRepository();
+            repo.Edit("User1", "Пользователь 1. Изменен", "User1@email.ru", "sdfsdf-sdafasdf-sdfwe-fghfh-cvdf-dfgsger");
 
             var query = repo.GetQueryableCollection();
             foreach (var model in query)
@@ -62,7 +62,7 @@ namespace WebSecurity.Tests
         [TestMethod]
         public void DeleteUserTest()
         {
-            var repo = new UserRepository();
+            var repo = new CommonUserRepository();
             repo.Delete("User1");
 
             var query = repo.GetQueryableCollection();

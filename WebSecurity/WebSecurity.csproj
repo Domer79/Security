@@ -58,24 +58,20 @@
     <Compile Include="Repositories\RoleRepository.cs" />
     <Compile Include="Repositories\SecurityRepository.cs" />
     <Compile Include="Repositories\UserGroupsDetailRepository.cs" />
-    <Compile Include="Repositories\UserRepository.cs" />
-    <Compile Include="Tests\Test1.cs" />
+    <Compile Include="Repositories\CommonUserRepository.cs" />
+    <Compile Include="Tests\WebSecurityTest1.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Taxorg\WebTools\SystemTools.csproj">
+    <ProjectReference Include="..\..\Taxorg\SystemTools\SystemTools.csproj">
       <Project>{8fb401c3-7285-4f17-a192-41f6cb77fc61}</Project>
       <Name>SystemTools</Name>
     </ProjectReference>
     <ProjectReference Include="..\DataRepository\DataRepository.csproj">
       <Project>{daf6e782-54cf-428a-9cec-02a95a35fad2}</Project>
       <Name>DataRepository</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Interfaces\Interfaces.csproj">
-      <Project>{bb755fd0-ef16-40e0-8466-fa851bccde12}</Project>
-      <Name>Interfaces</Name>
     </ProjectReference>
     <ProjectReference Include="..\SecurityDataModel\SecurityDataModel.csproj">
       <Project>{970b9170-f1b0-4ae3-b257-f6848b58768a}</Project>

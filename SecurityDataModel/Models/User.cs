@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using SystemTools.Interfaces;
 using DataRepository;
-using Interfaces;
 
 namespace SecurityDataModel.Models
 {
@@ -26,6 +26,9 @@ namespace SecurityDataModel.Models
 
         [StringLength(100)]
         public string Usersid { get; set; }
+
+        [StringLength(32)]
+        public string Password { get; set; }
 
         #region IMember members
 

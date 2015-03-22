@@ -36,6 +36,7 @@
     <Reference Include="EntityFramework.SqlServer">
       <HintPath>..\packages\EntityFramework.6.1.2\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
@@ -85,6 +86,7 @@
     <Compile Include="Exceptions\SecObjectNotFoundException.cs" />
     <Compile Include="Exceptions\UserGroupExistsException.cs" />
     <Compile Include="Exceptions\UserGroupNotFoundException.cs" />
+    <Compile Include="Infrastructure\MemberType.cs" />
     <Compile Include="Models\AccessType.cs" />
     <Compile Include="Models\Member.cs" />
     <Compile Include="Models\Role.cs" />
@@ -97,6 +99,8 @@
     <Compile Include="Models\UserGroupsDetail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\AccessTypeRepository.cs" />
+    <Compile Include="Repositories\CommonUserRepository.cs" />
+    <Compile Include="Repositories\FormsUserRepository.cs" />
     <Compile Include="Repositories\GrantRepository.cs" />
     <Compile Include="Repositories\GrantRepositoryLocal.cs" />
     <Compile Include="Repositories\GroupRepository.cs" />
@@ -106,14 +110,16 @@
     <Compile Include="Repositories\SecurityRepositoryBase.cs" />
     <Compile Include="Repositories\UserGroupsDetailRepository.cs" />
     <Compile Include="Repositories\UserGroupsDetailRepositoryLocal.cs" />
-    <Compile Include="Repositories\UserRepository.cs" />
+    <Compile Include="Repositories\UserRepositoryBase.cs" />
+    <Compile Include="Repositories\WindowsUserRepository.cs" />
+    <Compile Include="Tests\SecurityDataModelTest1.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Taxorg\WebTools\SystemTools.csproj">
+    <ProjectReference Include="..\..\Taxorg\SystemTools\SystemTools.csproj">
       <Project>{8FB401C3-7285-4F17-A192-41F6CB77FC61}</Project>
       <Name>SystemTools</Name>
     </ProjectReference>
@@ -121,13 +127,12 @@
       <Project>{DAF6E782-54CF-428A-9CEC-02A95A35FAD2}</Project>
       <Name>DataRepository</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Interfaces\Interfaces.csproj">
-      <Project>{BB755FD0-EF16-40E0-8466-FA851BCCDE12}</Project>
-      <Name>Interfaces</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Interfaces\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

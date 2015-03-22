@@ -1,6 +1,8 @@
 using System;
 using SystemTools.Extensions;
-using Interfaces;
+using SystemTools.Interfaces;
+using SecurityDataModel.Infrastructure;
+using SecurityDataModel.Models;
 
 namespace SecurityDataModel.Exceptions
 {
@@ -10,9 +12,15 @@ namespace SecurityDataModel.Exceptions
         /// ¬ыполн€ет инициализацию нового экземпл€ра класса <see cref="T:System.Exception"/>, использу€ указанное сообщение об ошибке.
         /// </summary>
         /// <param name="message">—ообщение, описывающее ошибку.</param>
-        public MemberNotFoundException(string message) 
+        public MemberNotFoundException(string message)
             : base(message)
         {
+        }
+
+        public MemberNotFoundException(MemberType memberType, string memberName)
+            : this(memberType.GetDescription(), memberName)
+        {
+            
         }
 
         public MemberNotFoundException(IMember member)

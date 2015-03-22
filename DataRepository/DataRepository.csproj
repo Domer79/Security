@@ -60,7 +60,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Taxorg\WebTools\SystemTools.csproj">
+    <ProjectReference Include="..\..\Taxorg\SystemTools\SystemTools.csproj">
       <Project>{8FB401C3-7285-4F17-A192-41F6CB77FC61}</Project>
       <Name>SystemTools</Name>
     </ProjectReference>

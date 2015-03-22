@@ -39,22 +39,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IAccessType.cs" />
-    <Compile Include="IAccessTypeRepository.cs" />
-    <Compile Include="IGrant.cs" />
-    <Compile Include="IGroup.cs" />
-    <Compile Include="IGroupRepository.cs" />
-    <Compile Include="IMember.cs" />
-    <Compile Include="IQueryableCollection.cs" />
-    <Compile Include="IRole.cs" />
-    <Compile Include="IRoleOfMember.cs" />
-    <Compile Include="IRoleOfMemberRepository.cs" />
-    <Compile Include="IRoleRepository.cs" />
-    <Compile Include="ISecObject.cs" />
-    <Compile Include="IUser.cs" />
-    <Compile Include="IUserGroupsDetail.cs" />
-    <Compile Include="IUserGroupsDetailRepository.cs" />
-    <Compile Include="IUserRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

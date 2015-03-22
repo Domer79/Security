@@ -8,7 +8,7 @@ using WebSecurity.Data;
 
 namespace WebSecurity.Repositories
 {
-    public class GroupRepository : SecurityDataModel.Repositories.GroupRepository
+    internal class GroupRepository : SecurityDataModel.Repositories.GroupRepository
     {
         public GroupRepository() 
             : base(new WebMvcSecurityContext())

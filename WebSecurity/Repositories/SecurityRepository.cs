@@ -9,7 +9,7 @@ using WebSecurity.Data;
 
 namespace WebSecurity.Repositories
 {
-    public class SecurityRepository<TEntity> : Repository<TEntity> where TEntity : ModelBase
+    internal class SecurityRepository<TEntity> : Repository<TEntity> where TEntity : ModelBase
     {
         public SecurityRepository() 
             : base(new WebMvcSecurityContext())

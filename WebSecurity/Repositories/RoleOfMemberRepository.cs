@@ -8,7 +8,7 @@ using WebSecurity.Data;
 
 namespace WebSecurity.Repositories
 {
-    public class RoleOfMemberRepository : SecurityDataModel.Repositories.RoleOfMemberRepository
+    internal class RoleOfMemberRepository : SecurityDataModel.Repositories.RoleOfMemberRepository
     {
         public RoleOfMemberRepository() : 
             base(new WebMvcSecurityContext())

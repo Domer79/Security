@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using SystemTools.Interfaces;
 using DataRepository;
-using Interfaces;
 
 namespace SecurityDataModel.Models
 {
