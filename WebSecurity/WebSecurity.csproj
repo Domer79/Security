@@ -57,6 +57,7 @@
     <Compile Include="Repositories\RoleOfMemberRepository.cs" />
     <Compile Include="Repositories\RoleRepository.cs" />
     <Compile Include="Repositories\SecurityRepository.cs" />
+    <Compile Include="Repositories\SecuritySettings.cs" />
     <Compile Include="Repositories\UserGroupsDetailRepository.cs" />
     <Compile Include="Repositories\CommonUserRepository.cs" />
     <Compile Include="Tests\WebSecurityTest1.cs" />

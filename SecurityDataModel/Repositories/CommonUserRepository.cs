@@ -4,65 +4,69 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using SystemTools;
 using SystemTools.Extensions;
 using SystemTools.Interfaces;
+using SystemTools.WebTools.Infrastructure;
 using DataRepository;
+using SecurityDataModel.Exceptions;
 using SecurityDataModel.Models;
 
 namespace SecurityDataModel.Repositories
 {
-
-    //TODO: Создать третий класс UserRepositoryBase, реализующий работу смешанного режима работы 
     public class CommonUserRepository : IUserRepository
     {
-        private readonly SecurityContext _context;
-        private UserRepositoryBase _userRepo;
+        private readonly UserRepositoryBase _userRepo;
 
         /// <summary>
         /// Инициализирует новый экземпляр класса <see cref="T:System.Object"/>.
         /// </summary>
         public CommonUserRepository(SecurityContext context)
         {
-            _context = context;
-
-        }
-
-        private static bool IsWindowsUser(string login, string usersid)
-        {
-            if (login.RxIsMatch(@"^[\w][-_\w.]+[\w]\\[\w][-_\w.]+[\w]$"))
-                return usersid.RxIsMatch(@"^S-[\d]-[\d]-[\d-]+[\d]$");
-            
-            return false;
+            switch (ApplicationCustomizer.SecuritySettings.IdentificationMode)
+            {
+                case IdentificationMode.Forms:
+                    _userRepo = new FormsUserRepository(context);
+                    break;
+                case IdentificationMode.Windows:
+                    _userRepo = new WindowsUserRepository(context);
+                    break;
+                case IdentificationMode.WindowsOrForms:
+                    _userRepo = new WindowsFormsUserRepository(context);
+                    break;
+                default:
+                    throw new IdentificationModeIsNotSetException();
+            }
         }
 
         public IQueryable<IUser> GetQueryableCollection()
         {
-            throw new NotImplementedException();
+            return _userRepo.GetQueryableCollection();
         }
 
-        public void Add(string login, string email, string displayName, string usersid)
+        public void Add(string login, string email, string displayName, string passwordOrSid)
         {
-            throw new NotImplementedException();
+            _userRepo.Add(login, email, displayName, passwordOrSid);
         }
 
-        public void Edit(int idUser, string login, string email, string displayName, string usersid)
+        public void Edit(string login, string email, string usersid, string displayName, string passwordOrSid)
         {
-            throw new NotImplementedException();
+            _userRepo.Edit(login, email, usersid, displayName, passwordOrSid);
         }
 
-        public void Edit(string login, string email, string displayName, string usersid)
+        public void Delete(string login, string password)
         {
-            throw new NotImplementedException();
+            Delete(login, null, password);
         }
 
-        public void Delete(string loginOrSid)
+        public void Delete(string login, string email, string password)
         {
-            throw new NotImplementedException();
+            Delete(login, email, null, password);
         }
 
-        public void Delete(int idUser)
+        public void Delete(string login, string email, string usersid, string password)
         {
-            throw new NotImplementedException();
+            _userRepo.Delete(login, email, usersid, password);
         }
     }
 }

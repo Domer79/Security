@@ -11,9 +11,10 @@ using SecurityDataModel.Models;
 
 namespace SecurityDataModel.Repositories
 {
-    public abstract class UserRepositoryBase : IUserRepository
+    internal abstract class UserRepositoryBase
     {
         public const string EmptyLogin = "empty_login";
+        protected internal OperationType _operationType;
 
         private readonly Repository<User> _repo;
 
@@ -25,15 +26,21 @@ namespace SecurityDataModel.Repositories
             _repo = new Repository<User>(context);
         }
 
+        public Repository<User> Repo
+        {
+            get { return _repo; }
+        }
+
         public void Add(string login, string email, string displayName, string passwordOrSid)
         {
+            _operationType = OperationType.Add;
             var user = CheckUser(login, email, passwordOrSid, () => CreateUser(login, email, displayName, passwordOrSid));
 
-            if (_repo.Any(u => u.Login == login))
+            if (Repo.Any(u => u.Login == login))
                 throw new MemberExistsException();
 
-            _repo.InsertOrUpdate(user);
-            _repo.SaveChanges();
+            Repo.InsertOrUpdate(user);
+            Repo.SaveChanges();
         }
 
         private User CreateUser(string login, string email, string displayName, string passwordOrSid)
@@ -51,65 +58,74 @@ namespace SecurityDataModel.Repositories
 
         protected abstract void SetPasswordOrSid(User user, string passwordOrSid);
 
-        public void Edit(string login, string email, string displayName, string passwordOrSid)
+        public virtual void Edit(string login, string email, string usersid, string displayName, string password)
         {
-            var user = _repo.FirstOrDefault(u => u.Login == login || u.Usersid == passwordOrSid);
+            _operationType = OperationType.Edit;
+            var user = GetUser(login, email, usersid, password);
 
             if (user == null)
-                throw new MemberNotFoundException(login, displayName, email);
+                throw new MemberNotFoundException(login, displayName, email, "Проверьте правильность введенного пароля");
 
-            Edit(user.IdUser, login, displayName, email, passwordOrSid);
+            user.DisplayName = displayName;
+            user.Email = email;
+            SetPasswordOrSid(user, password);
+
+            Repo.SaveChanges();
         }
 
-        public void Edit(int idUser, string login, string email, string displayName, string passwordOrSid)
+        /// <summary>
+        /// Производит удаление пользователя по его логину, либо email-у, либо SID (для Windows, в этом случае пароль не обязателен)
+        /// </summary>
+        /// <param name="login">Логин</param>
+        /// <param name="password">Пароль</param>
+        public virtual void Delete(string login, string password)
         {
-            var usr = CheckUser(login, email, passwordOrSid, () =>
-            {
-                var findUser = _repo.Find(idUser);
-                if (findUser == null)
-                    throw new MemberNotFoundException(idUser, login, email, displayName);
-                return findUser;
-            });
-
-            usr.DisplayName = displayName;
-            usr.Email = email;
-            SetPasswordOrSid(usr, passwordOrSid);
-
-            _repo.SaveChanges();
+            Delete(login, null, password);
         }
 
-        public void Delete(string loginOrSid)
+        /// <summary>
+        /// Производит удаление пользователя по его логину, либо email-у, либо SID (для Windows, в этом случае пароль не обязателен)
+        /// </summary>
+        /// <param name="login">Логин</param>
+        /// <param name="email">Почтовый адрес</param>
+        /// <param name="password">Пароль</param>
+        public virtual void Delete(string login, string email, string password)
         {
-            var user = _repo.FirstOrDefault(u => u.Login == loginOrSid || u.Usersid == loginOrSid);
+            Delete(login, email, null, password);
+        }
+
+        /// <summary>
+        /// Производит удаление пользователя по его логину, либо email-у, либо SID (для Windows, в этом случае пароль не обязателен)
+        /// </summary>
+        /// <param name="login">Логин</param>
+        /// <param name="email">Почтовый адрес</param>
+        /// <param name="usersid">SID для Windows пользователей</param>
+        /// <param name="password">Пароль</param>
+        public virtual void Delete(string login, string email, string usersid, string password)
+        {
+            _operationType = OperationType.Delete;
+            var user = GetUser(login, email, usersid, password);
 
             if (user == null)
-                throw new MemberNotFoundException("Login: ", loginOrSid);
+                throw new MemberNotFoundException(login, email, usersid, "Проверьте правильность введенного пароля");
 
-            _repo.Delete(user);
-            _repo.SaveChanges();
+            Repo.Delete(user);
+            Repo.SaveChanges();
         }
 
-        public void Delete(int idUser)
-        {
-            var usr = _repo.Find(idUser);
-            if (usr == null)
-                throw new MemberNotFoundException(string.Format("Участник безопасности с таким Id = {0} не найден.", idUser));
-
-            _repo.Delete(usr);
-            _repo.SaveChanges();
-        }
+        protected abstract User GetUser(string login, string email, string usersid, string password);
 
         public void SetPassword(string loginOrEmail, string password)
         {
-            var user = _repo.FirstOrDefault(u => u.Login == loginOrEmail || u.Email == loginOrEmail);
+            var user = Repo.FirstOrDefault(u => u.Login == loginOrEmail || u.Email == loginOrEmail);
             if (user == null)
                 throw new MemberNotFoundException(MemberType.User, loginOrEmail);
 
             user.Password = SystemTools.Crypto.GetHashString(password);
-            _repo.SaveChanges();
+            Repo.SaveChanges();
         }
 
-        private static User CheckUser(string login, string email, string passwordOrSid, Func<User> getUser)
+        private static User CheckUser(string login, string email, string password, Func<User> getUser)
         {
             if (string.IsNullOrEmpty(login))
                 throw new ArgumentException("login");
@@ -117,16 +133,20 @@ namespace SecurityDataModel.Repositories
             if (string.IsNullOrEmpty(email))
                 throw new ArgumentException("email");
 
-            if (string.IsNullOrEmpty(passwordOrSid))
-                throw new ArgumentException("passwordOrSid");
+            if (string.IsNullOrEmpty(password))
+                throw new ArgumentException("password");
 
             var user = getUser();
             return user;
         }
 
-        public IQueryable<IUser> GetQueryableCollection()
+        public abstract IQueryable<IUser> GetQueryableCollection();
+
+        internal protected enum OperationType
         {
-            return _repo;
+            Add,
+            Edit,
+            Delete
         }
     }
 }

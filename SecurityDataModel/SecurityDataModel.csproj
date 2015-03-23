@@ -76,7 +76,9 @@
     <Compile Include="Exceptions\BaseException.cs" />
     <Compile Include="Exceptions\GrantNotFoundException.cs" />
     <Compile Include="Exceptions\GroupExistsException.cs" />
+    <Compile Include="Exceptions\IdentificationModeIsNotSetException.cs" />
     <Compile Include="Exceptions\InvalidSecObjectPropertyType.cs" />
+    <Compile Include="Exceptions\LoginEmailOrPasswordInvalidException.cs" />
     <Compile Include="Exceptions\MemberNotFoundException.cs" />
     <Compile Include="Exceptions\MemberIsNotValidException.cs" />
     <Compile Include="Exceptions\ModelNotFoundException.cs" />
@@ -87,6 +89,7 @@
     <Compile Include="Exceptions\UserGroupExistsException.cs" />
     <Compile Include="Exceptions\UserGroupNotFoundException.cs" />
     <Compile Include="Infrastructure\MemberType.cs" />
+    <Compile Include="Infrastructure\Tools.cs" />
     <Compile Include="Models\AccessType.cs" />
     <Compile Include="Models\Member.cs" />
     <Compile Include="Models\Role.cs" />
@@ -95,6 +98,7 @@
     <Compile Include="Models\RoleOfMember.cs" />
     <Compile Include="Models\SecObject.cs" />
     <Compile Include="Models\SecurityContext.cs" />
+    <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserGroupsDetail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -108,9 +112,11 @@
     <Compile Include="Repositories\RoleOfMemberRepositoryLocal.cs" />
     <Compile Include="Repositories\RoleRepository.cs" />
     <Compile Include="Repositories\SecurityRepositoryBase.cs" />
+    <Compile Include="Repositories\SecuritySettings.cs" />
     <Compile Include="Repositories\UserGroupsDetailRepository.cs" />
     <Compile Include="Repositories\UserGroupsDetailRepositoryLocal.cs" />
     <Compile Include="Repositories\UserRepositoryBase.cs" />
+    <Compile Include="Repositories\WindowsFormsUserRepository.cs" />
     <Compile Include="Repositories\WindowsUserRepository.cs" />
     <Compile Include="Tests\SecurityDataModelTest1.cs" />
   </ItemGroup>

@@ -28,6 +28,7 @@ namespace SecurityDataModel.Models
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserGroupsDetail> UserGroupsDetails { get; set; }
         public virtual DbSet<Member> Members { get; set; }
+        internal virtual DbSet<Settings> Settings { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

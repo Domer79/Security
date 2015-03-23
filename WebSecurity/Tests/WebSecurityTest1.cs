@@ -1,7 +1,10 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Linq;
+using System.Net.Mime;
 using SystemTools;
 using SystemTools.Interfaces;
+using SystemTools.WebTools.Infrastructure;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SecurityDataModel.Models;
 using WebSecurity.Repositories;
@@ -14,14 +17,91 @@ namespace WebSecurity.Tests
         public WebSecurityTest1()
         {
 //            ApplicationCustomizer.SecurityConnectionString = "data source=cito1;initial catalog=Taxorg_Temp;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework";
-            ApplicationCustomizer.SecurityConnectionString = "data source=Domer-pc;initial catalog=Taxorg_Temp;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework";
+            ApplicationCustomizer.SecurityConnectionString = "data source=.;initial catalog=Taxorg_Temp;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework";
+            ApplicationCustomizer.SecuritySettings = new SecuritySettings();
+            ApplicationCustomizer.SecuritySettings.IdentificationMode = IdentificationMode.Windows;
         }
 
-        #region User test
+        #region Forms User test
 
         [TestMethod]
-        public void GetIUserCollectionTest()
+        public void GetFomrsUserCollectionTest()
         {
+            if (ApplicationCustomizer.SecuritySettings.IdentificationMode != IdentificationMode.Forms)
+                return;
+
+            var repo = new CommonUserRepository();
+            var query = repo.GetQueryableCollection();
+            foreach (var model in query)
+            {
+                Debug.WriteLine(model.Login);
+            }
+        }
+
+        [TestMethod]
+        public void AddFormsUserTest()
+        {
+            if (ApplicationCustomizer.SecuritySettings.IdentificationMode != IdentificationMode.Forms)
+                return;
+
+            var repo = new CommonUserRepository();
+            repo.Add("User1", "user1@email.ru", "Пользователь 1", "Очень сложный пароль");
+
+            var query = repo.GetQueryableCollection();
+            foreach (var model in query)
+            {
+                Debug.WriteLine(model.Login, ((User)model).Password);
+                Debug.WriteLine("");
+            }
+        }
+
+        //TODO: Протестировать с OperationType
+        [TestMethod]
+        public void EditFormsUserTest()
+        {
+            if (ApplicationCustomizer.SecuritySettings.IdentificationMode != IdentificationMode.Forms)
+                return;
+
+            var repo = new CommonUserRepository();
+            repo.Edit("User1", "User1@email.ru", null, "Пользователь 1. Изменен", "Очень сложный пароль");
+
+            var query = repo.GetQueryableCollection();
+            foreach (var model in query)
+            {
+                Debug.WriteLine(model.DisplayName);
+                Debug.WriteLine(model.Email);
+                Debug.WriteLine("");
+            }
+        }
+
+        [TestMethod]
+        public void DeleteFormsUserTest()
+        {
+            if (ApplicationCustomizer.SecuritySettings.IdentificationMode == IdentificationMode.None)
+                return;
+
+            var repo = new CommonUserRepository();
+            repo.Delete("User1", "Очень сложный пароль");
+
+            var query = repo.GetQueryableCollection();
+            foreach (var model in query)
+            {
+                Debug.WriteLine(model.DisplayName);
+                Debug.WriteLine(model.Email);
+                Debug.WriteLine("");
+            }
+        }
+
+        #endregion
+
+        #region Windows User test
+
+        [TestMethod]
+        public void GetWindowsUserCollectionTest()
+        {
+            if (ApplicationCustomizer.SecuritySettings.IdentificationMode != IdentificationMode.Windows)
+                return;
+
             var repo = new CommonUserRepository();
             var query = repo.GetQueryableCollection();
             foreach (var model in query)
@@ -33,8 +113,11 @@ namespace WebSecurity.Tests
         [TestMethod]
         public void AddUserTest()
         {
+            if (ApplicationCustomizer.SecuritySettings.IdentificationMode != IdentificationMode.Windows)
+                return;
+
             var repo = new CommonUserRepository();
-            repo.Add("User1", "password", "Пользователь 1", "user1@email.ru", "sdfsdf-sdafasdf-sdfwe-fghfh-cvdf-dfgsger");
+            repo.Add("User1\\domain", "user1@domain.ru", "Пользователь 1", "S-1-5-21-2276997554-85704920-702720168-1608");
 
             var query = repo.GetQueryableCollection();
             foreach (var model in query)
@@ -44,11 +127,15 @@ namespace WebSecurity.Tests
             }
         }
 
+        //TODO: Протестировать с OperationType
         [TestMethod]
         public void EditUserTest()
         {
+            if (ApplicationCustomizer.SecuritySettings.IdentificationMode != IdentificationMode.Windows)
+                return;
+
             var repo = new CommonUserRepository();
-            repo.Edit("User1", "Пользователь 1. Изменен", "User1@email.ru", "sdfsdf-sdafasdf-sdfwe-fghfh-cvdf-dfgsger");
+            repo.Edit("User1\\domain", "user1@domain.ru", "S-1-5-21-2276997554-85704920-702720168-1608", "Пользователь 1. Изменен", null);
 
             var query = repo.GetQueryableCollection();
             foreach (var model in query)
@@ -62,8 +149,11 @@ namespace WebSecurity.Tests
         [TestMethod]
         public void DeleteUserTest()
         {
+            if (ApplicationCustomizer.SecuritySettings.IdentificationMode == IdentificationMode.None)
+                return;
+
             var repo = new CommonUserRepository();
-            repo.Delete("User1");
+            repo.Delete("User1\\domain", null);
 
             var query = repo.GetQueryableCollection();
             foreach (var model in query)
@@ -364,6 +454,23 @@ namespace WebSecurity.Tests
             {
                 Debug.WriteLine("IdSecObject = {0}, IdRole = {1}, IdAccessType = {2}", grant.IdSecObject, grant.IdRole, grant.IdAccessType);
             }
+        }
+
+        #endregion
+
+        #region SecuritySettings test
+
+        [TestMethod]
+        public void GetIdentificationModeTest()
+        {
+            Debug.WriteLine(ApplicationCustomizer.SecuritySettings.IdentificationMode);
+        }
+
+        [TestMethod]
+        public void SetIdentificationMode()
+        {
+            ApplicationCustomizer.SecuritySettings.IdentificationMode = IdentificationMode.None;
+            Debug.WriteLine(ApplicationCustomizer.SecuritySettings.IdentificationMode);
         }
 
         #endregion
