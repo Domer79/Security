@@ -27,8 +27,8 @@ namespace SecurityDataModel.Models
         [StringLength(100)]
         public string Usersid { get; set; }
 
-        [StringLength(32)]
-        public string Password { get; set; }
+//        [Column(TypeName = "varbinary(32)")]
+        public byte[] Password { get; set; }
 
         #region IMember members
 

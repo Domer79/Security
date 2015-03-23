@@ -20,7 +20,7 @@ namespace SecurityDataModel.Repositories
         protected override void SetPasswordOrSid(User user, string passwordOrSid)
         {
             if (!Tools.IsWindowsUser(user.Login, passwordOrSid))
-                user.Password = passwordOrSid;
+                user.Password = passwordOrSid.GetBytes();
 
             user.Usersid = passwordOrSid;
         }
@@ -28,10 +28,10 @@ namespace SecurityDataModel.Repositories
         protected override User GetUser(string login, string email, string usersid, string password)
         {
             if (Tools.IsWindowsUser(login, usersid))
-                return Repo.FirstOrDefault(u => u.Login == login || u.Usersid == usersid);
+                return Repo.Where(u => u.Usersid != null).FirstOrDefault(u => u.Login == login || u.Usersid == usersid);
 
-            var usersByLoginEmail = Repo.Where(u => u.Login == login || u.Email == email);
-            var user = usersByLoginEmail.FirstOrDefault(u => u.Password == SystemTools.Crypto.GetHashString(password));
+            var usersByLoginEmail = Repo.Where(u => u.Login == login || u.Email == email).ToList();
+            var user = usersByLoginEmail.FirstOrDefault(u => u.Password.SequenceEqual(password.GetHashBytes()));
 
             return user;
         }

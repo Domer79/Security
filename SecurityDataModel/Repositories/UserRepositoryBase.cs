@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SystemTools.Extensions;
 using SystemTools.Interfaces;
 using DataRepository;
 using SecurityDataModel.Exceptions;
@@ -121,7 +122,7 @@ namespace SecurityDataModel.Repositories
             if (user == null)
                 throw new MemberNotFoundException(MemberType.User, loginOrEmail);
 
-            user.Password = SystemTools.Crypto.GetHashString(password);
+            user.Password = password.GetHashBytes();
             Repo.SaveChanges();
         }
 

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
+using SystemTools.Extensions;
 using SystemTools.Interfaces;
 using DataRepository;
 using SecurityDataModel.Exceptions;
@@ -29,7 +31,7 @@ namespace SecurityDataModel.Repositories
             if (string.IsNullOrEmpty(passwordOrSid))
                 throw new ArgumentNullException("passwordOrSid");
 
-            user.Password = SystemTools.Crypto.GetHashString(passwordOrSid);
+            user.Password = passwordOrSid.GetHashBytes();
             user.Usersid = null;
         }
 
@@ -51,8 +53,9 @@ namespace SecurityDataModel.Repositories
 
         protected override User GetUser(string login, string email, string usersid, string password)
         {
-            var usersByLoginEmail = Repo.Where(u => u.Login == login || u.Email == email);
-            var user = usersByLoginEmail.FirstOrDefault(u => u.Password == SystemTools.Crypto.GetHashString(password));
+            var usersByLoginEmail = Repo.Where(u => u.Login == login || u.Email == email).ToList();
+            var hashPass = password.GetHashBytes();
+            var user = usersByLoginEmail.FirstOrDefault(u => u.Password.SequenceEqual(hashPass));
 
             return user;
         }
