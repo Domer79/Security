@@ -22,6 +22,7 @@ namespace DataRepository
         private DbContext _context;
         private DbSet<T> _set;
         private readonly Dictionary<Type, object> _entityInfos = new Dictionary<Type, object>();
+        private readonly object _lockObject = new object();
 
         public virtual void SaveChanges()
         {
@@ -32,7 +33,12 @@ namespace DataRepository
                 throw new RepositoryValidationException(validationError.ErrorMessage, validationError.PropertyName);
             }
             if (HasChanges)
-                Context.SaveChanges();
+            {
+                lock (_lockObject)
+                {
+                    Context.SaveChanges();
+                }
+            }
         }
 
         public bool HasChanges

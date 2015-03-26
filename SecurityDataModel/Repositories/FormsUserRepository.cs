@@ -53,16 +53,21 @@ namespace SecurityDataModel.Repositories
 
         protected override User GetUser(string login, string email, string usersid, string password)
         {
-            var usersByLoginEmail = Repo.Where(u => u.Login == login || u.Email == email).ToList();
-            var hashPass = password.GetHashBytes();
-            var user = usersByLoginEmail.FirstOrDefault(u => u.Password.SequenceEqual(hashPass));
-
-            return user;
+            return GetUser(Repo, login, email, password);
         }
 
         public override IQueryable<IUser> GetQueryableCollection()
         {
             return Repo.Where(user => user.Password != null);
+        }
+
+        internal static User GetUser(Repository<User> repo, string login, string email, string password)
+        {
+            var usersByLoginEmail = repo.Where(u => u.Login == login || u.Email == email).ToList();
+            var hashPass = password.GetHashBytes();
+            var user = usersByLoginEmail.FirstOrDefault(u => u.Password.SequenceEqual(hashPass));
+
+            return user;
         }
     }
 }

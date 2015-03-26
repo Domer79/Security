@@ -19,7 +19,7 @@ namespace SecurityDataModel.EntityConfigurations
         }
         private void DeleteConfiguration(ModificationStoredProceduresConfiguration<Group> p)
         {
-            p.Delete(d => d.HasName("sec.DeleteMember").Parameter(p0 => p0.IdGroup, "idMember"));
+            p.Delete(d => d.HasName("sec.DeleteGroup"));
         }
 
         private static void UpdateConfiguration(ModificationStoredProceduresConfiguration<Group> p)

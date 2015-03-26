@@ -30,10 +30,7 @@ namespace SecurityDataModel.Repositories
             if (Tools.IsWindowsUser(login, usersid))
                 return Repo.Where(u => u.Usersid != null).FirstOrDefault(u => u.Login == login || u.Usersid == usersid);
 
-            var usersByLoginEmail = Repo.Where(u => u.Login == login || u.Email == email).ToList();
-            var user = usersByLoginEmail.FirstOrDefault(u => u.Password.SequenceEqual(password.GetHashBytes()));
-
-            return user;
+            return FormsUserRepository.GetUser(Repo, login, email, password);
         }
 
         public override IQueryable<IUser> GetQueryableCollection()

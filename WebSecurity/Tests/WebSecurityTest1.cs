@@ -19,7 +19,7 @@ namespace WebSecurity.Tests
 //            ApplicationCustomizer.SecurityConnectionString = "data source=cito1;initial catalog=Taxorg_Temp;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework";
             ApplicationCustomizer.SecurityConnectionString = "data source=.;initial catalog=Taxorg_Temp;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework";
             ApplicationCustomizer.SecuritySettings = new SecuritySettings();
-            ApplicationCustomizer.SecuritySettings.IdentificationMode = IdentificationMode.Forms;
+            ApplicationCustomizer.SecuritySettings.IdentificationMode = IdentificationMode.Windows;
         }
 
         #region Forms User test

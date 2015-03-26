@@ -15,7 +15,7 @@ namespace SecurityDataModel.Repositories
     internal abstract class UserRepositoryBase
     {
         public const string EmptyLogin = "empty_login";
-        protected internal OperationType _operationType;
+        protected internal OperationType TypeOperation;
 
         private readonly Repository<User> _repo;
 
@@ -34,7 +34,7 @@ namespace SecurityDataModel.Repositories
 
         public void Add(string login, string email, string displayName, string passwordOrSid)
         {
-            _operationType = OperationType.Add;
+            TypeOperation = OperationType.Add;
             var user = CheckUser(login, email, passwordOrSid, () => CreateUser(login, email, displayName, passwordOrSid));
 
             if (Repo.Any(u => u.Login == login))
@@ -61,7 +61,7 @@ namespace SecurityDataModel.Repositories
 
         public virtual void Edit(string login, string email, string usersid, string displayName, string password)
         {
-            _operationType = OperationType.Edit;
+            TypeOperation = OperationType.Edit;
             var user = GetUser(login, email, usersid, password);
 
             if (user == null)
@@ -104,7 +104,7 @@ namespace SecurityDataModel.Repositories
         /// <param name="password">Пароль</param>
         public virtual void Delete(string login, string email, string usersid, string password)
         {
-            _operationType = OperationType.Delete;
+            TypeOperation = OperationType.Delete;
             var user = GetUser(login, email, usersid, password);
 
             if (user == null)

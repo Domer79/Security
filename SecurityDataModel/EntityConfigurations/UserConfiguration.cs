@@ -26,7 +26,7 @@ namespace SecurityDataModel.EntityConfigurations
 
         private void DeleteConfiguration(ModificationStoredProceduresConfiguration<User> p)
         {
-            p.Delete(d => d.HasName("sec.DeleteMember").Parameter(p0 => p0.IdUser, "idMember"));
+            p.Delete(d => d.HasName("sec.DeleteUser"));
         }
 
         private static void UpdateConfiguration(ModificationStoredProceduresConfiguration<User> p)
@@ -34,7 +34,7 @@ namespace SecurityDataModel.EntityConfigurations
             p.Update(u => u.HasName("sec.UpdateUser"));
         }
 
-        public void InsertConfiguration(ModificationStoredProceduresConfiguration<User> p)
+        private void InsertConfiguration(ModificationStoredProceduresConfiguration<User> p)
         {
             p.Insert(i => i.HasName("sec.AddUser").Result(r => r.IdUser, "idMember"));
         }

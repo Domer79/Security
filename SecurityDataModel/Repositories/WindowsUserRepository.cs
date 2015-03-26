@@ -31,7 +31,7 @@ namespace SecurityDataModel.Repositories
             if (user == null) 
                 throw new ArgumentNullException("user");
 
-            if (_operationType != OperationType.Add)
+            if (TypeOperation != OperationType.Add)
                 return;
 
             if (!Tools.IsWindowsUser(user.Login, passwordOrSid))
