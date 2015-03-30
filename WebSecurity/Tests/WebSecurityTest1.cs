@@ -18,151 +18,11 @@ namespace WebSecurity.Tests
         {
 //            ApplicationCustomizer.SecurityConnectionString = "data source=cito1;initial catalog=Taxorg_Temp;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework";
             ApplicationCustomizer.SecurityConnectionString = "data source=.;initial catalog=Taxorg_Temp;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework";
-            ApplicationCustomizer.SecuritySettings = new SecuritySettings();
-            ApplicationCustomizer.SecuritySettings.IdentificationMode = IdentificationMode.Windows;
         }
 
-        #region Forms User test
+        #region User test
 
-        [TestMethod]
-        public void GetFomrsUserCollectionTest()
-        {
-            if (ApplicationCustomizer.SecuritySettings.IdentificationMode != IdentificationMode.Forms)
-                return;
 
-            var repo = new CommonUserRepository();
-            var query = repo.GetQueryableCollection();
-            foreach (var model in query)
-            {
-                Debug.WriteLine(model.Login);
-            }
-        }
-
-        [TestMethod]
-        public void AddFormsUserTest()
-        {
-            if (ApplicationCustomizer.SecuritySettings.IdentificationMode != IdentificationMode.Forms)
-                return;
-
-            var repo = new CommonUserRepository();
-            repo.Add("User1", "user1@email.ru", "Пользователь 1", "Очень сложный пароль");
-
-            var query = repo.GetQueryableCollection();
-            foreach (var model in query)
-            {
-                Debug.WriteLine(model.Login, ((User)model).Password);
-                Debug.WriteLine("");
-            }
-        }
-
-        //TODO: Протестировать с OperationType
-        [TestMethod]
-        public void EditFormsUserTest()
-        {
-            if (ApplicationCustomizer.SecuritySettings.IdentificationMode != IdentificationMode.Forms)
-                return;
-
-            var repo = new CommonUserRepository();
-            repo.Edit("User1", "User1@email.ru", null, "Пользователь 1. Изменен", "Очень сложный пароль");
-
-            var query = repo.GetQueryableCollection();
-            foreach (var model in query)
-            {
-                Debug.WriteLine(model.DisplayName);
-                Debug.WriteLine(model.Email);
-                Debug.WriteLine("");
-            }
-        }
-
-        [TestMethod]
-        public void DeleteFormsUserTest()
-        {
-            if (ApplicationCustomizer.SecuritySettings.IdentificationMode == IdentificationMode.None)
-                return;
-
-            var repo = new CommonUserRepository();
-            repo.Delete("User1", "Очень сложный пароль");
-
-            var query = repo.GetQueryableCollection();
-            foreach (var model in query)
-            {
-                Debug.WriteLine(model.DisplayName);
-                Debug.WriteLine(model.Email);
-                Debug.WriteLine("");
-            }
-        }
-
-        #endregion
-
-        #region Windows User test
-
-        [TestMethod]
-        public void GetWindowsUserCollectionTest()
-        {
-            if (ApplicationCustomizer.SecuritySettings.IdentificationMode != IdentificationMode.Windows)
-                return;
-
-            var repo = new CommonUserRepository();
-            var query = repo.GetQueryableCollection();
-            foreach (var model in query)
-            {
-                Debug.WriteLine(model.Login);
-            }
-        }
-
-        [TestMethod]
-        public void AddUserTest()
-        {
-            if (ApplicationCustomizer.SecuritySettings.IdentificationMode != IdentificationMode.Windows)
-                return;
-
-            var repo = new CommonUserRepository();
-            repo.Add("User1\\domain", "user1@domain.ru", "Пользователь 1", "S-1-5-21-2276997554-85704920-702720168-1608");
-
-            var query = repo.GetQueryableCollection();
-            foreach (var model in query)
-            {
-                Debug.WriteLine(model.Login, ((User)model).Password);
-                Debug.WriteLine("");
-            }
-        }
-
-        //TODO: Протестировать с OperationType
-        [TestMethod]
-        public void EditUserTest()
-        {
-            if (ApplicationCustomizer.SecuritySettings.IdentificationMode != IdentificationMode.Windows)
-                return;
-
-            var repo = new CommonUserRepository();
-            repo.Edit("User1\\domain", "user1@domain.ru", "S-1-5-21-2276997554-85704920-702720168-1608", "Пользователь 1. Изменен", null);
-
-            var query = repo.GetQueryableCollection();
-            foreach (var model in query)
-            {
-                Debug.WriteLine(model.DisplayName);
-                Debug.WriteLine(model.Email);
-                Debug.WriteLine("");
-            }
-        }
-
-        [TestMethod]
-        public void DeleteUserTest()
-        {
-            if (ApplicationCustomizer.SecuritySettings.IdentificationMode == IdentificationMode.None)
-                return;
-
-            var repo = new CommonUserRepository();
-            repo.Delete("User1\\domain", null);
-
-            var query = repo.GetQueryableCollection();
-            foreach (var model in query)
-            {
-                Debug.WriteLine(model.DisplayName);
-                Debug.WriteLine(model.Email);
-                Debug.WriteLine("");
-            }
-        }
 
         #endregion
 
@@ -454,23 +314,6 @@ namespace WebSecurity.Tests
             {
                 Debug.WriteLine("IdSecObject = {0}, IdRole = {1}, IdAccessType = {2}", grant.IdSecObject, grant.IdRole, grant.IdAccessType);
             }
-        }
-
-        #endregion
-
-        #region SecuritySettings test
-
-        [TestMethod]
-        public void GetIdentificationModeTest()
-        {
-            Debug.WriteLine(ApplicationCustomizer.SecuritySettings.IdentificationMode);
-        }
-
-        [TestMethod]
-        public void SetIdentificationMode()
-        {
-            ApplicationCustomizer.SecuritySettings.IdentificationMode = IdentificationMode.None;
-            Debug.WriteLine(ApplicationCustomizer.SecuritySettings.IdentificationMode);
         }
 
         #endregion
