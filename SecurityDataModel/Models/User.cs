@@ -23,9 +23,6 @@ namespace SecurityDataModel.Models
         [Required(AllowEmptyStrings = false, ErrorMessage = "Необходимо указать логин!"), StringLength(200)]
         public string Login { get; set; }
 
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Необходимо указать домен!")]
-        public string Domain { get; set; }
-
         [StringLength(200)]
         public string DisplayName { get; set; }
 

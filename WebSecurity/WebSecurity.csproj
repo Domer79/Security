@@ -31,10 +31,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework">
-      <HintPath>..\packages\EntityFramework.6.1.2\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\..\Taxorg\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer">
-      <HintPath>..\packages\EntityFramework.6.1.2\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\..\Taxorg\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
@@ -61,6 +61,7 @@
     <Compile Include="Repositories\SecurityRepository.cs" />
     <Compile Include="Repositories\UserGroupsDetailRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
+    <Compile Include="Security.cs" />
     <Compile Include="Tests\WebSecurityTest1.cs" />
   </ItemGroup>
   <ItemGroup>

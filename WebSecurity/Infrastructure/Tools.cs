@@ -9,21 +9,10 @@ namespace WebSecurity.Infrastructure
 {
     public class Tools
     {
-        internal static bool IsWindowsUser(string loginWithDomain, out string login, out string domain)
+        internal static bool IsWindowsUser(string login)
         {
             var rx = new Regex(@"^(?<login>[\w][-_\w.]*[\w])\\(?<domain>[\w][-_\w.]*[\w])$");
-
-            var match = rx.Match(loginWithDomain);
-            if (match.Success)
-            {
-                login = match.Groups["login"].Value;
-                domain = match.Groups["domain"].Value;
-                return true;
-            }
-
-            login = null;
-            domain = null;
-            return false;
+            return rx.IsMatch(login);
         }
     }
 }

@@ -14,8 +14,6 @@ namespace SecurityDataModel.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        public const string EmptyLogin = "empty_login";
-
         private readonly Repository<User> _repo;
 
         public UserRepository(SecurityContext context)
@@ -29,18 +27,15 @@ namespace SecurityDataModel.Repositories
             return _repo;
         }
 
-        public void Add(string login, string domain, string password)
+        public void Add(string login, string password)
         {
-            Add(login, domain, password, null, null, null);
+            Add(login, password, null, null, null);
         }
 
-        public void Add(string login, string domain, string password, string displayName, string email, string sid)
+        public void Add(string login, string password, string displayName, string email, string sid)
         {
             if (login == null) 
                 throw new ArgumentNullException("login");
-
-            if (domain == null) 
-                throw new ArgumentNullException("domain");
 
             if (password == null) 
                 throw new ArgumentNullException("password");
@@ -48,7 +43,6 @@ namespace SecurityDataModel.Repositories
             var user = new User
             {
                 Login = login,
-                Domain = domain,
                 Password = password.GetHashBytes(),
                 DisplayName = displayName,
                 Email = email,
@@ -57,6 +51,12 @@ namespace SecurityDataModel.Repositories
 
             _repo.InsertOrUpdate(user);
             _repo.SaveChanges();
+        }
+
+        public IUser GetUser(string login, string password)
+        {
+            var user = _repo.FirstOrDefault(u => u.Login == login && u.Password.SequenceEqual(password.GetHashBytes()));
+            return user;
         }
     }
 }
