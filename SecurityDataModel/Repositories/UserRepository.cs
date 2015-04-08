@@ -58,5 +58,10 @@ namespace SecurityDataModel.Repositories
             var user = _repo.FirstOrDefault(u => u.Login == login && u.Password.SequenceEqual(password.GetHashBytes()));
             return user;
         }
+
+        protected internal IUser GetUserByLogin(string name)
+        {
+            return _repo.FirstOrDefault(u => u.Login == name);
+        }
     }
 }

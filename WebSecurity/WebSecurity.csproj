@@ -54,11 +54,13 @@
     <Compile Include="Infrastructure\Tools.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\AccessTypeRepository.cs" />
+    <Compile Include="Repositories\ActionResultRepository.cs" />
     <Compile Include="Repositories\GrantRepository.cs" />
     <Compile Include="Repositories\GroupRepository.cs" />
     <Compile Include="Repositories\RoleOfMemberRepository.cs" />
     <Compile Include="Repositories\RoleRepository.cs" />
     <Compile Include="Repositories\SecurityRepository.cs" />
+    <Compile Include="Repositories\TableObjectRepository.cs" />
     <Compile Include="Repositories\UserGroupsDetailRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
     <Compile Include="Security.cs" />

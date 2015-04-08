@@ -318,13 +318,4 @@ namespace WebSecurity.Tests
 
         #endregion
     }
-
-    public enum SecurityAccessType
-    {
-        Select,
-        Insert,
-        Update,
-        Delete,
-        Exec
-    }
 }
