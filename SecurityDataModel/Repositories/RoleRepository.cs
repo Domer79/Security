@@ -73,5 +73,10 @@ namespace SecurityDataModel.Repositories
         {
             return _repo;
         }
+
+        protected IRole GetRoleObject(string role)
+        {
+            return _repo.FirstOrDefault(r => r.RoleName == role);
+        }
     }
 }

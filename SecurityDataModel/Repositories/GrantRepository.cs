@@ -18,18 +18,31 @@ namespace SecurityDataModel.Repositories
             _repo = new GrantRepositoryLocal(context);
         }
 
+        public void AddGrant(ISecObject securityObject, IRole role, IAccessType accessType)
+        {
+            AddGrant(securityObject.IdSecObject, role.IdRole, accessType.IdAccessType, false);
+        }
+
         public void AddGrant(int idSecObject, int idRole, int idAccessType)
         {
-            if (!CheckSecObject(idSecObject))
-                throw new SecObjectNotFoundException(idSecObject);
+            AddGrant(idSecObject, idRole, idAccessType, true);
+        }
 
-            if (!CheckRole(idRole))
-                throw new RoleNotFoundException("Идентификатор: ", idRole);
+        private void AddGrant(int idSecObject, int idRole, int idAccessType, bool withCheck)
+        {
+            if (withCheck)
+            {
+                if (!CheckSecObject(idSecObject))
+                    throw new SecObjectNotFoundException(idSecObject);
 
-            if (!CheckAccessType(idAccessType))
-                throw new AccessTypeNotFoundException(idAccessType);
+                if (!CheckRole(idRole))
+                    throw new RoleNotFoundException("Идентификатор: ", idRole);
 
-            _repo.InsertOrUpdate(new Grant{IdSecObject = idSecObject, IdRole = idRole, IdAccessType = idAccessType});
+                if (!CheckAccessType(idAccessType))
+                    throw new AccessTypeNotFoundException(idAccessType);
+            }
+
+            _repo.InsertOrUpdate(new Grant { IdSecObject = idSecObject, IdRole = idRole, IdAccessType = idAccessType });
             _repo.SaveChanges();
         }
 

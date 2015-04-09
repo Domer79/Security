@@ -1,6 +1,4 @@
-﻿using System.Data.Entity;
-using DataRepository;
-using SecurityDataModel.Models;
+﻿using SystemTools.Interfaces;
 using SecurityDataModel.Repositories;
 using WebSecurity.Data;
 
@@ -14,6 +12,11 @@ namespace WebSecurity.Repositories
         public TableObjectRepository() 
             : base(new WebMvcSecurityContext())
         {
+        }
+
+        public static ISecObject GetTableObject(string entity)
+        {
+            return new TableObjectRepository().GetSecObject(entity);
         }
     }
 }

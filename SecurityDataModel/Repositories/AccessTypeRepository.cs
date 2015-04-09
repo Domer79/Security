@@ -77,6 +77,21 @@ namespace SecurityDataModel.Repositories
             _repo.SaveChanges();
         }
 
+        public IAccessType GetSingleAccessType(Enum enumValue)
+        {
+            return GetAccessTypes(enumValue)[0];
+        }
+
+        public IAccessType[] GetAccessTypes(Enum enumValue)
+        {
+            var accessTypes = enumValue.GetFlags().Select(f => (IAccessType)_repo.FirstOrDefault(at => at.AccessName == f.ToString())).ToArray();
+
+            if (accessTypes.Any(at => at == null))
+                throw new AccessTypeNotFoundException(accessTypes.First(at => at == null));
+
+            return accessTypes;
+        }
+
         public IQueryable<IAccessType> GetQueryableCollection()
         {
             return _repo;

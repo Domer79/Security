@@ -1,4 +1,5 @@
-﻿using WebSecurity.Data;
+﻿using SystemTools.Interfaces;
+using WebSecurity.Data;
 
 namespace WebSecurity.Repositories
 {
@@ -7,6 +8,11 @@ namespace WebSecurity.Repositories
         public RoleRepository() 
             : base(new WebMvcSecurityContext())
         {
+        }
+
+        public static IRole GetRole(string role)
+        {
+            return new RoleRepository().GetRoleObject(role);
         }
     }
 }

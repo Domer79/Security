@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using SystemTools.Interfaces;
 using SystemTools.WebTools.Helpers;
 using SecurityDataModel.Attributes;
@@ -7,13 +8,11 @@ namespace WebSecurity.Data
 {
     internal class ActionResultObject : SecObject, IActionResultObject
     {
-        private string _path;
-
-        [ObjectName]
+        [NotMapped]
         string IActionResultObject.Path
         {
-            get { return _path; }
-            set { _path = string.IsNullOrEmpty(value) ? ControllerHelper.GetActionPath(Controller, Action) : value; }
+            get { return ObjectName; }
+            set { ObjectName = string.IsNullOrEmpty(value) ? ControllerHelper.GetActionPath(Controller, Action) : value; }
         }
 
         [Column1]

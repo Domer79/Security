@@ -1,6 +1,7 @@
-using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System; 
+using System.ComponentModel.DataAnnotations; 
 using System.ComponentModel.DataAnnotations.Schema;
+
 
 namespace SecurityDataModel.Attributes
 {
@@ -9,7 +10,7 @@ namespace SecurityDataModel.Attributes
     {
         public override Attribute[] GetColumnAttributes()
         {
-            return new Attribute[] { new ColumnAttribute("type7"), new StringLengthAttribute(100), };
+            return new Attribute[] {new ColumnAttribute("type7"), new StringLengthAttribute(100),};
         }
     }
 }

@@ -12,10 +12,10 @@ namespace SecurityDataModel.Models
         [Key]
         public int IdSecObject { get; set; }
 
-//        [Required]
-//        [StringLength(200)]
-//        public string ObjectName { get; set; }
-//
+        [Required]
+        [StringLength(200)]
+        public string ObjectName { get; set; }
+
 //        [StringLength(100)]
 //        public string type1 { get; set; }
 //
