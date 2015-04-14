@@ -22,12 +22,13 @@ namespace WebSecurity
     public class Security : ISecurity
     {
         public const string AnonymousUser = "anonymous";
-        private readonly UserRepository _repo = new UserRepository();
+        private readonly UserRepository _repo;
         private static Security _instance;
 
         private Security()
         {
             Tools.SetContext(WebMvcSecurityContext.Create);
+            _repo = new UserRepository();
         }
 
         #region ISecurity members
