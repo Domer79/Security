@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using SystemTools.Interfaces;
 using DataRepository;
 using SecurityDataModel.Exceptions;
+using SecurityDataModel.Infrastructure;
 using SecurityDataModel.Models;
 
 namespace SecurityDataModel.Repositories
@@ -14,9 +15,9 @@ namespace SecurityDataModel.Repositories
     {
         private readonly Repository<Role> _repo;
 
-        public RoleRepository(SecurityContext context) 
+        public RoleRepository() 
         {
-            _repo = new Repository<Role>(context);
+            _repo = new Repository<Role>(Tools.Context);
         }
 
         public void Add(string roleName)
@@ -69,14 +70,25 @@ namespace SecurityDataModel.Repositories
             _repo.SaveChanges();
         }
 
+        public IRole GetRole(int idRole)
+        {
+            if (idRole < 1)
+                throw new IndexOutOfRangeException("idRole");
+
+            return _repo.First(r => r.IdRole == idRole);
+        }
+
+        public IRole GetRole(string roleName)
+        {
+            if (roleName == null) 
+                throw new ArgumentNullException("roleName");
+
+            return _repo.First(r => r.RoleName == roleName);
+        }
+
         public IQueryable<IRole> GetQueryableCollection()
         {
             return _repo;
-        }
-
-        protected IRole GetRoleObject(string role)
-        {
-            return _repo.FirstOrDefault(r => r.RoleName == role);
         }
     }
 }

@@ -261,7 +261,7 @@ namespace WebSecurity.Tests
         {
             var repo = new AccessTypeRepository();
 
-            repo.SetNewAccessType<SecurityAccessType>();
+            repo.SetNewAccessTypes<SecurityAccessType>();
 
             var query = repo.GetQueryableCollection();
 

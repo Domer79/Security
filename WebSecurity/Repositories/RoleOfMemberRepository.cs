@@ -10,9 +10,5 @@ namespace WebSecurity.Repositories
 {
     internal class RoleOfMemberRepository : SecurityDataModel.Repositories.RoleOfMemberRepository
     {
-        public RoleOfMemberRepository() : 
-            base(new WebMvcSecurityContext())
-        {
-        }
     }
 }

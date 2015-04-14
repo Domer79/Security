@@ -1,8 +1,10 @@
+using System;
+
 namespace SecurityDataModel.Exceptions
 {
     internal class AccessTypeValidException : BaseException
     {
-        public AccessTypeValidException(string message, params object[] args) 
+        public AccessTypeValidException(string message, params Type[] args) 
             : base(message, args)
         {
         }

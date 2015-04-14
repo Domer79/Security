@@ -7,5 +7,10 @@ namespace WebSecurity.Data
     {
         public DbSet<TableObject> TableObjects { get; set; }
         public DbSet<ActionResultObject> ActionResultObjects { get; set; }
+
+        internal static WebMvcSecurityContext Create()
+        {
+            return new WebMvcSecurityContext();
+        }
     }
 }

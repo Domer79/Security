@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SystemTools.Extensions;
 using SystemTools.Interfaces;
 using DataRepository;
-using SecurityDataModel.Exceptions;
 using SecurityDataModel.Infrastructure;
 using SecurityDataModel.Models;
 
@@ -16,9 +13,9 @@ namespace SecurityDataModel.Repositories
     {
         private readonly Repository<User> _repo;
 
-        public UserRepository(SecurityContext context)
+        public UserRepository()
         {
-            _repo = new Repository<User>(context);
+            _repo = new Repository<User>(Tools.Context);
         }
 
 
@@ -53,15 +50,16 @@ namespace SecurityDataModel.Repositories
             _repo.SaveChanges();
         }
 
-        public IUser GetUser(string login, string password)
+        public IUser GetUser(string login)
         {
-            var user = _repo.FirstOrDefault(u => u.Login == login && u.Password.SequenceEqual(password.GetHashBytes()));
+            var user = _repo.FirstOrDefault(u => u.Login == login);
             return user;
         }
 
-        protected internal IUser GetUserByLogin(string name)
+        public bool SignUser(string login, string password)
         {
-            return _repo.FirstOrDefault(u => u.Login == name);
+            var user = _repo.FirstOrDefault(u => u.Login == login); 
+            return user != null && user.Password.SequenceEqual(password.GetHashBytes());
         }
     }
 }

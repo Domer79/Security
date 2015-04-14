@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using SystemTools.Interfaces;
 using DataRepository;
 using SecurityDataModel.Exceptions;
+using SecurityDataModel.Infrastructure;
 using SecurityDataModel.Models;
 
 namespace SecurityDataModel.Repositories
@@ -14,9 +15,9 @@ namespace SecurityDataModel.Repositories
     {
         private readonly Repository<Group> _repo;
 
-        public GroupRepository(SecurityContext context)
+        public GroupRepository()
         {
-            _repo = new Repository<Group>(context);
+            _repo = new Repository<Group>(Tools.Context);
         }
 
         public void Add(string groupName, string description = null)

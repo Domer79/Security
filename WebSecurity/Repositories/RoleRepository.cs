@@ -5,14 +5,14 @@ namespace WebSecurity.Repositories
 {
     internal class RoleRepository : SecurityDataModel.Repositories.RoleRepository
     {
-        public RoleRepository() 
-            : base(new WebMvcSecurityContext())
+        public static IRole GetRoleObject(string role)
         {
+            return new RoleRepository().GetRole(role);
         }
 
-        public static IRole GetRole(string role)
+        public static IRole GetRoleObject(int idRole)
         {
-            return new RoleRepository().GetRoleObject(role);
+            return new RoleRepository().GetRole(idRole);
         }
     }
 }

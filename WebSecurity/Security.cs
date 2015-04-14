@@ -1,5 +1,4 @@
 using System;
-using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Security.Principal;
 using System.Web;
@@ -7,10 +6,9 @@ using System.Web.Security;
 using SystemTools.Exceptions;
 using SystemTools.Extensions;
 using SystemTools.Interfaces;
-using SystemTools.WebTools.Helpers;
 using SystemTools.WebTools.Infrastructure;
+using SecurityDataModel.Infrastructure;
 using SecurityDataModel.Models;
-using SecurityDataModel.Repositories;
 using WebSecurity.Data;
 using WebSecurity.Repositories;
 using AccessTypeRepository = WebSecurity.Repositories.AccessTypeRepository;
@@ -24,24 +22,56 @@ namespace WebSecurity
     public class Security : ISecurity
     {
         public const string AnonymousUser = "anonymous";
-        private const string DefaultPassword = "DefaultPassword";
         private readonly UserRepository _repo = new UserRepository();
         private static Security _instance;
 
         private Security()
         {
-            var accessRepo = new AccessTypeRepository();
-            accessRepo.SetNewAccessType<SecurityAccessType>();
+            Tools.SetContext(WebMvcSecurityContext.Create);
         }
 
         #region ISecurity members
 
         private IUser User { get; set; }
 
+        public void SetAccessTypes<T>()
+        {
+            var accessRepo = new AccessTypeRepository();
+            accessRepo.SetNewAccessTypes<T>();
+        }
+
+        public void SetAccessTypes<T1, T2>()
+        {
+            IAccessTypeRepository accessRepo = new AccessTypeRepository();
+            accessRepo.SetNewAccessTypes<T1, T2>();
+        }
+
+        public void SetAccessTypes<T1, T2, T3>()
+        {
+            IAccessTypeRepository accessRepo = new AccessTypeRepository();
+            accessRepo.SetNewAccessTypes<T1, T2, T3>();
+        }
+
+        public void SetAccessTypes<T1, T2, T3, T4>()
+        {
+            IAccessTypeRepository accessRepo = new AccessTypeRepository();
+            accessRepo.SetNewAccessTypes<T1, T2, T3, T4>();
+        }
+
+        public IPublicRole PublicRole
+        {
+            get { return WebSecurity.PublicRole.Instance; }
+        }
+
         public bool Sign(string login, string password)
         {
-            User = GetUser(login, password);
-            return User != null;
+            return _repo.SignUser(login, password);
+        }
+
+        //TODO: Реализовать CreateUser в классе Security
+        public void CreateUser(string login, string password)
+        {
+            
         }
 
         public void CreateCookie(string login, bool isPersistent = false)
@@ -98,7 +128,7 @@ namespace WebSecurity
         {
             var grantRepo = new GrantRepository();
             var controllerObject = ActionResultRepository.GetActionResult(controller, action);
-            var roleObject = RoleRepository.GetRole(role);
+            var roleObject = RoleRepository.GetRoleObject(role);
             var accessTypeObject = AccessTypeRepository.GetExecAccessType();
 
             if (controllerObject == null)
@@ -117,7 +147,7 @@ namespace WebSecurity
         {
             var grantRepo = new GrantRepository();
             var entityObject = TableObjectRepository.GetTableObject(entity);
-            var roleObject = RoleRepository.GetRole(role);
+            var roleObject = RoleRepository.GetRoleObject(role);
             var accessTypes = AccessTypeRepository.GetAccessTypes(accessType);
 
             if (entityObject == null)
@@ -137,12 +167,7 @@ namespace WebSecurity
 
         #endregion
 
-        private IUser GetUser(string login, string password = DefaultPassword)
-        {
-            return _repo.GetUser(login, password);
-        }
-
-        public static Security Instance
+        public static ISecurity Instance
         {
             get { return _instance ?? (_instance = new Security()); }
         }

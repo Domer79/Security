@@ -1,5 +1,6 @@
 ﻿using System.Data.Entity;
 using DataRepository;
+using SecurityDataModel.Infrastructure;
 using SecurityDataModel.Models;
 
 namespace SecurityDataModel.Repositories
@@ -8,9 +9,9 @@ namespace SecurityDataModel.Repositories
     {
         private readonly SecurityContext _localContext;
 
-        public UserGroupsDetailRepositoryLocal(SecurityContext context)
+        public UserGroupsDetailRepositoryLocal()
         {
-            _localContext = context;
+            _localContext = Tools.Context;
         }
 
         protected override DbContext GetContext()

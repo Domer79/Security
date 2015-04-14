@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using SystemTools.Interfaces;
 using DataRepository;
 using SecurityDataModel.Exceptions;
+using SecurityDataModel.Infrastructure;
 using SecurityDataModel.Models;
 
 namespace SecurityDataModel.Repositories
@@ -15,11 +16,11 @@ namespace SecurityDataModel.Repositories
         private readonly Repository<Role> _repoRole;
         private readonly RoleOfMemberRepositoryLocal _repo;
 
-        public RoleOfMemberRepository(SecurityContext context)
+        public RoleOfMemberRepository()
         {
-            _repo = new RoleOfMemberRepositoryLocal(context);
-            _repoMember = new Repository<Member>(context);
-            _repoRole = new Repository<Role>(context);
+            _repo = new RoleOfMemberRepositoryLocal();
+            _repoMember = new Repository<Member>(Tools.Context);
+            _repoRole = new Repository<Role>(Tools.Context);
         }
 
         public void AddMemberToRole(int idMember, int idRole)

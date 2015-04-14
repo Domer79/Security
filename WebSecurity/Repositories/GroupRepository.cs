@@ -10,9 +10,5 @@ namespace WebSecurity.Repositories
 {
     internal class GroupRepository : SecurityDataModel.Repositories.GroupRepository
     {
-        public GroupRepository() 
-            : base(new WebMvcSecurityContext())
-        {
-        }
     }
 }

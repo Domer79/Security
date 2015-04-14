@@ -8,6 +8,7 @@ using SystemTools.Extensions;
 using SystemTools.Interfaces;
 using DataRepository;
 using SecurityDataModel.Exceptions;
+using SecurityDataModel.Infrastructure;
 using SecurityDataModel.Models;
 
 namespace SecurityDataModel.Repositories
@@ -16,22 +17,52 @@ namespace SecurityDataModel.Repositories
     {
         private readonly Repository<AccessType> _repo;
 
-        public AccessTypeRepository(SecurityContext context)
+        public AccessTypeRepository()
         {
-            _repo = new Repository<AccessType>(context);
+            _repo = new Repository<AccessType>(Tools.Context);
         }
 
-        public void SetNewAccessType<T>()
+        public void SetNewAccessTypes<T>()
         {
-            SetNewAccessTypes(typeof(T));
+            SetNewAccessTypes(new []{typeof(T)});
         }
 
-        public void SetNewAccessTypes(Type type)
+        public void SetNewAccessTypes<T1, T2>()
         {
-            if (!type.Is<Enum>())
-                throw new AccessTypeValidException("Тип должен быть типом перечисления. Аргументы: {0}", type);
+            SetNewAccessTypes(new[]
+            {
+                typeof (T1), 
+                typeof (T2)
+            });
+        }
 
-            SetNewAccessTypes(Enum.GetNames(type));
+        public void SetNewAccessTypes<T1, T2, T3>()
+        {
+            SetNewAccessTypes(new[]
+            {
+                typeof(T1), 
+                typeof(T2), 
+                typeof(T3)
+            });
+        }
+
+        public void SetNewAccessTypes<T1, T2, T3, T4>()
+        {
+            SetNewAccessTypes(new[]
+            {
+                typeof (T1), 
+                typeof (T2), 
+                typeof (T3), 
+                typeof (T4)
+            });
+        }
+
+        public void SetNewAccessTypes(Type[] types)
+        {
+            if (!types.All(t => t.Is<Enum>()))
+                throw new AccessTypeValidException("Тип должен быть типом перечисления. Аргументы: {0}", types);
+
+            SetNewAccessTypes(types.SelectMany(Enum.GetNames).ToArray());
         }
 
         public void SetNewAccessTypes(string[] accessNames)
@@ -90,6 +121,14 @@ namespace SecurityDataModel.Repositories
                 throw new AccessTypeNotFoundException(accessTypes.First(at => at == null));
 
             return accessTypes;
+        }
+
+        public IAccessType GetAccessType(string accessType)
+        {
+            if (accessType == null) 
+                throw new ArgumentNullException("accessType");
+
+            return _repo.First(at => at.AccessName == accessType);
         }
 
         public IQueryable<IAccessType> GetQueryableCollection()

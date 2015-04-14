@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SystemTools.Interfaces;
 using DataRepository;
 using SecurityDataModel.Exceptions;
+using SecurityDataModel.Infrastructure;
 using SecurityDataModel.Models;
 
 namespace SecurityDataModel.Repositories
@@ -16,11 +14,11 @@ namespace SecurityDataModel.Repositories
         private readonly Repository<User> _userRepo;
         private readonly Repository<Group> _groupRepo;
 
-        public UserGroupsDetailRepository(SecurityContext context)
+        public UserGroupsDetailRepository()
         {
-            _repo = new UserGroupsDetailRepositoryLocal(context);
-            _userRepo = new Repository<User>(context);
-            _groupRepo = new Repository<Group>(context);
+            _repo = new UserGroupsDetailRepositoryLocal();
+            _userRepo = new Repository<User>(Tools.Context);
+            _groupRepo = new Repository<Group>(Tools.Context);
         }
 
         public void AddToGroup(int idUser, int idGroup)

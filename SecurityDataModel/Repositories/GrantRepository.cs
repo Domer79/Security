@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SystemTools.Interfaces;
 using SecurityDataModel.Exceptions;
+using SecurityDataModel.Infrastructure;
 using SecurityDataModel.Models;
 
 namespace SecurityDataModel.Repositories
@@ -13,9 +14,9 @@ namespace SecurityDataModel.Repositories
     {
         private readonly GrantRepositoryLocal _repo;
 
-        public GrantRepository(SecurityContext context)
+        public GrantRepository()
         {
-            _repo = new GrantRepositoryLocal(context);
+            _repo = new GrantRepositoryLocal();
         }
 
         public void AddGrant(ISecObject securityObject, IRole role, IAccessType accessType)

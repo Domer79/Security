@@ -1,6 +1,6 @@
-﻿using System;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using DataRepository;
+using SecurityDataModel.Infrastructure;
 using SecurityDataModel.Models;
 
 namespace SecurityDataModel.Repositories
@@ -10,12 +10,9 @@ namespace SecurityDataModel.Repositories
     {
         private readonly SecurityContext _securityContext;
 
-        protected SecurityRepositoryBase(SecurityContext context)
+        protected SecurityRepositoryBase()
         {
-            if (context == null) 
-                throw new ArgumentNullException("context");
-
-            _securityContext = context;
+            _securityContext = Tools.Context;
         }
 
         protected sealed override DbContext GetContext()

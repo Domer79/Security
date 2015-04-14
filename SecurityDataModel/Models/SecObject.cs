@@ -7,7 +7,7 @@ using DataRepository;
 namespace SecurityDataModel.Models
 {
     [Table("sec.SecObject")]
-    public abstract class SecObject : ModelBase, ISecObject
+    public class SecObject : ModelBase, ISecObject
     {
         [Key]
         public int IdSecObject { get; set; }

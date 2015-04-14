@@ -15,15 +15,6 @@ namespace WebSecurity.Repositories
 {
     internal class ActionResultRepository : SecObjectRepository<ActionResultObject>
     {
-        /// <summary>
-        /// Инициализирует новый экземпляр класса <see cref="T:System.Object"/>.
-        /// </summary>
-        public ActionResultRepository() 
-            : base(new WebMvcSecurityContext())
-        {
-        }
-
-
         public static ISecObject GetActionResult(string controller, string action)
         {
             return new ActionResultRepository().GetActionResultObject(controller, action);
