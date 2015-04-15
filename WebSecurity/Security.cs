@@ -69,10 +69,15 @@ namespace WebSecurity
             return _repo.SignUser(login, password);
         }
 
-        //TODO: Реализовать CreateUser в классе Security
-        public void CreateUser(string login, string password)
+        public void CreateUser(string login, string password, bool withPublic = true)
         {
-            
+            _repo.Add(login, password);
+            var newUser = _repo.GetUser(login);
+            if (withPublic)
+            {
+                var roleOfMembersRepo = new RoleOfMemberRepository();
+                roleOfMembersRepo.AddMemberToRole(newUser, PublicRole);
+            }
         }
 
         public void CreateCookie(string login, bool isPersistent = false)

@@ -47,13 +47,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Exceptions\RepositoryValidationException.cs" />
+    <Compile Include="Infrastructure\Tools.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="ModelBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository.cs" />
     <Compile Include="RepositoryBase.cs" />
-    <Compile Include="Tools\EntityInfo.cs" />
-    <Compile Include="Tools\SystemLogs.cs" />
+    <Compile Include="Infrastructure\ContextInfo.cs" />
+    <Compile Include="Infrastructure\EntityInfo.cs" />
+    <Compile Include="Infrastructure\SystemLogs.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -8,8 +8,8 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Linq.Expressions;
 using DataRepository.Exceptions;
+using DataRepository.Infrastructure;
 using DataRepository.Interfaces;
-using DataRepository.Tools;
 
 namespace DataRepository
 {
@@ -166,7 +166,7 @@ namespace DataRepository
             return GetKeyName<T>();
         }
 
-        public string GetKeyName<TEntity>() where TEntity : class
+        public string GetKeyName<TEntity>() where TEntity : ModelBase
         {
             if (_entityInfos.Keys.Contains(typeof(TEntity)))
                 return ((EntityInfo<TEntity>)_entityInfos[typeof(TEntity)]).KeyName;
@@ -177,12 +177,18 @@ namespace DataRepository
             return entityInfo.KeyName;
         }
 
-        public Expression<Func<TEntity, TKey>> GetExpression<TEntity, TKey>() where TEntity : class
+        public string GetTableName<TEntity>() where TEntity : ModelBase
+        {
+            var entityInfo = new EntityInfo<TEntity>(Context);
+            return entityInfo.TableName;
+        }
+
+        public Expression<Func<TEntity, TKey>> GetExpression<TEntity, TKey>() where TEntity : ModelBase
         {
             return GetExpression<TEntity, TKey>(null);
         }
 
-        public Expression<Func<TEntity, TKey>> GetExpression<TEntity, TKey>(string columnName) where TEntity : class
+        public Expression<Func<TEntity, TKey>> GetExpression<TEntity, TKey>(string columnName) where TEntity : ModelBase
         {
             if (_entityInfos.Keys.Contains(typeof(TEntity)))
                 return ((EntityInfo<TEntity>)_entityInfos[typeof(TEntity)]).GetMemberAccess<TKey>(columnName);
@@ -193,7 +199,7 @@ namespace DataRepository
             return entityInfo.GetMemberAccess<TKey>(columnName);
         }
 
-        public Expression<Func<TEntity, object>> GetExpression<TEntity>(string columnName) where TEntity : class
+        public Expression<Func<TEntity, object>> GetExpression<TEntity>(string columnName) where TEntity : ModelBase
         {
             if (_entityInfos.Keys.Contains(typeof(TEntity)))
                 return ((EntityInfo<TEntity>)_entityInfos[typeof(TEntity)]).GetMemberAccess(columnName);
@@ -204,7 +210,7 @@ namespace DataRepository
             return entityInfo.GetMemberAccess(columnName);
         }
 
-        public EntityInfo<TEntity> GetEntityInfo<TEntity>() where TEntity : class
+        public EntityInfo<TEntity> GetEntityInfo<TEntity>() where TEntity : ModelBase
         {
             if (_entityInfos.Keys.Contains(typeof(TEntity)))
                 return ((EntityInfo<TEntity>)_entityInfos[typeof(TEntity)]);

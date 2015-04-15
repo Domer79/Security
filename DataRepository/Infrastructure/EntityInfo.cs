@@ -6,10 +6,11 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
-namespace DataRepository.Tools
+namespace DataRepository.Infrastructure
 {
-    public class EntityInfo<TEntity> where TEntity : class
+    public class EntityInfo<TEntity> where TEntity : ModelBase
     {
         private readonly DbContext _context;
         private string _keyName;
@@ -67,5 +68,14 @@ namespace DataRepository.Tools
 
             return keyInfo;
         }
+
+        #region GetTableName
+
+        public string TableName
+        {
+            get { return Tools.GetTableName<TEntity>(_context); }
+        }
+
+        #endregion
     }
 }

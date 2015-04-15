@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using SystemTools.Interfaces;
 using DataRepository;
@@ -37,5 +38,16 @@ namespace SecurityDataModel.Models
             set { GroupDescription = value; }
         }
 
+        public int IdMember
+        {
+            get { throw new NotImplementedException();}
+            set { throw new NotImplementedException(); }
+        }
+
+        public string Name
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
+        }
     }
 }

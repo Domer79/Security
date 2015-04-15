@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using SystemTools;
 
-namespace DataRepository.Tools
+namespace DataRepository.Infrastructure
 {
     public class SystemLogs
     {

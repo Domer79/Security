@@ -7,7 +7,7 @@ using DataRepository;
 namespace SecurityDataModel.Models
 {
     [Table("sec.Groups")]
-    public class Group : ModelBase, IGroup, IMember
+    public class Group : ModelBase, IGroup
     {
         [Key]
         [Column(Order = 0)]

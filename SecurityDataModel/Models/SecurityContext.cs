@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.Entity;
 using System.Linq;
 using System.Reflection;
 using SystemTools;
 using SystemTools.Extensions;
+using DataRepository.Infrastructure;
 using SecurityDataModel.Attributes;
 using SecurityDataModel.EntityConfigurations;
 using SecurityDataModel.Exceptions;
@@ -46,13 +48,7 @@ namespace SecurityDataModel.Models
 
         private void SecObjectDbSetInit()
         {
-            var enumerable =
-                GetType()
-                    .GetProperties()
-                    .Where(CheckPropertyToDbSet)
-                    .Where(CheckSecObjectType)
-                    .Select(pi => pi.PropertyType.GetGenericArguments().FirstOrDefault())
-                    .ToArray();
+            var enumerable = ContextInfo.GetDbSetProperties(this).Where(CheckSecObjectType).Select(pi => pi.PropertyType.GetGenericArguments().FirstOrDefault()).ToArray();
 
             var propertyDescriptors = enumerable
                 .SelectMany(t => TypeDescriptor.GetProperties(t).Cast<PropertyDescriptor>())
@@ -92,12 +88,6 @@ namespace SecurityDataModel.Models
             var genericArguments = pi.PropertyType.GetGenericArguments();
             var checkSecObjectType = genericArguments.FirstOrDefault().Is(typeof (SecObject));
             return checkSecObjectType;
-        }
-
-        private static bool CheckPropertyToDbSet(PropertyInfo pi)
-        {
-            var checkPropertyToDbSet = pi.PropertyType.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IDbSet<>));
-            return checkPropertyToDbSet;
         }
     }
 }

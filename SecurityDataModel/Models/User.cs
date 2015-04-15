@@ -11,7 +11,7 @@ using SecurityDataModel.Exceptions;
 namespace SecurityDataModel.Models
 {
     [Table("sec.Users")]
-    public class User : ModelBase, IUser, IMember
+    public class User : ModelBase, IUser
     {
         private string _usersid;
 
