@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace WebSecurity.IntellISense
+namespace WebSecurity.IntellISense.Base
 {
     public abstract class CommandTermBase : IEnumerable<CommandTermBase>
     {
@@ -60,7 +60,7 @@ namespace WebSecurity.IntellISense
 
         protected abstract string GetCommandTerm();
 
-        protected abstract IEnumerable<CommandTermBase> GetNextCommandTerms();
+        protected internal abstract IEnumerable<CommandTermBase> GetNextCommandTerms(params object[] @params);
 
         /// <summary>
         /// Возвращает перечислитель, выполняющий итерацию в коллекции.

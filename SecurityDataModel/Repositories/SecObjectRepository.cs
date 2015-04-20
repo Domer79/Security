@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using SystemTools.Interfaces;
@@ -41,6 +42,9 @@ namespace SecurityDataModel.Repositories
         }
     }
 
+    /// <summary>
+    /// Получает общий список всех обхектов безопасности
+    /// </summary>
     public class SecObjectRepository : RepositoryBase<SecObject>
     {
         private static SecObjectRepository _instance;
@@ -80,6 +84,11 @@ namespace SecurityDataModel.Repositories
         private static SecObjectRepository Instance
         {
             get { return _instance ?? (_instance = new SecObjectRepository()); }
+        }
+
+        public static IQueryable<ISecObject> GetSecObjects()
+        {
+            return Instance.AsQueryable();
         }
     }
 }

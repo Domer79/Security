@@ -1,22 +1,19 @@
-﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WebSecurity.IntellISense.Base;
+using WebSecurity.IntellISense.Grant.AccessTypes;
 
-namespace WebSecurity.IntellISense.Add
+namespace WebSecurity.IntellISense.Grant
 {
-    public class CommandTermAdd : CommandTermBase
+    internal class CommandTermTo : CommandTermBase
     {
         protected override string GetCommandTerm()
         {
-            throw new NotImplementedException();
+            return "to";
         }
 
         protected internal override IEnumerable<CommandTermBase> GetNextCommandTerms(params object[] @params)
         {
-            throw new NotImplementedException();
+            return new RoleNameCommandTermList<CommandTermRoleName>();
         }
     }
 }

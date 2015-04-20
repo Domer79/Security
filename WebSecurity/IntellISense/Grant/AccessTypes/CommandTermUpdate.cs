@@ -1,4 +1,6 @@
-namespace WebSecurity.IntellISense.Grant
+using WebSecurity.IntellISense.Grant.AccessTypes.Base;
+
+namespace WebSecurity.IntellISense.Grant.AccessTypes
 {
     internal class CommandTermUpdate : CommandTermAccessTypeBase
     {
