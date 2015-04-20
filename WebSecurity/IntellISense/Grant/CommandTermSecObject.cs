@@ -17,7 +17,7 @@ namespace WebSecurity.IntellISense.Grant
             return _objectName;
         }
 
-        protected internal override IEnumerable<CommandTermBase> GetNextCommandTerms(params object[] @params)
+        protected override IEnumerable<CommandTermBase> GetNextCommandTerms(params object[] @params)
         {
             return null;
         }

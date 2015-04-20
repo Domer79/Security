@@ -14,7 +14,7 @@ namespace WebSecurity.IntellISense.Add
             throw new NotImplementedException();
         }
 
-        protected internal override IEnumerable<CommandTermBase> GetNextCommandTerms(params object[] @params)
+        protected override IEnumerable<CommandTermBase> GetNextCommandTerms(params object[] @params)
         {
             throw new NotImplementedException();
         }

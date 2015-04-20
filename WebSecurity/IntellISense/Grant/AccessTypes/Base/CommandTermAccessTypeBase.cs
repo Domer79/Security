@@ -36,7 +36,7 @@ namespace WebSecurity.IntellISense.Grant.AccessTypes.Base
             return OptionalDepth;
         }
 
-        protected internal sealed override IEnumerable<CommandTermBase> GetNextCommandTerms(params object[] @params)
+        protected sealed override IEnumerable<CommandTermBase> GetNextCommandTerms(params object[] @params)
         {
             if (_depth < OptionalDepth)
             {

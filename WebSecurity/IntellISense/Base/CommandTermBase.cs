@@ -14,7 +14,7 @@ namespace WebSecurity.IntellISense.Base
             get { return _commandTerm ?? (_commandTerm = GetCommandTerm()); }
         }
 
-        public List<CommandTermBase> NextCommandTerms
+        private IEnumerable<CommandTermBase> NextCommandTerms
         {
             get
             {
@@ -31,11 +31,6 @@ namespace WebSecurity.IntellISense.Base
 
                 return _nextCommandTerms ?? (_nextCommandTerms = new List<CommandTermBase>(commandTerms));
             }
-        }
-
-        public bool ExistCommandTerms
-        {
-            get { return NextCommandTerms != null && NextCommandTerms.Count != 0; }
         }
 
         internal int MaxOptionalDepth
@@ -60,7 +55,7 @@ namespace WebSecurity.IntellISense.Base
 
         protected abstract string GetCommandTerm();
 
-        protected internal abstract IEnumerable<CommandTermBase> GetNextCommandTerms(params object[] @params);
+        protected abstract IEnumerable<CommandTermBase> GetNextCommandTerms(params object[] @params);
 
         /// <summary>
         /// Возвращает перечислитель, выполняющий итерацию в коллекции.
@@ -70,6 +65,7 @@ namespace WebSecurity.IntellISense.Base
         /// </returns>
         public IEnumerator<CommandTermBase> GetEnumerator()
         {
+            //TODO NextCommandTerms = null
             return NextCommandTerms.GetEnumerator();
         }
 

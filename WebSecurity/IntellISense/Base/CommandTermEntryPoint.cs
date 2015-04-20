@@ -9,6 +9,11 @@ namespace WebSecurity.IntellISense.Base
             return null;
         }
 
-        protected internal override abstract IEnumerable<CommandTermBase> GetNextCommandTerms(params object[] @params);
+        protected override abstract IEnumerable<CommandTermBase> GetNextCommandTerms(params object[] @params);
+
+        public virtual ICommandTermTrigger[] Triggers
+        {
+            get { return new ICommandTermTrigger[]{}; }
+        }
     }
 }

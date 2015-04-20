@@ -12,7 +12,7 @@ namespace WebSecurity.IntellISense.Grant.AccessTypes
             return "exec";
         }
 
-        protected internal override IEnumerable<CommandTermBase> GetNextCommandTerms(params object[] @params)
+        protected override IEnumerable<CommandTermBase> GetNextCommandTerms(params object[] @params)
         {
             yield return _commandTermTo;
         }

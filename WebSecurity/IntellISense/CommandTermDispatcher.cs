@@ -3,29 +3,25 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using SystemTools.Extensions;
 using WebSecurity.IntellISense.Base;
 
 namespace WebSecurity.IntellISense
 {
-    public class CommandTermDispatcher<TCommandTermEntryPoint> : IEnumerable<string> where TCommandTermEntryPoint : CommandTermBase, new()
+    public class CommandTermDispatcher<TCommandTermEntryPoint> : IEnumerable<string> where TCommandTermEntryPoint : CommandTermEntryPoint, new()
     {
 //        private const string CommandStringPattern = @"(?<term>[^\W]+)(?<delimiter>[^\w]*)";
         private const string CommandStringPattern = @"[^\s]+";
         private const string EndSpacePattern = @"[\s]$";
-        private readonly CommandTermBase _commandTermEntryPoint = new TCommandTermEntryPoint();
-        private readonly CommandTermStack _stack = new CommandTermStack();
+        private readonly CommandTermStack _stack;
 
         public CommandTermDispatcher(string command)
         {
             CommandStrings = GetCommandStrings(command);
+            _stack = new CommandTermStack(new TCommandTermEntryPoint());
         }
 
         private string[] CommandStrings { get; set; }
-
-        private CommandTermBase CommandTermEntryPoint
-        {
-            get { return _commandTermEntryPoint; }
-        }
 
         private string[] GetCommandStrings(string command)
         {
@@ -42,26 +38,34 @@ namespace WebSecurity.IntellISense
 
         private IEnumerable<string> GetCommandTerms()
         {
-            return GetCommandTerms(0, CommandTermEntryPoint);
+//            return GetCommandTerms(0, new TCommandTermEntryPoint());
+            return GetCommandTerms2(0);
         }
 
-        private IEnumerable<string> GetCommandTerms(int termIndex, CommandTermBase commandTerm)
+        private IEnumerable<string> GetCommandTerms(int termIndex, IEnumerable<CommandTermBase> commandTerm)
         {
-            _stack.Add(commandTerm);
-            var nextCommandTerms = commandTerm.GetNextCommandTerms();
             if (termIndex == CommandStrings.Length - 1)
 //                return commandTerm.GetNextCommandTerms().Where(t => t.CommandTerm.StartsWith(CommandStrings[termIndex])).Select(t => t.ToString());
             {
-                return nextCommandTerms == null ? new[]{""} : nextCommandTerms.Where(t => t.CommandTerm.ToLower().Contains(CommandStrings[termIndex].ToLower())).Select(t => t.ToString());
+                return commandTerm == null ? new[]{""} : commandTerm.Where(t => t.CommandTerm.ToLower().Contains(CommandStrings[termIndex].ToLower())).Select(t => t.ToString());
             }
 
-            return GetCommandTerms(termIndex + 1, nextCommandTerms.First(t => t.CommandTerm == CommandStrings[termIndex]));
+            return GetCommandTerms(termIndex + 1, commandTerm.First(t => t.CommandTerm == CommandStrings[termIndex]));
         }
 
-        private IEnumerable<string> GetCommandTerms2(int termIndex, CommandTermBase commandTerm)
+        private IEnumerable<string> GetCommandTerms2(int termIndex)
         {
-            if (_stack.CanAdd(CommandStrings[termIndex]))
-                _stack.Add(CommandStrings[termIndex]);
+            if (termIndex > CommandStrings.Length - 1)
+                return new[] {""};
+
+            var term = CommandStrings[termIndex];
+            if (!_stack.CanAdd(term))
+            {
+                return _stack.LastCommandNext().Where(t => t.CommandTerm.ToLower().Contains(term.ToLower())).Select(t => t.ToString());
+            }
+
+            _stack.Add(term);
+            return GetCommandTerms2(termIndex + 1);
         }
 
         #region IEnumerable members
@@ -91,9 +95,25 @@ namespace WebSecurity.IntellISense
         #endregion
     }
 
-    public class CommandTermStack : ICollection<CommandTermBase>
+    public interface ICommandTermTrigger
+    {
+        Type[] CommandTermTypes { get; }
+        Action<CommandTermBase> Trigger { get; }
+    }
+
+    internal class CommandTermStack: ICollection<CommandTermBase>
     {
         private readonly List<CommandTermBase> _list = new List<CommandTermBase>();
+        private readonly ICommandTermTrigger[] _triggers;
+
+        public CommandTermStack(CommandTermEntryPoint entryPoint)
+        {
+            if (entryPoint == null) 
+                throw new ArgumentNullException("entryPoint");
+
+            _list.Add(entryPoint);
+            _triggers = entryPoint.Triggers;
+        }
 
         /// <summary>
         /// Возвращает перечислитель, выполняющий итерацию в коллекции.
@@ -121,9 +141,10 @@ namespace WebSecurity.IntellISense
         /// Добавляет элемент в коллекцию <see cref="T:System.Collections.Generic.ICollection`1"/>.
         /// </summary>
         /// <param name="item">Объект, добавляемый в коллекцию <see cref="T:System.Collections.Generic.ICollection`1"/>.</param><exception cref="T:System.NotSupportedException">Объект <see cref="T:System.Collections.Generic.ICollection`1"/> доступен только для чтения.</exception>
-        public void Add(CommandTermBase item)
+        [Obsolete("Не поддерживается. Используйте Add(string commandString)", true)]
+        void ICollection<CommandTermBase>.Add(CommandTermBase item)
         {
-            _list.Add(item);
+            throw new NotSupportedException("Не поддерживается. Используйте Add(string commandString)");
         }
 
         /// <summary>
@@ -132,18 +153,31 @@ namespace WebSecurity.IntellISense
         /// <param name="commandString">Имя команды</param>
         public void Add(string commandString)
         {
-            var commandTerm = GetLastCommandTerm();
+            if (string.IsNullOrEmpty(commandString)) 
+                throw new ArgumentNullException("commandString");
+
+            if (!CanAdd(commandString))
+                throw new InvalidOperationException(string.Format("Данное слово {0} недопустимо", commandString));
+
+            _list.Add(LastCommandTerm.First(ct => ct.CommandTerm == commandString));
+            DoTrigger();
         }
 
-        private CommandTermBase GetLastCommandTerm()
+        private void DoTrigger()
         {
-            throw new NotImplementedException();
+            var commandTermTypes = _list.Select(ct => ct.GetType()).Where(t => !t.Is<CommandTermEntryPoint>()).ToArray();
+            foreach (var commandTermTrigger in _triggers)
+            {
+                if (commandTermTrigger.CommandTermTypes.SequenceEqual(commandTermTypes))
+                    commandTermTrigger.Trigger(LastCommandTerm);
+            }
         }
 
         /// <summary>
         /// Удаляет все элементы из коллекции <see cref="T:System.Collections.Generic.ICollection`1"/>.
         /// </summary>
         /// <exception cref="T:System.NotSupportedException">Объект <see cref="T:System.Collections.Generic.ICollection`1"/> доступен только для чтения.</exception>
+        [Obsolete("Не поддерживается", true)]
         void ICollection<CommandTermBase>.Clear()
         {
             throw new NotSupportedException("Не поддерживается");
@@ -159,7 +193,7 @@ namespace WebSecurity.IntellISense
         [Obsolete("Не поддерживается", true)]
         bool ICollection<CommandTermBase>.Contains(CommandTermBase item)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException("Не поддерживается");
         }
 
         /// <summary>
@@ -181,7 +215,7 @@ namespace WebSecurity.IntellISense
         [Obsolete("Не поддерживается", true)]
         bool ICollection<CommandTermBase>.Remove(CommandTermBase item)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException("Не поддерживается");
         }
 
         /// <summary>
@@ -216,6 +250,21 @@ namespace WebSecurity.IntellISense
         {
             var hashCode = _list.Aggregate(0, (current, commandTerm) => current ^ commandTerm.GetType().GetHashCode());
             return hashCode;
+        }
+
+        public bool CanAdd(string commandString)
+        {
+            return LastCommandTerm.Any(ct => ct.CommandTerm == commandString);
+        }
+
+        internal CommandTermBase LastCommandTerm
+        {
+            get { return _list.Last(); }
+        }
+
+        public IEnumerable<CommandTermBase> LastCommandNext()
+        {
+            return LastCommandTerm;
         }
     }
 }

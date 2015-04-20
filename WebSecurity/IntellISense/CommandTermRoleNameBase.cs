@@ -12,6 +12,6 @@ namespace WebSecurity.IntellISense
             return RoleName;
         }
 
-        protected internal override abstract IEnumerable<CommandTermBase> GetNextCommandTerms(params object[] @params);
+        protected override abstract IEnumerable<CommandTermBase> GetNextCommandTerms(params object[] @params);
     }
 }

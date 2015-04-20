@@ -99,7 +99,7 @@
     <Compile Include="IntellISense\Grant\CommandTermRoleNameForGrant.cs" />
     <Compile Include="IntellISense\Grant\CommandTermSecObject.cs" />
     <Compile Include="IntellISense\Grant\CommandTermTo.cs" />
-    <Compile Include="IntellISense\Grant\SecObjectCommandTermList.cs" />
+    <Compile Include="IntellISense\Grant\Triggers\ExecTrigger.cs" />
     <Compile Include="IntellISense\RoleNameCommandTermList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PublicRole.cs" />
