@@ -1,0 +1,6 @@
+﻿add {user|group|role|controller|table} {<Имя добавляемого объекта>} [userpassword-"Если add user"]
+set {role|group} {<Имя роли|Имя группы>} to {<(Логин пользователя|Имя группы)-"Для set role"|(Логин пользователя)-"Для set group">}
+grant {exec|select|insert|update|delete} [,...n] to {<Имя роли>} on {<SecObject ObjectName>}
+delete {member|user|group|controller|table} {<memberName|userName|groupName|controllerName|tableName>} [from {<roleName-"Для delete member"|groupName-"для delete user">}]
+
+(user, group, role - общие модификаторы)

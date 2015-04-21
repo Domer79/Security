@@ -12,8 +12,8 @@ namespace WebSecurity.IntellISense.Add
         private readonly CommandTermCommonUser _commandTermCommonUser = new CommandTermCommonUser();
         private readonly CommandTermCommonGroup _commandTermCommonGroup = new CommandTermCommonGroup();
         private readonly CommandTermCommonRole _commandTermCommonRole = new CommandTermCommonRole();
-        private readonly CommandTermController _commandTermController = new CommandTermController();
-        private readonly CommandTermTable _commandTermTable = new CommandTermTable();
+        private readonly CommandTermCommonController _commandTermController = new CommandTermCommonController();
+        private readonly CommandTermCommonTable _commandTermTable = new CommandTermCommonTable();
 
         protected override string GetCommandTerm()
         {

@@ -5,6 +5,7 @@ using SystemTools.Interfaces;
 using IntellISenseSecurity.Base;
 using SecurityDataModel.Models;
 using WebSecurity.IntellISense.CommandTermCommon;
+using WebSecurity.IntellISense.Delete;
 using WebSecurity.IntellISense.Grant;
 using WebSecurity.Repositories;
 
@@ -132,6 +133,96 @@ namespace WebSecurity.IntellISense.Triggers
             var ct = commandTerm as CommandTermTo;
             var query = UserRepository.GetUserCollection().Select(u => u.Login).Union(GroupRepository.GetGroupCollection().Select(g => g.GroupName));
             ct.NextCommandTermList = query.ToList().Select(u => new CommandTermMemberName { MemberName = u });
+        }
+
+        #endregion
+
+        #region delete triggers
+
+        #region DELETE MEMBER triggers
+
+        public static void DeleteMemberMemberName(CommandTermBase commandTerm)
+        {
+            if (commandTerm as CommandTermMemberName == null)
+                throw new ArgumentNullException("commandTerm");
+
+            var ct = commandTerm as CommandTermMemberName;
+            ct.NextCommandTermList = new List<CommandTermBase> {new CommandTermFrom()};
+        }
+
+        public static void DeleteMemberFromTrigger(CommandTermBase commandTerm)
+        {
+            if (commandTerm as CommandTermFrom == null)
+                throw new ArgumentNullException("commandTerm");
+
+            var ct = commandTerm as CommandTermFrom;
+            var query = RoleRepository.GetRoleCollection();
+            ct.NextCommandTermList = query.ToList().Select(r => new CommandTermRoleName { RoleName = r.RoleName });
+        }
+
+        #endregion
+
+        #region delete user triggers
+
+        public static void DeleteUserTrigger(CommandTermBase commandTerm)
+        {
+            if (commandTerm as CommandTermCommonUser == null)
+                throw new ArgumentNullException("commandTerm");
+
+            var ct = commandTerm as CommandTermCommonUser;
+            var query = UserRepository.GetUserCollection();
+            ct.NextCommandTermList = query.ToList().Select(u => new CommandTermUserName { UserName = u.Login });
+        }
+
+        public static void DeleteUserUserNameTrigger(CommandTermBase commandTerm)
+        {
+            if (commandTerm as CommandTermUserName == null)
+                throw new ArgumentNullException("commandTerm");
+
+            var ct = commandTerm as CommandTermUserName;
+            ct.NextCommandTermList = new List<CommandTermBase> { new CommandTermFrom() };
+        }
+
+        public static void DeleteUserFromTrigger(CommandTermBase commandTerm)
+        {
+            if (commandTerm as CommandTermFrom == null)
+                throw new ArgumentNullException("commandTerm");
+
+            var ct = commandTerm as CommandTermFrom;
+            var query = GroupRepository.GetGroupCollection();
+            ct.NextCommandTermList = query.ToList().Select(g => new CommandTermGroupName { GroupName = g.GroupName });
+        }
+
+        #endregion
+
+        public static void DeleteGroupTrigger(CommandTermBase commandTerm)
+        {
+            if (commandTerm as CommandTermCommonGroup == null)
+                throw new ArgumentNullException("commandTerm");
+
+            var ct = commandTerm as CommandTermCommonGroup;
+            var query = GroupRepository.GetGroupCollection();
+            ct.NextCommandTermList = query.ToList().Select(g => new CommandTermGroupName { GroupName = g.GroupName });
+        }
+
+        public static void DeleteControllerTrigger(CommandTermBase commandTerm)
+        {
+            if (commandTerm as CommandTermCommonController == null)
+                throw new ArgumentNullException("commandTerm");
+
+            var ct = commandTerm as CommandTermCommonController;
+            var query = new ActionResultRepository().GetQueryableCollection();
+            ct.NextCommandTermList = query.ToList().Select(so => new CommandTermSecObjectName(so.ObjectName));
+        }
+
+        public static void DeleteTableTrigger(CommandTermBase commandTerm)
+        {
+            if (commandTerm as CommandTermCommonTable == null)
+                throw new ArgumentNullException("commandTerm");
+
+            var ct = commandTerm as CommandTermCommonTable;
+            var query = new TableObjectRepository().GetQueryableCollection();
+            ct.NextCommandTermList = query.ToList().Select(so => new CommandTermSecObjectName(so.ObjectName));
         }
 
         #endregion

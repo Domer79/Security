@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using IntellISenseSecurity.Base;
 
-namespace WebSecurity.IntellISense.Grant
+namespace WebSecurity.IntellISense
 {
-    internal class CommandTermSecObject : CommandTermBase
+    internal class CommandTermSecObjectName : CommandTermBase
     {
         private readonly string _objectName;
 
-        public CommandTermSecObject(string objectName)
+        public CommandTermSecObjectName(string objectName)
         {
             _objectName = objectName;
         }

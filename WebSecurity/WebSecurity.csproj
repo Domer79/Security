@@ -82,18 +82,22 @@
     <Compile Include="Infrastructure\ControllerCollection.cs" />
     <Compile Include="Infrastructure\Tools.cs" />
     <Compile Include="IntellISense\Add\CommandTermAdd.cs" />
-    <Compile Include="IntellISense\Add\CommandTermController.cs" />
-    <Compile Include="IntellISense\Add\CommandTermTable.cs" />
     <Compile Include="IntellISense\CommandTerm.cs" />
+    <Compile Include="IntellISense\CommandTermCommon\CommandTermCommonController.cs" />
     <Compile Include="IntellISense\CommandTermCommon\CommandTermCommonGroup.cs" />
     <Compile Include="IntellISense\CommandTermCommon\CommandTermCommonRole.cs" />
+    <Compile Include="IntellISense\CommandTermCommon\CommandTermCommonTable.cs" />
     <Compile Include="IntellISense\CommandTermCommon\CommandTermCommonUser.cs" />
     <Compile Include="IntellISense\CommandTermCommon\CommandTermTo.cs" />
     <Compile Include="IntellISense\CommandTermGroupName.cs" />
     <Compile Include="IntellISense\CommandTermMain.cs" />
     <Compile Include="IntellISense\CommandTermMemberName.cs" />
     <Compile Include="IntellISense\CommandTermRoleName.cs" />
+    <Compile Include="IntellISense\CommandTermSecObjectName.cs" />
     <Compile Include="IntellISense\CommandTermUserName.cs" />
+    <Compile Include="IntellISense\Delete\CommandTermDelete.cs" />
+    <Compile Include="IntellISense\Delete\CommandTermFrom.cs" />
+    <Compile Include="IntellISense\Delete\CommandTermMember.cs" />
     <Compile Include="IntellISense\Grant\AccessTypes\Base\CommandTermAccessTypeBase.cs" />
     <Compile Include="IntellISense\Grant\AccessTypes\CommandTermDelete.cs" />
     <Compile Include="IntellISense\Grant\AccessTypes\CommandTermExec.cs" />
@@ -102,8 +106,13 @@
     <Compile Include="IntellISense\Grant\AccessTypes\CommandTermUpdate.cs" />
     <Compile Include="IntellISense\Grant\CommandTermGrant.cs" />
     <Compile Include="IntellISense\Grant\CommandTermOnGrant.cs" />
-    <Compile Include="IntellISense\Grant\CommandTermSecObject.cs" />
     <Compile Include="IntellISense\Set\CommandTermSet.cs" />
+    <Compile Include="IntellISense\Triggers\Delete\DeleteGroupTrigger.cs" />
+    <Compile Include="IntellISense\Triggers\Delete\Member\DeleteMemberFromTrigger.cs" />
+    <Compile Include="IntellISense\Triggers\Delete\Member\DeleteMemberMemberNameTrigger.cs" />
+    <Compile Include="IntellISense\Triggers\Delete\User\DeleteUserFromTrigger.cs" />
+    <Compile Include="IntellISense\Triggers\Delete\User\DeleteUserTrigger.cs" />
+    <Compile Include="IntellISense\Triggers\Delete\User\DeleteUserUserName.cs" />
     <Compile Include="IntellISense\Triggers\ExecTrigger.cs" />
     <Compile Include="IntellISense\Triggers\GrantToRoleNameTrigger.cs" />
     <Compile Include="IntellISense\Triggers\GrantToTrigger.cs" />
@@ -153,6 +162,9 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="IntellISense\Синтаксис комманд для системы безопасности.txt" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

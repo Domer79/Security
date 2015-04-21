@@ -18,7 +18,7 @@ namespace WebSecurity.IntellISense.Grant
 
         protected override IEnumerable<CommandTermBase> GetNextCommandTerms(params object[] @params)
         {
-            return SecObjectCollection.ToList().Select(so => new CommandTermSecObject(so.ObjectName));
+            return SecObjectCollection.ToList().Select(so => new CommandTermSecObjectName(so.ObjectName));
         }
     }
 }

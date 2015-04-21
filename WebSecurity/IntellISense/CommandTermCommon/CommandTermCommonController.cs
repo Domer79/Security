@@ -1,10 +1,9 @@
-using System;
 using System.Collections.Generic;
 using IntellISenseSecurity.Base;
 
-namespace WebSecurity.IntellISense.Add
+namespace WebSecurity.IntellISense.CommandTermCommon
 {
-    internal class CommandTermController : CommandTermBase
+    internal class CommandTermCommonController : CommandTermBase
     {
         protected override string GetCommandTerm()
         {
@@ -13,7 +12,9 @@ namespace WebSecurity.IntellISense.Add
 
         protected override IEnumerable<CommandTermBase> GetNextCommandTerms(params object[] @params)
         {
-            return null;
+            return NextCommandTermList;
         }
+
+        public IEnumerable<CommandTermBase> NextCommandTermList { get; set; }
     }
 }
