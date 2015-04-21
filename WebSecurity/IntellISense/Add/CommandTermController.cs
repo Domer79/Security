@@ -1,20 +1,14 @@
+using System;
 using System.Collections.Generic;
 using IntellISenseSecurity.Base;
 
-namespace WebSecurity.IntellISense.Grant
+namespace WebSecurity.IntellISense.Add
 {
-    internal class CommandTermSecObject : CommandTermBase
+    internal class CommandTermController : CommandTermBase
     {
-        private readonly string _objectName;
-
-        public CommandTermSecObject(string objectName)
-        {
-            _objectName = objectName;
-        }
-
         protected override string GetCommandTerm()
         {
-            return _objectName;
+            return "controller";
         }
 
         protected override IEnumerable<CommandTermBase> GetNextCommandTerms(params object[] @params)

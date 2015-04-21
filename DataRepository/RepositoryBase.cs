@@ -13,12 +13,9 @@ using DataRepository.Interfaces;
 
 namespace DataRepository
 {
-    public abstract class RepositoryBase<T> : IRepository<T>, IQueryable<T>
-//        ICollection<T> 
+    public abstract class RepositoryBase<T> : IRepository<T>
         where T : ModelBase
     {
-        //todo: решить вопрос с потоками, нельзы использовать один и тот же контекст (т.е. он не должен быть статичным для всего приложения)
-//        private readonly TaxorgContext _context = TaxorgContext.Context;
         private DbContext _context;
         private DbSet<T> _set;
         private readonly Dictionary<Type, object> _entityInfos = new Dictionary<Type, object>();

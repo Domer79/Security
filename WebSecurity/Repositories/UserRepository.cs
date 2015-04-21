@@ -15,5 +15,10 @@ namespace WebSecurity.Repositories
         {
             return new UserProvider(GetUser(name));
         }
+
+        public static IQueryable<IUser> GetUserCollection()
+        {
+            return new UserRepository().GetQueryableCollection();
+        }
     }
 }

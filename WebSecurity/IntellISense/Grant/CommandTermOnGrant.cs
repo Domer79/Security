@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using SystemTools.Interfaces;
-using WebSecurity.IntellISense.Base;
+using IntellISenseSecurity.Base;
+using WebSecurity.Repositories;
 
 namespace WebSecurity.IntellISense.Grant
 {

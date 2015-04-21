@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SecurityDataModel.Models;
-using WebSecurity.Data;
+﻿using System.Linq;
+using SystemTools.Interfaces;
 
 namespace WebSecurity.Repositories
 {
     internal class GroupRepository : SecurityDataModel.Repositories.GroupRepository
     {
+        public static IQueryable<IGroup> GetGroupCollection()
+        {
+            return new GroupRepository().GetQueryableCollection();
+        }
     }
 }

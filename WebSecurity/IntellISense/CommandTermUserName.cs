@@ -1,29 +1,22 @@
-﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using IntellISenseSecurity.Base;
 
 namespace WebSecurity.IntellISense
 {
-    public class CommandTerm : CommandTermBase
+    public class CommandTermUserName : CommandTermBase
     {
-        private readonly string _term;
-
-        public CommandTerm(string term)
-        {
-            _term = term;
-        }
+        public IEnumerable<CommandTermBase> NextCommandTermList { get; set; }
 
         protected override string GetCommandTerm()
         {
-            return _term;
+            return UserName;
         }
 
         protected override IEnumerable<CommandTermBase> GetNextCommandTerms(params object[] @params)
         {
-            return null;
+            return NextCommandTermList;
         }
+
+        public string UserName { get; set; }
     }
 }

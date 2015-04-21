@@ -1,4 +1,7 @@
-﻿using SystemTools.Interfaces;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using SystemTools.Interfaces;
 using WebSecurity.Data;
 
 namespace WebSecurity.Repositories
@@ -13,6 +16,11 @@ namespace WebSecurity.Repositories
         public static IRole GetRoleObject(int idRole)
         {
             return new RoleRepository().GetRole(idRole);
+        }
+
+        public static IQueryable<IRole> GetRoleCollection()
+        {
+            return new RoleRepository().GetQueryableCollection();
         }
     }
 }

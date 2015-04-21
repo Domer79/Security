@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using WebSecurity.IntellISense.Base;
+using IntellISenseSecurity.Base;
 using WebSecurity.IntellISense.Grant.AccessTypes;
 using WebSecurity.IntellISense.Grant.AccessTypes.Base;
 

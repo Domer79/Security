@@ -1,5 +1,6 @@
 using System.Collections.Generic;
-using WebSecurity.IntellISense.Base;
+using IntellISenseSecurity.Base;
+using WebSecurity.IntellISense.CommandTermCommon;
 
 namespace WebSecurity.IntellISense.Grant.AccessTypes.Base
 {

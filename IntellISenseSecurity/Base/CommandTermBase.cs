@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace WebSecurity.IntellISense.Base
+namespace IntellISenseSecurity.Base
 {
     public abstract class CommandTermBase : IEnumerable<CommandTermBase>
     {
@@ -22,13 +22,14 @@ namespace WebSecurity.IntellISense.Base
                     return _nextCommandTerms;
 
                 var nextCommandTerms = GetNextCommandTerms();
-                if (nextCommandTerms == null)
-                    return null;
+//                if (nextCommandTerms == null)
+//                    return null;
 
-                var commandTerms = nextCommandTerms as CommandTermBase[] ?? nextCommandTerms.ToArray();
-                if (!commandTerms.Any())
-                    return null;
+                var commandTerms = nextCommandTerms == null ? new CommandTermBase[]{}: nextCommandTerms.ToArray();
+//                if (!commandTerms.Any())
+//                    return null;
 
+//                return _nextCommandTerms ?? (_nextCommandTerms = new List<CommandTermBase>(commandTerms));
                 return _nextCommandTerms ?? (_nextCommandTerms = new List<CommandTermBase>(commandTerms));
             }
         }
@@ -65,7 +66,6 @@ namespace WebSecurity.IntellISense.Base
         /// </returns>
         public IEnumerator<CommandTermBase> GetEnumerator()
         {
-            //TODO NextCommandTerms = null
             return NextCommandTerms.GetEnumerator();
         }
 

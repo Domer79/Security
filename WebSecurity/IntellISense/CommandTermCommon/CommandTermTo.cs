@@ -1,8 +1,9 @@
+using System;
 using System.Collections.Generic;
-using WebSecurity.IntellISense.Base;
-using WebSecurity.IntellISense.Grant.AccessTypes;
+using IntellISenseSecurity.Base;
+using WebSecurity.IntellISense.Grant;
 
-namespace WebSecurity.IntellISense.Grant
+namespace WebSecurity.IntellISense.CommandTermCommon
 {
     internal class CommandTermTo : CommandTermBase
     {
@@ -13,7 +14,11 @@ namespace WebSecurity.IntellISense.Grant
 
         protected override IEnumerable<CommandTermBase> GetNextCommandTerms(params object[] @params)
         {
-            return new RoleNameCommandTermList<CommandTermGrantRoleName>();
+            return NextCommandTermList;
         }
+
+        public IEnumerable<CommandTermBase> NextCommandTermList { get; set; }
+
+        //TODO: Реализовать SetTrigger
     }
 }
