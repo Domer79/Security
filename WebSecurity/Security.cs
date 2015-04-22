@@ -64,6 +64,11 @@ namespace WebSecurity
             get { return WebSecurity.PublicRole.Instance; }
         }
 
+        public void AddUser(string userName, string password)
+        {
+            _repo.Add(userName, password);
+        }
+
         public bool Sign(string login, string password)
         {
             return _repo.SignUser(login, password);

@@ -5,7 +5,7 @@ using WebSecurity.IntellISense.CommandTermCommon;
 using WebSecurity.IntellISense.Grant;
 using WebSecurity.IntellISense.Grant.AccessTypes.Base;
 
-namespace WebSecurity.IntellISense.Triggers
+namespace WebSecurity.IntellISense.Triggers.Grant
 {
     public class TableTrigger : ICommandTermTrigger
     {

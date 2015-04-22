@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="Base\CommandTermBase.cs" />
     <Compile Include="Base\CommandTermEntryPoint.cs" />
+    <Compile Include="CommandTermAdditionalParam.cs" />
     <Compile Include="CommandTermDispatcher.cs" />
     <Compile Include="CommandTermStack.cs" />
     <Compile Include="CommandTermTypeComparer.cs" />

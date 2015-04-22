@@ -4,9 +4,9 @@ using IntellISenseSecurity.Base;
 using WebSecurity.IntellISense.CommandTermCommon;
 using WebSecurity.IntellISense.Set;
 
-namespace WebSecurity.IntellISense.Triggers
+namespace WebSecurity.IntellISense.Triggers.Set.Group
 {
-    public class SetGroupGroupNameTrigger : ICommandTermTrigger
+    public class SetGroupTrigger : ICommandTermTrigger
     {
         public Type[][] CommandTermTypes
         {
@@ -17,8 +17,7 @@ namespace WebSecurity.IntellISense.Triggers
                     new[]
                     {
                         typeof (CommandTermSet),
-                        typeof (CommandTermCommonGroup),
-                        typeof (CommandTermGroupName)
+                        typeof (CommandTermCommonGroup)
                     }
                 };
             }
@@ -26,7 +25,7 @@ namespace WebSecurity.IntellISense.Triggers
 
         public Action<CommandTermBase> Trigger
         {
-            get { return TriggerActions.SetGroupGroupNameTrigger; }
+            get { return TriggerActions.SetGroupTrigger; }
         }
     }
 }

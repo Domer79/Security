@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using IntellISenseSecurity;
 using IntellISenseSecurity.Base;
 using WebSecurity.IntellISense.CommandTermCommon;
@@ -10,7 +6,7 @@ using WebSecurity.IntellISense.Grant;
 using WebSecurity.IntellISense.Grant.AccessTypes;
 using WebSecurity.IntellISense.Grant.AccessTypes.Base;
 
-namespace WebSecurity.IntellISense.Triggers
+namespace WebSecurity.IntellISense.Triggers.Grant
 {
     public class GrantToRoleNameTrigger : ICommandTermTrigger
     {

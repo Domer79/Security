@@ -76,13 +76,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CmdRun\CommandRunDispatcher.cs" />
     <Compile Include="Data\ActionResultObject.cs" />
     <Compile Include="Data\WebMvcSecurityContext.cs" />
     <Compile Include="Data\TableObject.cs" />
     <Compile Include="Infrastructure\ControllerCollection.cs" />
     <Compile Include="Infrastructure\Tools.cs" />
     <Compile Include="IntellISense\Add\CommandTermAdd.cs" />
-    <Compile Include="IntellISense\CommandTerm.cs" />
     <Compile Include="IntellISense\CommandTermCommon\CommandTermCommonController.cs" />
     <Compile Include="IntellISense\CommandTermCommon\CommandTermCommonGroup.cs" />
     <Compile Include="IntellISense\CommandTermCommon\CommandTermCommonRole.cs" />
@@ -113,14 +113,16 @@
     <Compile Include="IntellISense\Triggers\Delete\User\DeleteUserFromTrigger.cs" />
     <Compile Include="IntellISense\Triggers\Delete\User\DeleteUserTrigger.cs" />
     <Compile Include="IntellISense\Triggers\Delete\User\DeleteUserUserName.cs" />
-    <Compile Include="IntellISense\Triggers\ExecTrigger.cs" />
-    <Compile Include="IntellISense\Triggers\GrantToRoleNameTrigger.cs" />
-    <Compile Include="IntellISense\Triggers\GrantToTrigger.cs" />
-    <Compile Include="IntellISense\Triggers\SetGroupGroupNameTrigger.cs" />
-    <Compile Include="IntellISense\Triggers\SetGroupToTrigger.cs" />
-    <Compile Include="IntellISense\Triggers\SetGroupTrigger.cs" />
-    <Compile Include="IntellISense\Triggers\SetRoleTrigger.cs" />
-    <Compile Include="IntellISense\Triggers\TableTrigger.cs" />
+    <Compile Include="IntellISense\Triggers\Grant\ExecTrigger.cs" />
+    <Compile Include="IntellISense\Triggers\Grant\GrantToRoleNameTrigger.cs" />
+    <Compile Include="IntellISense\Triggers\Grant\GrantToTrigger.cs" />
+    <Compile Include="IntellISense\Triggers\Grant\TableTrigger.cs" />
+    <Compile Include="IntellISense\Triggers\Set\Group\SetGroupGroupNameTrigger.cs" />
+    <Compile Include="IntellISense\Triggers\Set\Group\SetGroupToTrigger.cs" />
+    <Compile Include="IntellISense\Triggers\Set\Group\SetGroupTrigger.cs" />
+    <Compile Include="IntellISense\Triggers\Set\Role\SetRoleRoleNameTrigger.cs" />
+    <Compile Include="IntellISense\Triggers\Set\Role\SetRoleToTrigger.cs" />
+    <Compile Include="IntellISense\Triggers\Set\Role\SetRoleTrigger.cs" />
     <Compile Include="IntellISense\Triggers\TriggerActions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PublicRole.cs" />

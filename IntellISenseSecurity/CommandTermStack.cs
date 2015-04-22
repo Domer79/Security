@@ -7,7 +7,7 @@ using IntellISenseSecurity.Base;
 
 namespace IntellISenseSecurity
 {
-    internal class CommandTermStack: ICollection<CommandTermBase>
+    public class CommandTermStack: ICollection<CommandTermBase>
     {
         private readonly List<CommandTermBase> _list = new List<CommandTermBase>();
         private readonly ICommandTermTrigger[] _triggers;
@@ -175,6 +175,36 @@ namespace IntellISenseSecurity
         public IEnumerable<CommandTermBase> LastCommandNext()
         {
             return LastCommandTerm;
+        }
+
+        public CommandTermBase this[int index]
+        {
+            get { return _list[index]; }
+        }
+
+        public CommandTermBase this[string term]
+        {
+            get { return this.First(ct => ct.CommandTerm == term); }
+        }
+
+        public T GetCommandTerm<T>() where T : CommandTermBase
+        {
+            return (T)this.First(ct => ct.GetType() == typeof (T));
+        }
+
+        public void AddAdditionCommandTerm(string term)
+        {
+            _list.Add(new CommandTermAdditionalParam(term));
+        }
+
+        public CommandTermAdditionalParam[] GetAdditionalParams()
+        {
+            return this.OfType<CommandTermAdditionalParam>().ToArray();
+        }
+
+        public IEnumerable<CommandTermBase> GetLastCommandsNextNotAdditional()
+        {
+            return _list.Last(ct => !ct.Is<CommandTermAdditionalParam>());
         }
     }
 }

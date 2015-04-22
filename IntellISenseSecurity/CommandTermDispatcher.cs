@@ -11,15 +11,25 @@ namespace IntellISenseSecurity
 //        private const string CommandStringPattern = @"(?<term>[^\W]+)(?<delimiter>[^\w]*)";
         private const string CommandStringPattern = @"[^\s]+";
         private const string EndSpacePattern = @"[\s]$";
-        private readonly CommandTermStack _stack;
+        private CommandTermStack _stack;
 
         public CommandTermDispatcher(string command)
         {
             CommandStrings = GetCommandStrings(command);
-            _stack = new CommandTermStack(new TCommandTermEntryPoint());
         }
 
         private string[] CommandStrings { get; set; }
+
+        public CommandTermStack Stack
+        {
+            get
+            {
+                if (_stack == null)
+                    StackInit();
+
+                return _stack;
+            }
+        }
 
         private string[] GetCommandStrings(string command)
         {
@@ -37,7 +47,8 @@ namespace IntellISenseSecurity
         private IEnumerable<string> GetCommandTerms()
         {
 //            return GetCommandTerms(0, new TCommandTermEntryPoint());
-            return GetCommandTerms2(0);
+//            return GetCommandTerms2(0);
+            return GetCommandTerms3();
         }
 
         private IEnumerable<string> GetCommandTerms(int termIndex, IEnumerable<CommandTermBase> commandTerm)
@@ -57,13 +68,41 @@ namespace IntellISenseSecurity
                 return new[] {""};
 
             var term = CommandStrings[termIndex];
-            if (!_stack.CanAdd(term))
+            if (!Stack.CanAdd(term))
             {
-                return _stack.LastCommandNext().Where(t => t.CommandTerm.ToLower().Contains(term.ToLower())).Select(t => t.ToString());
+                var commandTerms2 = Stack.LastCommandNext().Where(t => t.CommandTerm.ToLower().Contains(term.ToLower())).Select(t => t.ToString());
+                for (var i = termIndex; i < CommandStrings.Length; i++)
+                {
+                    Stack.AddAdditionCommandTerm(CommandStrings[i]);
+                }
+                return commandTerms2;
             }
 
-            _stack.Add(term);
+            Stack.Add(term);
             return GetCommandTerms2(termIndex + 1);
+        }
+
+        private IEnumerable<string> GetCommandTerms3()
+        {
+            return Stack.GetLastCommandsNextNotAdditional().Where(t => t.CommandTerm.ToLower().Contains(LastTerm.ToLower())).Select(t => t.ToString());
+        }
+
+        public string LastTerm
+        {
+            get { return CommandStrings[CommandStrings.Length - 1]; }
+        }
+
+        private void StackInit()
+        {
+            _stack = new CommandTermStack(new TCommandTermEntryPoint());
+
+            foreach (var commandString in CommandStrings)
+            {
+                if (!Stack.CanAdd(commandString))
+                    Stack.AddAdditionCommandTerm(commandString);
+                else
+                    Stack.Add(commandString);
+            }
         }
 
         #region IEnumerable members

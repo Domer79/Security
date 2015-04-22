@@ -34,13 +34,13 @@ namespace SecurityDataModel.Repositories
             if (login == null) 
                 throw new ArgumentNullException("login");
 
-            if (password == null) 
-                throw new ArgumentNullException("password");
+//            if (password == null) 
+//                throw new ArgumentNullException("password");
 
             var user = new User
             {
                 Login = login,
-                Password = password.GetHashBytes(),
+                Password = password == null ? null : password.GetHashBytes(),
                 DisplayName = displayName,
                 Email = email,
                 Usersid = sid

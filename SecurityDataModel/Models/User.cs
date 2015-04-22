@@ -43,7 +43,7 @@ namespace SecurityDataModel.Models
             }
         }
 
-        [Required]
+//        [Required]
         public byte[] Password { get; set; }
 
         #region IMember members

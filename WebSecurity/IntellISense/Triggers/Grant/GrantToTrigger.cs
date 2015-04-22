@@ -6,7 +6,7 @@ using WebSecurity.IntellISense.Grant;
 using WebSecurity.IntellISense.Grant.AccessTypes;
 using WebSecurity.IntellISense.Grant.AccessTypes.Base;
 
-namespace WebSecurity.IntellISense.Triggers
+namespace WebSecurity.IntellISense.Triggers.Grant
 {
     public class GrantToTrigger : ICommandTermTrigger
     {

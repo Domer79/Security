@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using IntellISenseSecurity.Base;
 
-namespace WebSecurity.IntellISense
+namespace IntellISenseSecurity
 {
-    public class CommandTerm : CommandTermBase
+    public class CommandTermAdditionalParam : CommandTermBase
     {
         private readonly string _term;
 
-        public CommandTerm(string term)
+        public CommandTermAdditionalParam(string term)
         {
             _term = term;
         }

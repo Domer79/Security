@@ -1,12 +1,12 @@
-using System;
+﻿using System;
 using IntellISenseSecurity;
 using IntellISenseSecurity.Base;
 using WebSecurity.IntellISense.CommandTermCommon;
 using WebSecurity.IntellISense.Set;
 
-namespace WebSecurity.IntellISense.Triggers
+namespace WebSecurity.IntellISense.Triggers.Set.Role
 {
-    public class SetGroupToTrigger : ICommandTermTrigger
+    public class SetRoleRoleNameTrigger : ICommandTermTrigger
     {
         public Type[][] CommandTermTypes
         {
@@ -17,9 +17,8 @@ namespace WebSecurity.IntellISense.Triggers
                     new[]
                     {
                         typeof (CommandTermSet),
-                        typeof (CommandTermCommonGroup),
-                        typeof (CommandTermGroupName),
-                        typeof (CommandTermTo)
+                        typeof (CommandTermCommonRole),
+                        typeof (CommandTermRoleName)
                     }
                 };
             }
@@ -27,7 +26,7 @@ namespace WebSecurity.IntellISense.Triggers
 
         public Action<CommandTermBase> Trigger
         {
-            get { return TriggerActions.SetGroupToTrigger; }
+            get { return TriggerActions.SetRoleRoleNameTrigger; }
         }
     }
 }

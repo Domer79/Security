@@ -2,12 +2,11 @@
 using IntellISenseSecurity;
 using IntellISenseSecurity.Base;
 using WebSecurity.IntellISense.CommandTermCommon;
-using WebSecurity.IntellISense.Grant;
-using WebSecurity.IntellISense.Grant.AccessTypes;
+using WebSecurity.IntellISense.Set;
 
-namespace WebSecurity.IntellISense.Triggers
+namespace WebSecurity.IntellISense.Triggers.Set.Role
 {
-    public class ExecTrigger : ICommandTermTrigger
+    public class SetRoleToTrigger : ICommandTermTrigger
     {
         public Type[][] CommandTermTypes
         {
@@ -17,11 +16,10 @@ namespace WebSecurity.IntellISense.Triggers
                 {
                     new[]
                     {
-                        typeof (CommandTermGrant),
-                        typeof (CommandTermExec),
-                        typeof (CommandTermTo),
+                        typeof (CommandTermSet),
+                        typeof (CommandTermCommonRole),
                         typeof (CommandTermRoleName),
-                        typeof (CommandTermOnGrant)
+                        typeof (CommandTermTo)
                     }
                 };
             }
@@ -29,7 +27,7 @@ namespace WebSecurity.IntellISense.Triggers
 
         public Action<CommandTermBase> Trigger
         {
-            get { return TriggerActions.GrantExecTrigger; }
+            get { return TriggerActions.SetRoleToTrigger; }
         }
     }
 }
