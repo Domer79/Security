@@ -24,6 +24,7 @@ namespace DataRepository
         public virtual void SaveChanges()
         {
             var validationErrors = Context.GetValidationErrors();
+            var changeTracker = Context.ChangeTracker.Entries();
             
             foreach (var validationError in validationErrors.SelectMany(entityValidationResult => entityValidationResult.ValidationErrors))
             {

@@ -37,5 +37,10 @@ namespace SecurityDataModel.Infrastructure
             _context = createContext();
             _createContext = createContext;
         }
+
+        public static void DisposeContext()
+        {
+            Context.Dispose();
+        }
     }
 }

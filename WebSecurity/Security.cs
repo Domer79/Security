@@ -19,7 +19,7 @@ using UserRepository = WebSecurity.Repositories.UserRepository;
 
 namespace WebSecurity
 {
-    public class Security : ISecurity
+    public class Security : ISecurity, IDisposable
     {
         public const string AnonymousUser = "anonymous";
         private readonly UserRepository _repo;
@@ -181,6 +181,14 @@ namespace WebSecurity
         public static ISecurity Instance
         {
             get { return _instance ?? (_instance = new Security()); }
+        }
+
+        /// <summary>
+        /// ¬ыполн€ет определ€емые приложением задачи, св€занные с высвобождением или сбросом неуправл€емых ресурсов.
+        /// </summary>
+        public void Dispose()
+        {
+            Tools.DisposeContext();
         }
     }
 
