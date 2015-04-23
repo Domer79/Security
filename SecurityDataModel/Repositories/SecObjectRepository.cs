@@ -10,21 +10,21 @@ using SecurityDataModel.Models;
 namespace SecurityDataModel.Repositories
 {
     public abstract class SecObjectRepository<TSecObject> : ISecObjectRepository<TSecObject> 
-        where TSecObject : SecObject, ISecObject
+        where TSecObject : class, ISecObject
     {
-        private readonly SecurityRepository<TSecObject> _repo;
+        private readonly SecurityRepository<SecObject> _repo;
 
         /// <summary>
         /// Инициализирует новый экземпляр класса <see cref="T:System.Object"/>.
         /// </summary>
         protected SecObjectRepository()
         {
-            _repo = new SecurityRepository<TSecObject>();
+            _repo = new SecurityRepository<SecObject>();
         }
 
         public IQueryable<TSecObject> GetQueryableCollection()
         {
-            return _repo;
+            return (IQueryable<TSecObject>) _repo;
         }
 
         public void Add(TSecObject secObject)
@@ -32,13 +32,13 @@ namespace SecurityDataModel.Repositories
             if (secObject == null) 
                 throw new ArgumentNullException("secObject");
 
-            _repo.InsertOrUpdate(secObject);
+            _repo.InsertOrUpdate(secObject as SecObject);
             _repo.SaveChanges();
         }
 
         public TSecObject GetSecObject(string objectName)
         {
-            return _repo.FirstOrDefault(so => so.ObjectName == objectName);
+            return _repo.Cast<TSecObject>().FirstOrDefault(so => so.ObjectName == objectName);
         }
     }
 

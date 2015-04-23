@@ -83,6 +83,18 @@ namespace WebSecurity
             repo.Add(roleName, description);
         }
 
+        public void AddController(string path)
+        {
+            var repo = new ActionResultRepository();
+            repo.Add(new ActionResultObject(){ObjectName = path});
+        }
+
+        public void AddTable(string tableName)
+        {
+            var repo = new TableObjectRepository();
+            repo.Add(new TableObject(){ObjectName = tableName});
+        }
+
         public bool Sign(string login, string password)
         {
             var repo = new UserRepository();

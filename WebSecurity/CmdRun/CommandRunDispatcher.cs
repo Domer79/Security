@@ -84,6 +84,16 @@ namespace WebSecurity.CmdRun
             Security.Instance.AddRole(roleName, description.Trim(new[] { '"' }));
         }
 
+        private void AddController(string controllerName)
+        {
+            Security.Instance.AddController(controllerName);
+        }
+
+        private void AddTable(string tableName)
+        {
+            Security.Instance.AddTable(tableName);
+        }
+
         #endregion
 
         #endregion
