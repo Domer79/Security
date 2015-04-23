@@ -189,7 +189,13 @@ namespace IntellISenseSecurity
 
         public T GetCommandTerm<T>() where T : CommandTermBase
         {
-            return (T)this.First(ct => ct.GetType() == typeof (T));
+            return GetCommandTerm<T>(0);
+        }
+
+        public T GetCommandTerm<T>(int index) where T : CommandTermBase
+        {
+            return this.OfType<T>().ElementAt(index);
+//            return (T)this.First(ct => ct.GetType() == typeof(T));
         }
 
         public void AddAdditionCommandTerm(string term)

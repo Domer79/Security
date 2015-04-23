@@ -11,14 +11,14 @@ namespace SecurityDataModel.Repositories
     public class UserGroupsDetailRepository : IUserGroupsDetailRepository
     {
         private readonly UserGroupsDetailRepositoryLocal _repo;
-        private readonly Repository<User> _userRepo;
-        private readonly Repository<Group> _groupRepo;
+        private readonly SecurityRepository<User> _userRepo;
+        private readonly SecurityRepository<Group> _groupRepo;
 
         public UserGroupsDetailRepository()
         {
             _repo = new UserGroupsDetailRepositoryLocal();
-            _userRepo = new Repository<User>(Tools.Context);
-            _groupRepo = new Repository<Group>(Tools.Context);
+            _userRepo = new SecurityRepository<User>();
+            _groupRepo = new SecurityRepository<Group>();
         }
 
         public void AddToGroup(int idUser, int idGroup)

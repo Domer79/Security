@@ -25,6 +25,8 @@ namespace SecurityDataModel.Models
         [Column("name")]
         public string RoleName { get; set; }
 
+        public string Description { get; set; }
+
         public HashSet<Grant> Grants { get; set; }
 
         public HashSet<RoleOfMember> RoleOfMembers { get; set; }

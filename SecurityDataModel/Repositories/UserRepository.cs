@@ -4,6 +4,8 @@ using System.Linq;
 using SystemTools.Extensions;
 using SystemTools.Interfaces;
 using DataRepository;
+using SecurityDataModel.Events.Delegates;
+using SecurityDataModel.Events.EventArgs;
 using SecurityDataModel.Infrastructure;
 using SecurityDataModel.Models;
 
@@ -11,11 +13,11 @@ namespace SecurityDataModel.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        private readonly Repository<User> _repo;
+        private readonly SecurityRepository<User> _repo;
 
         public UserRepository()
         {
-            _repo = new Repository<User>(Tools.Context);
+            _repo = new SecurityRepository<User>();
         }
 
 
@@ -39,7 +41,7 @@ namespace SecurityDataModel.Repositories
 
             var user = new User
             {
-                Login = login,
+                Login = login.ToLower(),
                 Password = password == null ? null : password.GetHashBytes(),
                 DisplayName = displayName,
                 Email = email,
@@ -48,7 +50,19 @@ namespace SecurityDataModel.Repositories
 
             _repo.InsertOrUpdate(user);
             _repo.SaveChanges();
+            OnAddUser(user);
         }
+
+        private void OnAddUser(User user)
+        {
+            var handler = UserAdded;
+            if (handler != null)
+            {
+                handler(this, new UserAddedEventArgs(user));
+            }
+        }
+
+        public event UserAddedEventHandler UserAdded;
 
         public IUser GetUser(string login)
         {

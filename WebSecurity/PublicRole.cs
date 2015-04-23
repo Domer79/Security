@@ -11,29 +11,42 @@ namespace WebSecurity
     public class PublicRole : IPublicRole
     {
         public const string Name = "public";
+        public const string RoleDescription = "Публичная роль предназначенная для всех";
         private readonly IRole _role;
         private static PublicRole _instance;
 
         private PublicRole()
         {
             IRoleRepository repo = new RoleRepository();
-            var query = repo.GetQueryableCollection();
-            if (!query.Any(r => r.IdRole == IdRole))
-                repo.Add(RoleName);
+            SetPublic();
 
             _role = repo.GetRole(Name);
+        }
+
+        public static void SetPublic()
+        {
+            var repo = new RoleRepository();
+            var query = repo.GetQueryableCollection();
+            if (!query.Any(r => r.RoleName == Name))
+                repo.Add(Name, RoleDescription);
         }
 
         public int IdRole
         {
             get { return _role.IdRole; }
-            set { throw new NotImplementedException(); }
+            set { }
         }
 
         public string RoleName
         {
             get { return _role.RoleName; }
-            set { throw new NotImplementedException(); }
+            set { }
+        }
+
+        public string Description
+        {
+            get { return _role.Description; }
+            set { }
         }
 
         public void GrantToRole(ISecObject secObject, Enum accessType)

@@ -45,6 +45,15 @@ namespace SecurityDataModel.Models
         [StringLength(200)]
         public string RoleName { get; set; }
 
+        [NotMapped]
+        string IRole.Description
+        {
+            get { return RoleDescription; }
+            set { RoleDescription = value; }
+        }
+
+        public string RoleDescription { get; set; }
+
         [Key]
         [Column(Order = 2)]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]

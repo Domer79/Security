@@ -9,7 +9,8 @@ namespace IntellISenseSecurity
     public class CommandTermDispatcher<TCommandTermEntryPoint> : IEnumerable<string> where TCommandTermEntryPoint : CommandTermEntryPoint, new()
     {
 //        private const string CommandStringPattern = @"(?<term>[^\W]+)(?<delimiter>[^\w]*)";
-        private const string CommandStringPattern = @"[^\s]+";
+//        private const string CommandStringPattern = @"[^\s]+";
+        private const string CommandStringPattern = @"(""[\w\s]+"")|[^\s]+";
         private const string EndSpacePattern = @"[\s]$";
         private CommandTermStack _stack;
 

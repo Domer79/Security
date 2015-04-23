@@ -106,7 +106,7 @@ namespace WebSecurity.Tests
         public void AddRoleTest()
         {
             var repo = new RoleRepository();
-            repo.Add("Role5");
+            repo.Add("Role5", null);
 
             var query = repo.GetQueryableCollection();
             foreach (var role in query)
@@ -119,7 +119,7 @@ namespace WebSecurity.Tests
         public void EditRoleTest()
         {
             var repo = new RoleRepository();
-            repo.Edit("role5", "NewRole5");
+            repo.Edit("role5", "NewRole5", null);
 
             var query = repo.GetQueryableCollection();
             foreach (var role in query)
@@ -133,7 +133,7 @@ namespace WebSecurity.Tests
         public void EditRoleByIdTest()
         {
             var repo = new RoleRepository();
-            repo.Edit(6, "Role5");
+            repo.Edit(6, "Role5", null);
 
             var query = repo.GetQueryableCollection();
             foreach (var role in query)

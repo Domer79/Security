@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -6,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using IntellISenseSecurity;
 using IntellISenseSecurity.Base;
+using WebSecurity.IntellISense.CommandTermCommon;
 
 namespace WebSecurity.CmdRun
 {
@@ -45,7 +47,7 @@ namespace WebSecurity.CmdRun
             {
                 case "add":
                 {
-                    methodParams = new[] {stack[3],}.Union(stack.GetAdditionalParams()).Select(ct => ct.CommandTerm).ToArray();
+                    methodParams = stack.GetAdditionalParams().Select(ct => ct.CommandTerm).ToArray();
                     return string.Format("add{0}", stack[2]);
                 }
                 default:
@@ -59,18 +61,81 @@ namespace WebSecurity.CmdRun
         {
             var methodInfos = GetType().GetMethods(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
 
-            var method = methodInfos.First(mi => String.Equals(mi.Name, methodName, StringComparison.CurrentCultureIgnoreCase) && mi.GetParameters().Select(p => p.ParameterType).SequenceEqual(@params.Select(p => p.GetType())));
-            method.Invoke(this, @params ?? new object[] {});
+            var method = methodInfos.First(mi => String.Equals(mi.Name, methodName, StringComparison.CurrentCultureIgnoreCase));
+            method.Invoke(this, new ParameterCollection(method.GetParameters().Count(), @params).ToArray());
         }
 
-        private void AddUser(string userName)
+        #region Run Methods
+
+        #region Add
+
+        private void AddUser(string userName, string password, string email, string displayName, string sid)
         {
-            AddUser(userName, null);
+            Security.Instance.AddUser(userName, password, email, displayName.Trim(new[] {'"'}), sid);
         }
 
-        private void AddUser(string userName, string password)
+        private void AddGroup(string groupName, string description)
         {
-            Security.Instance.AddUser(userName, password);
+            Security.Instance.AddGroup(groupName, description.Trim(new[] { '"' }));
+        }
+
+        private void AddRole(string roleName, string description)
+        {
+            Security.Instance.AddRole(roleName, description.Trim(new[] { '"' }));
+        }
+
+        #endregion
+
+        #endregion
+    }
+
+    internal class ParameterCollection : IEnumerable<object>
+    {
+        private readonly int _paramCount;
+        private readonly List<object> _values = new List<object>();
+        /// <summary>
+        /// Инициализирует новый экземпляр класса <see cref="T:System.Object"/>.
+        /// </summary>
+        public ParameterCollection(int paramCount, object[] values)
+        {
+            _paramCount = paramCount;
+            AddValues(values);
+        }
+
+        private void AddValues(object[] values)
+        {
+            var i = 0;
+            while (i < _paramCount)
+            {
+                if (i >= values.Length)
+                    _values.Add(null);
+                else
+                    _values.Add(values[i]);
+
+                i++;
+            }
+        }
+
+        /// <summary>
+        /// Возвращает перечислитель, выполняющий итерацию в коллекции.
+        /// </summary>
+        /// <returns>
+        /// Интерфейс <see cref="T:System.Collections.Generic.IEnumerator`1"/>, который может использоваться для перебора элементов коллекции.
+        /// </returns>
+        public IEnumerator<object> GetEnumerator()
+        {
+            return _values.GetEnumerator();
+        }
+
+        /// <summary>
+        /// Возвращает перечислитель, осуществляющий итерацию в коллекции.
+        /// </summary>
+        /// <returns>
+        /// Объект <see cref="T:System.Collections.IEnumerator"/>, который может использоваться для перебора коллекции.
+        /// </returns>
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

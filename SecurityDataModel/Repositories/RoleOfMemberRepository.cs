@@ -12,15 +12,15 @@ namespace SecurityDataModel.Repositories
 {
     public class RoleOfMemberRepository : IRoleOfMemberRepository
     {
-        private readonly Repository<Member> _repoMember;
-        private readonly Repository<Role> _repoRole;
+        private readonly SecurityRepository<Member> _repoMember;
+        private readonly SecurityRepository<Role> _repoRole;
         private readonly RoleOfMemberRepositoryLocal _repo;
 
         public RoleOfMemberRepository()
         {
             _repo = new RoleOfMemberRepositoryLocal();
-            _repoMember = new Repository<Member>(Tools.Context);
-            _repoRole = new Repository<Role>(Tools.Context);
+            _repoMember = new SecurityRepository<Member>();
+            _repoRole = new SecurityRepository<Role>();
         }
 
         public void AddMemberToRole(int idMember, int idRole)

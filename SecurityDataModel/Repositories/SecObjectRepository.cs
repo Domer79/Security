@@ -12,14 +12,14 @@ namespace SecurityDataModel.Repositories
     public abstract class SecObjectRepository<TSecObject> : ISecObjectRepository<TSecObject> 
         where TSecObject : SecObject, ISecObject
     {
-        private readonly Repository<TSecObject> _repo;
+        private readonly SecurityRepository<TSecObject> _repo;
 
         /// <summary>
         /// Инициализирует новый экземпляр класса <see cref="T:System.Object"/>.
         /// </summary>
         protected SecObjectRepository()
         {
-            _repo = new Repository<TSecObject>(Tools.Context);
+            _repo = new SecurityRepository<TSecObject>();
         }
 
         public IQueryable<TSecObject> GetQueryableCollection()

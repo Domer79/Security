@@ -13,11 +13,11 @@ namespace SecurityDataModel.Repositories
 {
     public class GroupRepository : IGroupRepository
     {
-        private readonly Repository<Group> _repo;
+        private readonly SecurityRepository<Group> _repo;
 
         public GroupRepository()
         {
-            _repo = new Repository<Group>(Tools.Context);
+            _repo = new SecurityRepository<Group>();
         }
 
         public void Add(string groupName, string description = null)
@@ -25,7 +25,7 @@ namespace SecurityDataModel.Repositories
             if (string.IsNullOrEmpty(groupName))
                 throw new ArgumentException("groupName");
 
-            if (_repo.Any(g => g.GroupName == groupName))
+            if (_repo.Any(g => String.Equals(g.GroupName, groupName, StringComparison.CurrentCultureIgnoreCase)))
                 throw new GroupExistsException();
 
             _repo.InsertOrUpdate(new Group {GroupName = groupName, Description = description});

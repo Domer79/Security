@@ -7,6 +7,7 @@ using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Linq.Expressions;
+using SystemTools;
 using DataRepository.Exceptions;
 using DataRepository.Infrastructure;
 using DataRepository.Interfaces;
@@ -145,9 +146,20 @@ namespace DataRepository
             get { return ((IQueryable) Set).Provider; }
         }
 
+        public static bool RepositoryForWeb
+        {
+            get { return ApplicationCustomizer.ApplicationType == ApplicationType.Web; }
+        }
+
         public DbContext Context
         {
-            get { return _context ?? (_context = GetContext()); }
+            get
+            {
+//                if (RepositoryForWeb)
+//                    return GetContext();
+
+                return _context ?? (_context = GetContext());
+            }
         }
 
         protected abstract DbContext GetContext();

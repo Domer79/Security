@@ -19,16 +19,17 @@ using UserRepository = WebSecurity.Repositories.UserRepository;
 
 namespace WebSecurity
 {
-    public class Security : ISecurity, IDisposable
+    public class Security : ISecurity
     {
         public const string AnonymousUser = "anonymous";
-        private readonly UserRepository _repo;
+//        private readonly UserRepository _repo;
         private static Security _instance;
 
         private Security()
         {
             Tools.SetContext(WebMvcSecurityContext.Create);
-            _repo = new UserRepository();
+            WebSecurity.PublicRole.SetPublic();
+//            _repo = new UserRepository();
         }
 
         #region ISecurity members
@@ -64,20 +65,35 @@ namespace WebSecurity
             get { return WebSecurity.PublicRole.Instance; }
         }
 
-        public void AddUser(string userName, string password)
+        public void AddUser(string userName, string password, string email, string displayName, string sid)
         {
-            _repo.Add(userName, password);
+            var repo = new UserRepository();
+            repo.Add(userName, password, displayName, email, sid);
+        }
+
+        public void AddGroup(string groupName, string description)
+        {
+            var repo = new GroupRepository();
+            repo.Add(groupName, description);
+        }
+
+        public void AddRole(string roleName, string description)
+        {
+            var repo = new RoleRepository();
+            repo.Add(roleName, description);
         }
 
         public bool Sign(string login, string password)
         {
-            return _repo.SignUser(login, password);
+            var repo = new UserRepository();
+            return repo.SignUser(login, password);
         }
 
         public void CreateUser(string login, string password, bool withPublic = true)
         {
-            _repo.Add(login, password);
-            var newUser = _repo.GetUser(login);
+            var repo = new UserRepository();
+            repo.Add(login, password);
+            var newUser = repo.GetUser(login);
             if (withPublic)
             {
                 var roleOfMembersRepo = new RoleOfMemberRepository();
@@ -99,6 +115,7 @@ namespace WebSecurity
 
         public IPrincipal GetWebPrinicipal()
         {
+            var repo = new UserRepository();
             var cookie = HttpContext.Current.Request.Cookies.Get(FormsAuthentication.FormsCookieName);
             if (cookie == null || string.IsNullOrEmpty(cookie.Value))
                 return new UserProvider(User);
@@ -107,12 +124,13 @@ namespace WebSecurity
             if (ticket == null)
                 throw new LoginEmailOrPasswordInvalidException();
 
-            return _repo.GetUserPrincipal(ticket.Name);
+            return repo.GetUserPrincipal(ticket.Name);
         }
 
         public IPrincipal GetWindowsPrincipal(string name)
         {
-            return _repo.GetUserPrincipal(name);
+            var repo = new UserRepository();
+            return repo.GetUserPrincipal(name);
         }
 
         /// <summary>
@@ -176,19 +194,16 @@ namespace WebSecurity
             }
         }
 
+        public static void RenewContext()
+        {
+            Tools.RenewContext();
+        }
+
         #endregion
 
         public static ISecurity Instance
         {
             get { return _instance ?? (_instance = new Security()); }
-        }
-
-        /// <summary>
-        /// ¬ыполн€ет определ€емые приложением задачи, св€занные с высвобождением или сбросом неуправл€емых ресурсов.
-        /// </summary>
-        public void Dispose()
-        {
-            Tools.DisposeContext();
         }
     }
 

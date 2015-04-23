@@ -5,20 +5,8 @@ using SecurityDataModel.Models;
 
 namespace SecurityDataModel.Repositories
 {
-    internal class RoleOfMemberRepositoryLocal : RepositoryBase<RoleOfMember>
+    internal class RoleOfMemberRepositoryLocal : SecurityRepository<RoleOfMember>
     {
-        private readonly SecurityContext _localContext;
-
-        public RoleOfMemberRepositoryLocal()
-        {
-            _localContext = Tools.Context;
-        }
-
-        protected override DbContext GetContext()
-        {
-            return _localContext;
-        }
-
         public sealed override void InsertOrUpdate(RoleOfMember item)
         {
             Set.Add(item);

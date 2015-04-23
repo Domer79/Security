@@ -15,11 +15,11 @@ namespace SecurityDataModel.Repositories
 {
     public class AccessTypeRepository : IAccessTypeRepository
     {
-        private readonly Repository<AccessType> _repo;
+        private readonly SecurityRepository<AccessType> _repo;
 
         public AccessTypeRepository()
         {
-            _repo = new Repository<AccessType>(Tools.Context);
+            _repo = new SecurityRepository<AccessType>();
         }
 
         public void SetNewAccessTypes<T>()

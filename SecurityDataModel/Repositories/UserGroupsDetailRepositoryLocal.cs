@@ -5,20 +5,8 @@ using SecurityDataModel.Models;
 
 namespace SecurityDataModel.Repositories
 {
-    internal class UserGroupsDetailRepositoryLocal : RepositoryBase<UserGroupsDetail>
+    internal class UserGroupsDetailRepositoryLocal : SecurityRepository<UserGroupsDetail>
     {
-        private readonly SecurityContext _localContext;
-
-        public UserGroupsDetailRepositoryLocal()
-        {
-            _localContext = Tools.Context;
-        }
-
-        protected override DbContext GetContext()
-        {
-            return _localContext;
-        }
-
         public override void InsertOrUpdate(UserGroupsDetail item)
         {
             Set.Add(item);

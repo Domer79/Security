@@ -5,20 +5,8 @@ using SecurityDataModel.Models;
 
 namespace SecurityDataModel.Repositories
 {
-    public class GrantRepositoryLocal : RepositoryBase<Grant>
+    public class GrantRepositoryLocal : SecurityRepository<Grant>
     {
-        private readonly SecurityContext _localContext;
-
-        public GrantRepositoryLocal()
-        {
-            _localContext = Tools.Context;
-        }
-
-        protected override DbContext GetContext()
-        {
-            return _localContext;
-        }
-
         public override void InsertOrUpdate(Grant item)
         {
             Set.Add(item);

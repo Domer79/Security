@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SecurityDataModel.Models;
 
 namespace SecurityDataModel.Infrastructure
@@ -20,9 +15,14 @@ namespace SecurityDataModel.Infrastructure
                 if (_context == null)
                     throw new InvalidOperationException("Контекст не объявлен");
 
+                if (ContextDisposed)
+                    throw new InvalidOperationException("Контекст удален");
+
                 return _context;
             }
         }
+
+        public static bool ContextDisposed { get; private set; }
 
         internal static SecurityContext CreateContext()
         {
@@ -34,13 +34,21 @@ namespace SecurityDataModel.Infrastructure
             if (createContext == null) 
                 throw new ArgumentNullException("createContext");
 
-            _context = createContext();
+            if (_context == null || ContextDisposed)
+            {
+                _context = createContext();
+                ContextDisposed = false;
+            }
+
             _createContext = createContext;
         }
 
-        public static void DisposeContext()
+        public static void RenewContext()
         {
-            Context.Dispose();
+            if (_createContext == null)
+                throw new NullReferenceException("Делегат CreateContext не проинициализирован");
+
+            _context = _createContext();
         }
     }
 }
