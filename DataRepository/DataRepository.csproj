@@ -47,6 +47,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Exceptions\RepositoryValidationException.cs" />
+    <Compile Include="Infrastructure\EntityMetadata.cs" />
+    <Compile Include="Infrastructure\EntityMetadataCollection.cs" />
     <Compile Include="Infrastructure\Tools.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="ModelBase.cs" />
@@ -56,6 +58,7 @@
     <Compile Include="Infrastructure\ContextInfo.cs" />
     <Compile Include="Infrastructure\EntityInfo.cs" />
     <Compile Include="Infrastructure\SystemLogs.cs" />
+    <Compile Include="RepositoryDataContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

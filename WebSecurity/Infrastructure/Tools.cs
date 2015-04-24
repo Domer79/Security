@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using DataRepository.Infrastructure;
 
 namespace WebSecurity.Infrastructure
 {
@@ -13,6 +14,11 @@ namespace WebSecurity.Infrastructure
         {
             var rx = new Regex(@"^(?<login>[\w][-_\w.]*[\w])\\(?<domain>[\w][-_\w.]*[\w])$");
             return rx.IsMatch(login);
+        }
+
+        internal static IEnumerable<string> GetSecurityObjects()
+        {
+            return ControllerCollection.GetControllerCollection().Select(ci => ci.Alias).Union(ContextInfo.)
         }
     }
 }

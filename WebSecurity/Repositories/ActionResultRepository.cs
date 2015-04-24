@@ -13,7 +13,7 @@ using WebSecurity.Data;
 
 namespace WebSecurity.Repositories
 {
-    internal class ActionResultRepository : SecObjectRepository<IActionResultObject>
+    internal class ActionResultRepository : SecObjectRepository<ActionResultObject>
     {
         public static ISecObject GetActionResult(string controller, string action)
         {

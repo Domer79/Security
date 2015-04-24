@@ -16,7 +16,7 @@ namespace DataRepository.Infrastructure
 
         public static string GetTableName<T>(ObjectContext context) where T : ModelBase
         {
-            string sql = context.CreateObjectSet<T>().ToTraceString();
+            var sql = context.CreateObjectSet<T>().ToTraceString();
             return GetTableNameFromSqlQuery(sql);
         }
 

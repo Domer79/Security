@@ -38,5 +38,16 @@ namespace SecurityDataModel.Models
 //        public string type7 { get; set; }
 
         public HashSet<Grant> Grants { get; set; }
+
+        /// <summary>
+        /// Возвращает строку, которая представляет текущий объект.
+        /// </summary>
+        /// <returns>
+        /// Строка, представляющая текущий объект.
+        /// </returns>
+        public override sealed string ToString()
+        {
+            return ObjectName;
+        }
     }
 }

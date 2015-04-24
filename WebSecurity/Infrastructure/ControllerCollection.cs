@@ -3,22 +3,29 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Web.Mvc;
 using SystemTools.Extensions;
+using SystemTools.WebTools.Attributes;
 using SystemTools.WebTools.Helpers;
 
 namespace WebSecurity.Infrastructure
 {
     public class ControllerCollection : IEnumerable<ControllerInfo>
     {
-        private List<ControllerInfo> _controllerInfoList;
+        private readonly Dictionary<MethodInfo, ControllerInfo> _controllerInfoList = new Dictionary<MethodInfo, ControllerInfo>();
 
         static ControllerCollection()
         {
             Assemblies = new List<Assembly>();
+        }
+
+        /// <summary>
+        /// Инициализирует новый экземпляр класса <see cref="T:System.Object"/>.
+        /// </summary>
+        public ControllerCollection()
+        {
+            Init();
         }
 
         public static List<Assembly> Assemblies { get; private set; }
@@ -28,15 +35,44 @@ namespace WebSecurity.Infrastructure
             return new ControllerCollection();
         }
 
-        private List<ControllerInfo> ControllerInfoList
+        private Dictionary<MethodInfo, ControllerInfo> ControllerInfoList
         {
-            get
-            {
-                if (_controllerInfoList == null)
-                    Init();
+            get { return _controllerInfoList; }
+        }
 
-                return _controllerInfoList;
+        private void Init()
+        {
+            var methods = Assemblies.SelectMany(a => a.GetTypes()).Where(t => t.GetInterface("IController") != null).SelectMany(type => type.GetMethods().Where(mi => mi.ReturnType.Is<ActionResult>()));
+            foreach (var methodInfo in methods)
+            {
+                Add(methodInfo);
             }
+        }
+
+        private void Add(MethodInfo methodInfo)
+        {
+            var controllerInfo = new ControllerInfo(methodInfo);
+
+            if (ControllerInfoList.Values.Any(ci => string.Equals(ci.Alias, controllerInfo.Alias, StringComparison.InvariantCultureIgnoreCase)))
+                throw new InvalidOperationException("Нельзя добавить два одинаковых метода");
+
+            ControllerInfoList.Add(methodInfo, controllerInfo);
+        }
+
+        public ControllerInfo this[MethodInfo methodInfo]
+        {
+            get { return ControllerInfoList[methodInfo]; }
+        }
+
+        public ControllerInfo GetControllerInfo(Type controllerType, MethodInfo methodInfo)
+        {
+            return GetControllerInfo(controllerType, methodInfo.Name);
+        }
+
+        public ControllerInfo GetControllerInfo(Type controllerType, string methodName)
+        {
+            var methodInfo =  ControllerInfoList.Keys.First(k => k.DeclaringType == controllerType && k.Name == methodName);
+            return this[methodInfo];
         }
 
         /// <summary>
@@ -47,49 +83,7 @@ namespace WebSecurity.Infrastructure
         /// </returns>
         public IEnumerator<ControllerInfo> GetEnumerator()
         {
-            return ControllerInfoList.GetEnumerator();
-        }
-
-        private void Init()
-        {
-            _controllerInfoList = new List<ControllerInfo>();
-            foreach (var type in Assemblies.SelectMany(a => a.GetTypes()).Where(t => t.GetInterface("IController") != null))
-            {
-                foreach (var methodInfo in type.GetMethods().Where(mi => mi.ReturnType.Is<ActionResult>()))
-                {
-                    Add(type, methodInfo);
-                }
-            }
-        }
-
-        public void Add(Type type, MethodInfo methodInfo)
-        {
-            if (type == null) 
-                throw new ArgumentNullException("type");
-
-            if (methodInfo == null) 
-                throw new ArgumentNullException("methodInfo");
-
-            Add(type.Name, methodInfo.Name);
-        }
-
-        public void Add(string controllerName, string actionName)
-        {
-            if (controllerName == null) 
-                throw new ArgumentNullException("controllerName");
-
-            if (actionName == null) 
-                throw new ArgumentNullException("actionName");
-
-            if (Contains(controllerName, actionName))
-                return;
-
-            ControllerInfoList.Add(new ControllerInfo(controllerName, actionName));
-        }
-
-        private bool Contains(string controller, string action)
-        {
-            return ControllerInfoList.Any(ci => ci.ControllerFullName == controller && ci.Action == action);
+            return ControllerInfoList.Values.GetEnumerator();
         }
 
         /// <summary>
@@ -106,6 +100,8 @@ namespace WebSecurity.Infrastructure
 
     public class ControllerInfo
     {
+        private readonly MethodInfo _methodInfo;
+
         /// <summary>
         /// Инициализирует новый экземпляр класса <see cref="T:System.Object"/>.
         /// </summary>
@@ -116,10 +112,15 @@ namespace WebSecurity.Infrastructure
         /// <summary>
         /// Инициализирует новый экземпляр класса <see cref="T:System.Object"/>.
         /// </summary>
-        public ControllerInfo(string controllerFullName, string action)
+        public ControllerInfo(MethodInfo methodInfo)
         {
-            ControllerFullName = controllerFullName;
-            Action = action;
+            if (methodInfo == null) 
+                throw new ArgumentNullException("methodInfo");
+
+            if (methodInfo.DeclaringType == null)
+                throw new InvalidOperationException("У метода отсутствует объявляющий его тип");
+
+            _methodInfo = methodInfo;
         }
 
         public string Controller
@@ -137,9 +138,39 @@ namespace WebSecurity.Infrastructure
             }
         }
 
-        internal string ControllerFullName { get; set; }
+        internal string ControllerFullName
+        {
+// ReSharper disable once PossibleNullReferenceException
+            get { return MethodInfo.DeclaringType.Name; }
+        }
 
-        public string Action { get; set; }
+        public string Action
+        {
+            get { return MethodInfo.Name; }
+        }
+
+        public string Alias
+        {
+            get
+            {
+                return ActionAlias != null ? ActionAlias.Alias : string.Format("{0}{1}", Controller, Action);
+            }
+        }
+
+        private ActionAliasAttribute ActionAlias
+        {
+            get { return ((ActionAliasAttribute) Attribute.GetCustomAttribute(MethodInfo, typeof (ActionAliasAttribute))); }
+        }
+
+        public string Description
+        {
+            get { return ActionAlias != null ? ActionAlias.Description : null; }
+        }
+
+        public MethodInfo MethodInfo
+        {
+            get { return _methodInfo; }
+        }
 
         /// <summary>
         /// Возвращает строку, которая представляет текущий объект.

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using SystemTools.WebTools.Attributes;
 
 namespace DataRepository.Infrastructure
 {
@@ -14,12 +15,15 @@ namespace DataRepository.Infrastructure
     {
         private readonly DbContext _context;
         private string _keyName;
+        private EntityMetadata _entityMetadata;
 
         public EntityInfo(DbContext context)
         {
             if (context == null) 
                 throw new ArgumentNullException("context");
+
             _context = context;
+            _entityMetadata = new EntityMetadata(typeof(TEntity));
         }
 
         private ObjectContext ObjectContext
@@ -67,6 +71,21 @@ namespace DataRepository.Infrastructure
                 throw new KeyNotFoundException("KeyName");
 
             return keyInfo;
+        }
+
+        public string EntityName 
+        {
+            get { return _entityMetadata.EntityName; }
+        }
+
+        public string EntityAlias
+        {
+            get { return _entityMetadata.EntityAlias; }
+        }
+
+        public string EntityDescription
+        {
+            get { return _entityMetadata.EntityDescription; }
         }
 
         #region GetTableName

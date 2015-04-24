@@ -6,29 +6,16 @@ using SecurityDataModel.Models;
 
 namespace WebSecurity.Data
 {
-    internal class ActionResultObject : SecObject, IActionResultObject
+    internal class ActionResultObject : SecObject
     {
         [NotMapped]
-        string IActionResultObject.Path
+        public string ActionAlias
         {
             get { return ObjectName; }
-            set { ObjectName = string.IsNullOrEmpty(value) ? ControllerHelper.GetActionPath(Controller, Action) : value; }
+            set { ObjectName = value; }
         }
 
         [Column1]
-        public string Action { get; set; }
-
-        [Column2]
-        public string Controller { get; set; }
-
-        [Column3]
-        public string AppName { get; set; }
-    }
-
-    public interface IActionResultObject : ISecObject
-    {
-        string Path { get; set; }
-        string Action { get; set; }
-        string Controller { get; set; }
+        public string Description { get; set; }
     }
 }
