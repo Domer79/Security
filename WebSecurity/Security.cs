@@ -9,12 +9,15 @@ using SystemTools.Interfaces;
 using SystemTools.WebTools.Infrastructure;
 using SecurityDataModel.Infrastructure;
 using SecurityDataModel.Models;
+using SecurityDataModel.Repositories;
 using WebSecurity.Data;
 using WebSecurity.Repositories;
 using AccessTypeRepository = WebSecurity.Repositories.AccessTypeRepository;
 using GrantRepository = WebSecurity.Repositories.GrantRepository;
+using GroupRepository = WebSecurity.Repositories.GroupRepository;
 using RoleOfMemberRepository = WebSecurity.Repositories.RoleOfMemberRepository;
 using RoleRepository = WebSecurity.Repositories.RoleRepository;
+using UserGroupsDetailRepository = WebSecurity.Repositories.UserGroupsDetailRepository;
 using UserRepository = WebSecurity.Repositories.UserRepository;
 
 namespace WebSecurity
@@ -171,50 +174,31 @@ namespace WebSecurity
         }
 
         /// <summary>
-        /// Предоставляет права роли <see cref="role"/> для запуска действия контроллера 
+        /// Предоставляет права для роли <see cref="roleName"/> для объекта <see cref="objectName"/>
         /// </summary>
-        /// <param name="controller">Имя контроллера</param>
-        /// <param name="action">Имя дествия</param>
-        /// <param name="role">Имя роли</param>
+        /// <param name="roleName">Имя роли</param>
+        /// <param name="objectName">имя объекта</param>
+        /// <param name="accessType">Тип доступа</param>
         /// <exception cref="ArgumentException">Возникает в случае отсутствия значений какого-либо из входных параметров в базе данных</exception>
-        public void GrantActionToRole(string controller, string action, string role)
+        public void Grant(string roleName, string objectName, SecurityAccessType accessType)
         {
             var grantRepo = new GrantRepository();
-            var controllerObject = ActionResultRepository.GetActionResult(controller, action);
-            var roleObject = RoleRepository.GetRoleObject(role);
-            var accessTypeObject = AccessTypeRepository.GetExecAccessType();
-
-            if (controllerObject == null)
-                throw new ArgumentException("action");
-
-            if (roleObject == null)
-                throw new ArgumentException("role");
-
-            if (accessTypeObject == null)
-                throw new InvalidOperationException("Тип доступа Exec отсутствует в базе данных");
-
-            grantRepo.AddGrant(controllerObject, roleObject, accessTypeObject);
-        }
-
-        public void GrantEntityToRole(string entity, string role, SecurityAccessType accessType)
-        {
-            var grantRepo = new GrantRepository();
-            var entityObject = TableObjectRepository.GetTableObject(entity);
-            var roleObject = RoleRepository.GetRoleObject(role);
+            var roleObject = RoleRepository.GetRoleObject(roleName);
+            var secObject = SecObjectRepository.GetSecurityObject(objectName);
             var accessTypes = AccessTypeRepository.GetAccessTypes(accessType);
 
-            if (entityObject == null)
-                throw new ArgumentException("entity");
+            if (secObject == null)
+                throw new ArgumentException("objectName");
 
             if (roleObject == null)
-                throw new ArgumentException("role");
+                throw new ArgumentException("roleName");
 
             if (accessTypes == null || accessTypes.Length == 0)
-                throw new ArgumentException("accessType");
+                throw new InvalidOperationException(string.Format("Тип доступа {0} отсутствует в базе данных", accessType));
 
             foreach (var access in accessTypes)
             {
-                grantRepo.AddGrant(entityObject, roleObject, access);
+                grantRepo.AddGrant(secObject, roleObject, access);
             }
         }
 

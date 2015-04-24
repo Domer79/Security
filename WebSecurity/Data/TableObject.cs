@@ -1,8 +1,4 @@
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity.Infrastructure;
-using SystemTools;
-using SecurityDataModel.Attributes;
 using SecurityDataModel.Models;
 
 namespace WebSecurity.Data

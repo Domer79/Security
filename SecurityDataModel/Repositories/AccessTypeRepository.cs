@@ -115,7 +115,7 @@ namespace SecurityDataModel.Repositories
 
         public IAccessType[] GetAccessTypes(Enum enumValue)
         {
-            var accessTypes = enumValue.GetFlags().Select(f => (IAccessType)_repo.FirstOrDefault(at => at.AccessName == f.ToString())).ToArray();
+            var accessTypes = enumValue.GetFlags().Select(f => Enum.GetName(enumValue.GetType(), f)).Select(f => (IAccessType)_repo.FirstOrDefault(at => at.AccessName == f)).ToArray();
 
             if (accessTypes.Any(at => at == null))
                 throw new AccessTypeNotFoundException(accessTypes.First(at => at == null));
