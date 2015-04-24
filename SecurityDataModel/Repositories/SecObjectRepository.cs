@@ -24,7 +24,7 @@ namespace SecurityDataModel.Repositories
 
         public IQueryable<TSecObject> GetQueryableCollection()
         {
-            return (IQueryable<TSecObject>) _repo;
+            return _repo.OfType<TSecObject>();
         }
 
         public void Add(TSecObject secObject)

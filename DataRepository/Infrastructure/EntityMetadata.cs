@@ -31,9 +31,13 @@ namespace DataRepository.Infrastructure
             get { return EntityAliasAttribute != null ? EntityAliasAttribute.Description : null; }
         }
 
-        private EntityAliasAttribute EntityAliasAttribute
+        public AliasAttributeBase EntityAliasAttribute
         {
-            get { return (EntityAliasAttribute)Attribute.GetCustomAttribute(_entityType, typeof(EntityAliasAttribute)); }
+            get
+            {
+                var aliasAttribute = (EntityAliasAttribute)Attribute.GetCustomAttribute(_entityType, typeof(EntityAliasAttribute));
+                return aliasAttribute ?? new EntityAliasAttribute(EntityName);
+            }
         }
 
 

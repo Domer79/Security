@@ -95,6 +95,18 @@ namespace WebSecurity
             repo.Add(new TableObject(){ObjectName = tableName});
         }
 
+        public void SetRole(string roleName, string memberName)
+        {
+            var repo = new RoleOfMemberRepository();
+            repo.AddMemberToRole(memberName, roleName);
+        }
+
+        public void SetGroup(string groupName, string login)
+        {
+            var repo = new UserGroupsDetailRepository();
+            repo.AddToGroup(login, groupName);
+        }
+
         public bool Sign(string login, string password)
         {
             var repo = new UserRepository();

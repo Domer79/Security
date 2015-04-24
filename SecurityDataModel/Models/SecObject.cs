@@ -7,7 +7,7 @@ using DataRepository;
 namespace SecurityDataModel.Models
 {
     [Table("sec.SecObject")]
-    public class SecObject : ModelBase, ISecObject
+    public abstract class SecObject : ModelBase, ISecObject
     {
         [Key]
         public int IdSecObject { get; set; }
@@ -15,6 +15,9 @@ namespace SecurityDataModel.Models
         [Required]
         [StringLength(200)]
         public string ObjectName { get; set; }
+
+        [Column("type1")]
+        public string Description { get; set; }
 
 //        [StringLength(100)]
 //        public string type1 { get; set; }

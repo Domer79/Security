@@ -21,6 +21,20 @@ namespace SecurityDataModel.Repositories
             _groupRepo = new SecurityRepository<Group>();
         }
 
+        public void AddToGroup(string login, string groupName)
+        {
+            if (login == null) 
+                throw new ArgumentNullException("login");
+
+            if (groupName == null) 
+                throw new ArgumentNullException("groupName");
+
+            var user = _userRepo.First(u => u.Login == login);
+            var group = _groupRepo.First(g => g.GroupName == groupName);
+
+            AddToGroup(user, group);
+        }
+
         public void AddToGroup(int idUser, int idGroup)
         {
             var user = _userRepo.FirstOrDefault(u => u.IdUser == idUser);
@@ -48,6 +62,11 @@ namespace SecurityDataModel.Repositories
 
             _repo.InsertOrUpdate(new UserGroupsDetail(){IdUser = user.IdUser, IdGroup = group.IdGroup});
             _repo.SaveChanges();
+        }
+
+        public void DeleteFromGroup(string userName, string groupName)
+        {
+            throw new NotImplementedException();
         }
 
         public void DeleteFromGroup(int idUser, int idGroup)

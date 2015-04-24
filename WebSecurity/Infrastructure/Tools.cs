@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using SystemTools.WebTools.Attributes;
 using DataRepository.Infrastructure;
 
 namespace WebSecurity.Infrastructure
@@ -16,9 +17,20 @@ namespace WebSecurity.Infrastructure
             return rx.IsMatch(login);
         }
 
-        internal static IEnumerable<string> GetSecurityObjects()
+        internal static IEnumerable<AliasAttributeBase> GetSecurityObjects()
         {
-            return ControllerCollection.GetControllerCollection().Select(ci => ci.Alias).Union(ContextInfo.)
+            var securityObjects = GetControllerActionAliases().Concat(GetEntityAliases());
+            return securityObjects;
+        }
+
+        internal static IEnumerable<AliasAttributeBase> GetControllerActionAliases()
+        {
+            return ControllerCollection.GetControllerCollection().Select(ci => ci.ActionAliasAttribute);
+        }
+
+        internal static IEnumerable<AliasAttributeBase> GetEntityAliases()
+        {
+            return ContextInfo.ContextInfoCollection.SelectMany(ci => ci.EntityMetadataCollection).Select(em => em.EntityAliasAttribute);
         }
     }
 }

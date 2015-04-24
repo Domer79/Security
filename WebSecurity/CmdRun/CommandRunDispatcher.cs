@@ -5,9 +5,15 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using SystemTools.WebTools.Attributes;
 using IntellISenseSecurity;
 using IntellISenseSecurity.Base;
+using SecurityDataModel.Repositories;
+using WebSecurity.Data;
+using WebSecurity.Infrastructure;
 using WebSecurity.IntellISense.CommandTermCommon;
+using WebSecurity.IntellISense.Grant.AccessTypes.Base;
+using WebSecurity.Repositories;
 
 namespace WebSecurity.CmdRun
 {
@@ -49,6 +55,15 @@ namespace WebSecurity.CmdRun
                 {
                     methodParams = stack.GetAdditionalParams().Select(ct => ct.CommandTerm).ToArray();
                     return string.Format("add{0}", stack[2]);
+                }
+                case "set":
+                {
+                    methodParams = new[] {stack[3], stack[5]}.Select(ct => ct.CommandTerm).ToArray();
+                    return string.Format("set{0}", stack[2]);
+                }
+                case "grant":
+                {
+                    var paramList = stack.OfType<CommandTermAccessTypeBase>()
                 }
                 default:
                 {
@@ -92,6 +107,34 @@ namespace WebSecurity.CmdRun
         private void AddTable(string tableName)
         {
             Security.Instance.AddTable(tableName);
+        }
+
+        private void AddAllSecurityObjects()
+        {
+            var actionResultRepository = new ActionResultRepository();
+            var tableObjectRepository = new TableObjectRepository();
+            foreach (var alias in Tools.GetSecurityObjects())
+            {
+                if (alias is ActionAliasAttribute)
+                    actionResultRepository.Add(new ActionResultObject(){ActionAlias = alias.Alias, Description = alias.Description});
+                
+                if (alias is EntityAliasAttribute)
+                    tableObjectRepository.Add(new TableObject(){EntityName = alias.Alias, Description = alias.Description});
+            }
+        }
+
+        #endregion
+
+        #region Set
+
+        private void SetRole(string roleName, string memberName)
+        {
+            Security.Instance.SetRole(roleName, memberName);
+        }
+
+        private void SetGroup(string groupName, string login)
+        {
+            Security.Instance.SetGroup(groupName, login);
         }
 
         #endregion

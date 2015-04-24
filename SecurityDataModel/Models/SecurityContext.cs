@@ -48,7 +48,7 @@ namespace SecurityDataModel.Models
 
         private void SecObjectDbSetInit()
         {
-            var enumerable = ContextInfo.GetDbSetProperties(this).Where(CheckSecObjectType).Select(pi => pi.PropertyType.GetGenericArguments().FirstOrDefault()).ToArray();
+            var enumerable = ContextInfo.GetDbSetProperties(GetType()).Where(CheckSecObjectType).Select(pi => pi.PropertyType.GetGenericArguments().FirstOrDefault()).ToArray();
 
             var propertyDescriptors = enumerable
                 .SelectMany(t => TypeDescriptor.GetProperties(t).Cast<PropertyDescriptor>())

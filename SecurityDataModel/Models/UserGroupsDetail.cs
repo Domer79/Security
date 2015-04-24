@@ -38,12 +38,14 @@ namespace SecurityDataModel.Models
             set { GroupDescription = value; }
         }
 
+        [NotMapped]
         public int IdMember
         {
             get { throw new NotImplementedException();}
             set { throw new NotImplementedException(); }
         }
 
+        [NotMapped]
         public string Name
         {
             get { throw new NotImplementedException(); }

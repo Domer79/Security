@@ -54,7 +54,7 @@ namespace WebSecurity.Infrastructure
             var controllerInfo = new ControllerInfo(methodInfo);
 
             if (ControllerInfoList.Values.Any(ci => string.Equals(ci.Alias, controllerInfo.Alias, StringComparison.InvariantCultureIgnoreCase)))
-                throw new InvalidOperationException("Нельзя добавить два одинаковых метода");
+                return;
 
             ControllerInfoList.Add(methodInfo, controllerInfo);
         }
@@ -153,18 +153,27 @@ namespace WebSecurity.Infrastructure
         {
             get
             {
-                return ActionAlias != null ? ActionAlias.Alias : string.Format("{0}{1}", Controller, Action);
+                return ActionAliasAttribute != null ? ActionAliasAttribute.Alias : ControllerActionName;
             }
         }
 
-        private ActionAliasAttribute ActionAlias
+        private string ControllerActionName
         {
-            get { return ((ActionAliasAttribute) Attribute.GetCustomAttribute(MethodInfo, typeof (ActionAliasAttribute))); }
+            get { return string.Format("{0}{1}", Controller, Action); }
+        }
+
+        public AliasAttributeBase ActionAliasAttribute
+        {
+            get
+            {
+                var aliasAttribute = ((ActionAliasAttribute) Attribute.GetCustomAttribute(MethodInfo, typeof (ActionAliasAttribute)));
+                return aliasAttribute ?? new ActionAliasAttribute(ControllerActionName);
+            }
         }
 
         public string Description
         {
-            get { return ActionAlias != null ? ActionAlias.Description : null; }
+            get { return ActionAliasAttribute != null ? ActionAliasAttribute.Description : null; }
         }
 
         public MethodInfo MethodInfo

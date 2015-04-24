@@ -16,6 +16,12 @@ namespace SecurityDataModel.Models
         [StringLength(200)]
         public string ObjectName { get; set; }
 
+        string ISecObject.Description
+        {
+            get { return Type1; }
+            set { Type1 = value; }
+        }
+
         [StringLength(100)]
         public string Type1 { get; set; }
 

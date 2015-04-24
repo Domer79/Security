@@ -10,13 +10,16 @@ namespace DataRepository.Infrastructure
 {
     public class ContextInfo
     {
-        private readonly DbContext _context;
         private readonly EntityMetadataCollection _entityMetadataCollection;
 
         public ContextInfo(DbContext context)
+            : this(context.GetType())
         {
-            _context = context;
-            _entityMetadataCollection = new EntityMetadataCollection(GetContextEntities(_context).ToArray());
+            
+        }
+        public ContextInfo(Type contextType)
+        {
+            _entityMetadataCollection = new EntityMetadataCollection(GetContextEntities(contextType).ToArray());
         }
 
         public EntityMetadataCollection EntityMetadataCollection
@@ -24,33 +27,18 @@ namespace DataRepository.Infrastructure
             get { return _entityMetadataCollection; }
         }
 
-        public string[] GetTableNames()
+        public static IEnumerable<PropertyInfo> GetDbSetProperties(Type contextType)
         {
-            return GetContextEntities(_context).Select(GetTableName).ToArray();
-        }
-
-        public string GetTableName(Type type)
-        {
-            if (type == null && !type.Is<ModelBase>())
-                throw new ArgumentNullException("type");
-
-            var sqlQuery = _context.Set(type).AsNoTracking().ToString();
-            return Tools.GetTableNameFromSqlQuery(sqlQuery);
-        }
-
-        public static IEnumerable<PropertyInfo> GetDbSetProperties(DbContext context)
-        {
-            var enumerable = context
-                    .GetType()
+            var enumerable = contextType
                     .GetProperties()
                     .Where(CheckPropertyToDbSet);
 
             return enumerable;
         }
 
-        private static IEnumerable<Type> GetContextEntities(DbContext context)
+        internal static IEnumerable<Type> GetContextEntities(Type contextType)
         {
-            return GetDbSetProperties(context).Select(pi => pi.PropertyType.GetGenericArguments()[0]);
+            return GetDbSetProperties(contextType).Select(pi => pi.PropertyType.GetGenericArguments()[0]);
         }
 
         private static bool CheckPropertyToDbSet(PropertyInfo pi)
@@ -69,16 +57,28 @@ namespace DataRepository.Infrastructure
 
     public class ContextInfoColelction : IEnumerable<ContextInfo>
     {
-        private readonly Dictionary<DbContext, ContextInfo> _dictionary = new Dictionary<DbContext, ContextInfo>();
+        private readonly Dictionary<string, ContextInfo> _dictionary = new Dictionary<string, ContextInfo>();
 
-        public void Add(DbContext context)
+        public void Add(Type contextType)
         {
-            _dictionary.Add(context, new ContextInfo(context));
+            if (contextType == null || !contextType.Is<DbContext>()) 
+                throw new ArgumentNullException("contextType");
+
+            if (_dictionary.ContainsKey(contextType.FullName))
+                return;
+
+            _dictionary.Add(contextType.FullName, new ContextInfo(contextType));
         }
 
-        public ContextInfo this[DbContext context]
+        public ContextInfo this[Type contextType]
         {
-            get { return _dictionary[context]; }
+            get
+            {
+                if (contextType == null) 
+                    throw new ArgumentNullException("contextType");
+
+                return _dictionary[contextType.FullName];
+            }
         }
 
         /// <summary>

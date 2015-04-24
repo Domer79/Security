@@ -189,7 +189,14 @@ namespace IntellISenseSecurity
 
         public T GetCommandTerm<T>() where T : CommandTermBase
         {
-            return GetCommandTerm<T>(0);
+            try
+            {
+                return GetCommandTerm<T>(0);
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public T GetCommandTerm<T>(int index) where T : CommandTermBase

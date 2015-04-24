@@ -36,6 +36,20 @@ namespace SecurityDataModel.Repositories
             AddMemberToRole(member, role);
         }
 
+        public void AddMemberToRole(string memberName, string roleName)
+        {
+            if (memberName == null) 
+                throw new ArgumentNullException("memberName");
+
+            if (roleName == null) 
+                throw new ArgumentNullException("roleName");
+
+            var member = _repoMember.First(m => m.MemberName == memberName);
+            var role = _repoRole.First(r => r.RoleName == roleName);
+
+            AddMemberToRole(member, role);
+        }
+
         public void AddMemberToRole(IMember member, IRole role)
         {
             var roleOfMember = CheckMemberRole(member, role, () => new RoleOfMember() { IdMember = member.IdMember, IdRole = role.IdRole });
@@ -51,6 +65,20 @@ namespace SecurityDataModel.Repositories
         private Task AddMemberToRoleTask(IMember member, IRole role)
         {
             return new Task(() => AddMemberToRole(member, role));
+        }
+
+        public void DeleteMemberFromRole(string memberName, string roleName)
+        {
+            if (memberName == null) 
+                throw new ArgumentNullException("memberName");
+
+            if (roleName == null) 
+                throw new ArgumentNullException("roleName");
+
+            var member = _repoMember.First(m => m.MemberName == memberName);
+            var role = _repoRole.First(r => r.RoleName == roleName);
+
+            DeleteMemberFromRole(member, role);
         }
 
         public void DeleteMemberFromRole(int idMember, int idRole)

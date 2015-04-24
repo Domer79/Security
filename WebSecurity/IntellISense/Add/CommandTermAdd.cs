@@ -14,6 +14,7 @@ namespace WebSecurity.IntellISense.Add
         private readonly CommandTermCommonRole _commandTermCommonRole = new CommandTermCommonRole();
         private readonly CommandTermCommonController _commandTermController = new CommandTermCommonController();
         private readonly CommandTermCommonTable _commandTermTable = new CommandTermCommonTable();
+        private readonly CommandTermBase _commandTermAllSecurityObjects = new CommandTermAllSecurityObjects();
 
         protected override string GetCommandTerm()
         {
@@ -27,6 +28,7 @@ namespace WebSecurity.IntellISense.Add
             yield return _commandTermCommonRole;
             yield return _commandTermController;
             yield return _commandTermTable;
+            yield return _commandTermAllSecurityObjects;
         }
     }
 }

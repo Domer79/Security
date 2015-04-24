@@ -14,8 +14,5 @@ namespace WebSecurity.Data
             get { return ObjectName; }
             set { ObjectName = value; }
         }
-
-        [Column1]
-        public string Description { get; set; }
     }
 }

@@ -7,6 +7,7 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SystemTools.Extensions;
 using DataRepository.Infrastructure;
 
 namespace DataRepository
@@ -18,7 +19,7 @@ namespace DataRepository
         /// </summary>
         protected RepositoryDataContext()
         {
-            ContextInfo.ContextInfoCollection.Add(this);
+            ContextInfo.ContextInfoCollection.Add(GetType());
         }
 
         /// <summary>
@@ -28,7 +29,7 @@ namespace DataRepository
         protected RepositoryDataContext(DbCompiledModel model) 
             : base(model)
         {
-            ContextInfo.ContextInfoCollection.Add(this);
+            ContextInfo.ContextInfoCollection.Add(GetType());
         }
 
         /// <summary>
@@ -38,7 +39,7 @@ namespace DataRepository
         public RepositoryDataContext(string nameOrConnectionString) 
             : base(nameOrConnectionString)
         {
-            ContextInfo.ContextInfoCollection.Add(this);
+            ContextInfo.ContextInfoCollection.Add(GetType());
         }
 
         /// <summary>
@@ -48,7 +49,7 @@ namespace DataRepository
         public RepositoryDataContext(string nameOrConnectionString, DbCompiledModel model) 
             : base(nameOrConnectionString, model)
         {
-            ContextInfo.ContextInfoCollection.Add(this);
+            ContextInfo.ContextInfoCollection.Add(GetType());
         }
 
         /// <summary>
@@ -58,7 +59,7 @@ namespace DataRepository
         public RepositoryDataContext(DbConnection existingConnection, bool contextOwnsConnection) 
             : base(existingConnection, contextOwnsConnection)
         {
-            ContextInfo.ContextInfoCollection.Add(this);
+            ContextInfo.ContextInfoCollection.Add(GetType());
         }
 
         /// <summary>
@@ -68,7 +69,7 @@ namespace DataRepository
         public RepositoryDataContext(DbConnection existingConnection, DbCompiledModel model, bool contextOwnsConnection) 
             : base(existingConnection, model, contextOwnsConnection)
         {
-            ContextInfo.ContextInfoCollection.Add(this);
+            ContextInfo.ContextInfoCollection.Add(GetType());
         }
 
         /// <summary>
@@ -78,7 +79,23 @@ namespace DataRepository
         public RepositoryDataContext(ObjectContext objectContext, bool dbContextOwnsObjectContext) 
             : base(objectContext, dbContextOwnsObjectContext)
         {
-            ContextInfo.ContextInfoCollection.Add(this);
+            ContextInfo.ContextInfoCollection.Add(GetType());
         }
+
+        public string[] GetTableNames()
+        {
+            return ContextInfo.GetContextEntities(GetType()).Select(GetTableName).ToArray();
+        }
+
+        public string GetTableName(Type type)
+        {
+            if (type == null && !type.Is<ModelBase>())
+                throw new ArgumentNullException("type");
+
+            var sqlQuery = Set(type).AsNoTracking().ToString();
+            return Tools.GetTableNameFromSqlQuery(sqlQuery);
+        }
+
+
     }
 }

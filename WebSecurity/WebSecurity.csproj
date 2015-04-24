@@ -83,6 +83,7 @@
     <Compile Include="Infrastructure\ControllerCollection.cs" />
     <Compile Include="Infrastructure\Tools.cs" />
     <Compile Include="IntellISense\Add\CommandTermAdd.cs" />
+    <Compile Include="IntellISense\Add\CommandTermAllSecurityObjects.cs" />
     <Compile Include="IntellISense\CommandTermCommon\CommandTermCommonController.cs" />
     <Compile Include="IntellISense\CommandTermCommon\CommandTermCommonGroup.cs" />
     <Compile Include="IntellISense\CommandTermCommon\CommandTermCommonRole.cs" />
