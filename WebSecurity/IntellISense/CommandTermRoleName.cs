@@ -7,6 +7,15 @@ namespace WebSecurity.IntellISense
     {
         public string RoleName { get; set; }
 
+        public CommandTermRoleName()
+        {
+        }
+
+        public CommandTermRoleName(string roleName)
+        {
+            RoleName = roleName;
+        }
+
         protected sealed override string GetCommandTerm()
         {
             return RoleName;

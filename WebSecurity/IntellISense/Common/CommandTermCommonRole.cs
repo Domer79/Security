@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using IntellISenseSecurity.Base;
 
-namespace WebSecurity.IntellISense.CommandTermCommon
+namespace WebSecurity.IntellISense.Common
 {
-    internal class CommandTermCommonController : CommandTermBase
+    internal class CommandTermCommonRole : CommandTermBase
     {
         protected override string GetCommandTerm()
         {
-            return "controller";
+            return "role";
         }
 
         protected override IEnumerable<CommandTermBase> GetNextCommandTerms(params object[] @params)

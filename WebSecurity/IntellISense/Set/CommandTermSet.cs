@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IntellISenseSecurity.Base;
-using WebSecurity.IntellISense.CommandTermCommon;
+using WebSecurity.IntellISense.Common;
 
 namespace WebSecurity.IntellISense.Set
 {

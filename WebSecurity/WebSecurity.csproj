@@ -84,12 +84,13 @@
     <Compile Include="Infrastructure\Tools.cs" />
     <Compile Include="IntellISense\Add\CommandTermAdd.cs" />
     <Compile Include="IntellISense\Add\CommandTermAllSecurityObjects.cs" />
-    <Compile Include="IntellISense\CommandTermCommon\CommandTermCommonController.cs" />
-    <Compile Include="IntellISense\CommandTermCommon\CommandTermCommonGroup.cs" />
-    <Compile Include="IntellISense\CommandTermCommon\CommandTermCommonRole.cs" />
-    <Compile Include="IntellISense\CommandTermCommon\CommandTermCommonTable.cs" />
-    <Compile Include="IntellISense\CommandTermCommon\CommandTermCommonUser.cs" />
-    <Compile Include="IntellISense\CommandTermCommon\CommandTermTo.cs" />
+    <Compile Include="IntellISense\Common\CommandTermCommonController.cs" />
+    <Compile Include="IntellISense\Common\CommandTermCommonGroup.cs" />
+    <Compile Include="IntellISense\Common\CommandTermCommonRole.cs" />
+    <Compile Include="IntellISense\Common\CommandTermCommonTable.cs" />
+    <Compile Include="IntellISense\Common\CommandTermCommonUser.cs" />
+    <Compile Include="IntellISense\Common\CommandTermFor.cs" />
+    <Compile Include="IntellISense\Common\CommandTermTo.cs" />
     <Compile Include="IntellISense\CommandTermGroupName.cs" />
     <Compile Include="IntellISense\CommandTermMain.cs" />
     <Compile Include="IntellISense\CommandTermMemberName.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="IntellISense\CommandTermUserName.cs" />
     <Compile Include="IntellISense\Delete\CommandTermDelete.cs" />
     <Compile Include="IntellISense\Delete\CommandTermFrom.cs" />
+    <Compile Include="IntellISense\Delete\CommandTermGrantTo.cs" />
     <Compile Include="IntellISense\Delete\CommandTermMember.cs" />
     <Compile Include="IntellISense\Grant\AccessTypes\Base\CommandTermAccessTypeBase.cs" />
     <Compile Include="IntellISense\Grant\AccessTypes\CommandTermDelete.cs" />
@@ -109,6 +111,9 @@
     <Compile Include="IntellISense\Grant\CommandTermOnGrant.cs" />
     <Compile Include="IntellISense\Set\CommandTermSet.cs" />
     <Compile Include="IntellISense\Triggers\Delete\DeleteGroupTrigger.cs" />
+    <Compile Include="IntellISense\Triggers\Delete\GrantTo\DeleteGrantAfterFor.cs" />
+    <Compile Include="IntellISense\Triggers\Delete\GrantTo\DeleteGrantAfterSecObject.cs" />
+    <Compile Include="IntellISense\Triggers\Delete\GrantTo\DeleteGrantToRoleName.cs" />
     <Compile Include="IntellISense\Triggers\Delete\Member\DeleteMemberFromTrigger.cs" />
     <Compile Include="IntellISense\Triggers\Delete\Member\DeleteMemberMemberNameTrigger.cs" />
     <Compile Include="IntellISense\Triggers\Delete\User\DeleteUserFromTrigger.cs" />

@@ -4,13 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IntellISenseSecurity;
-using IntellISenseSecurity.Base;
-using WebSecurity.IntellISense.Common;
 using WebSecurity.IntellISense.Delete;
 
-namespace WebSecurity.IntellISense.Triggers.Delete.User
+namespace WebSecurity.IntellISense.Triggers.Delete.GrantTo
 {
-    public class DeleteUserTrigger : ICommandTermTrigger
+    internal class DeleteGrantToRoleName : ICommandTermTrigger
     {
         public Type[][] CommandTermTypes
         {
@@ -20,8 +18,9 @@ namespace WebSecurity.IntellISense.Triggers.Delete.User
                 {
                     new[]
                     {
-                        typeof(CommandTermDelete),
-                        typeof(CommandTermCommonUser)
+                        typeof (CommandTermDelete),
+                        typeof (CommandTermGrantTo),
+                        typeof (CommandTermRoleName)
                     }
                 };
             }
@@ -29,7 +28,7 @@ namespace WebSecurity.IntellISense.Triggers.Delete.User
 
         public Action<CommandTermStack> Trigger
         {
-            get { return TriggerActions.DeleteUserTrigger; }
+            get { return TriggerActions.DeleteGrantToRoleName; }
         }
     }
 }

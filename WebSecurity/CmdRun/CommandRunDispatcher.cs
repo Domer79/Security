@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Management.Instrumentation;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using SystemTools.Extensions;
 using SystemTools.WebTools.Attributes;
 using SystemTools.WebTools.Infrastructure;
@@ -18,11 +14,9 @@ using WebSecurity.Data;
 using WebSecurity.Exceptions;
 using WebSecurity.Infrastructure;
 using WebSecurity.IntellISense;
-using WebSecurity.IntellISense.CommandTermCommon;
 using WebSecurity.IntellISense.Delete;
 using WebSecurity.IntellISense.Grant.AccessTypes;
 using WebSecurity.IntellISense.Grant.AccessTypes.Base;
-using WebSecurity.Repositories;
 
 namespace WebSecurity.CmdRun
 {
@@ -117,17 +111,20 @@ namespace WebSecurity.CmdRun
 
         private void AddUser(string userName, string password, string email, string displayName, string sid)
         {
-            Security.Instance.AddUser(userName, password, email, displayName.Trim(new[] {'"'}), sid);
+            var name = displayName != null ? displayName.Trim(new[] {'"'}) : null;
+            Security.Instance.AddUser(userName, password, email, name, sid);
         }
 
         private void AddGroup(string groupName, string description)
         {
-            Security.Instance.AddGroup(groupName, description.Trim(new[] { '"' }));
+            var d = description != null ? description.Trim(new[] { '"' }) : null;
+            Security.Instance.AddGroup(groupName, d);
         }
 
         private void AddRole(string roleName, string description)
         {
-            Security.Instance.AddRole(roleName, description.Trim(new[] { '"' }));
+            var d = description != null ? description.Trim(new[] { '"' }) : null;
+            Security.Instance.AddRole(roleName, d);
         }
 
         private void AddController(string controllerName)

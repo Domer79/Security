@@ -1,7 +1,7 @@
 ﻿using System;
 using IntellISenseSecurity;
 using IntellISenseSecurity.Base;
-using WebSecurity.IntellISense.CommandTermCommon;
+using WebSecurity.IntellISense.Common;
 using WebSecurity.IntellISense.Delete;
 
 namespace WebSecurity.IntellISense.Triggers.Delete.User

@@ -67,7 +67,16 @@ namespace DataRepository.Infrastructure
             if (_dictionary.ContainsKey(contextType.FullName))
                 return;
 
-            _dictionary.Add(contextType.FullName, new ContextInfo(contextType));
+            var contextInfo = new ContextInfo(contextType);
+            var entityMetadatas = _dictionary.Values.SelectMany(ct => ct.EntityMetadataCollection).ToArray();
+
+            foreach (var entityMetadata in contextInfo.EntityMetadataCollection)
+            {
+                if (entityMetadatas.Any(ecm => ecm.EntityAlias.ToLower() == entityMetadata.EntityAlias))
+                    throw new InvalidOperationException("Такая сущность уже зарегистрирована");
+            }
+
+            _dictionary.Add(contextType.FullName, contextInfo);
         }
 
         public ContextInfo this[Type contextType]

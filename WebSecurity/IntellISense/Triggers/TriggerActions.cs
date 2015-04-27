@@ -5,9 +5,10 @@ using SystemTools.Interfaces;
 using IntellISenseSecurity;
 using IntellISenseSecurity.Base;
 using SecurityDataModel.Models;
-using WebSecurity.IntellISense.CommandTermCommon;
+using WebSecurity.IntellISense.Common;
 using WebSecurity.IntellISense.Delete;
 using WebSecurity.IntellISense.Grant;
+using WebSecurity.IntellISense.Grant.AccessTypes;
 using WebSecurity.Repositories;
 
 namespace WebSecurity.IntellISense.Triggers
@@ -258,6 +259,40 @@ namespace WebSecurity.IntellISense.Triggers
             var query = new TableObjectRepository().GetQueryableCollection();
             ct.NextCommandTermList = query.ToList().Select(so => new CommandTermSecObjectName(so.ObjectName));
         }
+
+        #region delete grant to
+
+        public static void DeleteGrantToRoleName(CommandTermStack stack)
+        {
+            var commandTerm = stack.LastCommandTerm;
+            if (commandTerm as CommandTermRoleName == null)
+                throw new InvalidOperationException("commandTerm as CommandTermRoleName == null");
+
+            var ct = commandTerm as CommandTermRoleName;
+            ct.NextCommandTermList = new CommandTermOnGrant();
+        }
+
+        public static void DeleteGrantAfterSecObject(CommandTermStack stack)
+        {
+            var commandTerm = stack.LastCommandTerm;
+            if (commandTerm as CommandTermSecObjectName == null)
+                throw new InvalidOperationException("commandTerm as CommandTermSecObjectName == null");
+
+            var ct = commandTerm as CommandTermSecObjectName;
+            ct.NextCommandTermList = new List<CommandTermBase> {new CommandTermFor()};
+        }
+
+        public static void DeleteGrantAfterFor(CommandTermStack stack)
+        {
+            var commandTerm = stack.LastCommandTerm;
+            if (commandTerm as CommandTermFor == null)
+                throw new InvalidOperationException("commandTerm as CommandTermFor == null");
+
+            var ct = commandTerm as CommandTermFor;
+            ct.NextCommandTermList = new List<CommandTermBase> { new CommandTermTo(), new CommandTermSelect(), new CommandTermInsert(), new CommandTermUpdate(), new IntellISense.Grant.AccessTypes.CommandTermDelete() };
+        }
+
+        #endregion
 
         #endregion
     }

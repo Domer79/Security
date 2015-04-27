@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using IntellISenseSecurity.Base;
-using WebSecurity.IntellISense.CommandTermCommon;
+using WebSecurity.IntellISense.Common;
 
 namespace WebSecurity.IntellISense.Grant.AccessTypes.Base
 {
@@ -13,7 +13,6 @@ namespace WebSecurity.IntellISense.Grant.AccessTypes.Base
         private readonly CommandTermAccessTypeBase _commandTermInsert;
         private readonly CommandTermAccessTypeBase _commandTermUpdate;
         private readonly CommandTermAccessTypeBase _commandTermDelete;
-        private readonly CommandTermTo _commandTermTo;
 
         protected CommandTermAccessTypeBase()
         {
@@ -22,7 +21,6 @@ namespace WebSecurity.IntellISense.Grant.AccessTypes.Base
         internal CommandTermAccessTypeBase(int depth)
         {
             _depth = depth;
-            _commandTermTo = new CommandTermTo();
             if (depth == OptionalDepth)
                 return;
 
@@ -46,7 +44,9 @@ namespace WebSecurity.IntellISense.Grant.AccessTypes.Base
                 yield return _commandTermUpdate;
                 yield return _commandTermDelete;
             }
-            yield return _commandTermTo;
+            yield return NextCommandTermList;
         }
+
+        public CommandTermBase NextCommandTermList { get; set; }
     }
 }

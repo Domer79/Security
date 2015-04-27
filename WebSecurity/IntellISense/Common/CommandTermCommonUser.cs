@@ -1,8 +1,7 @@
-using System;
 using System.Collections.Generic;
 using IntellISenseSecurity.Base;
 
-namespace WebSecurity.IntellISense.CommandTermCommon
+namespace WebSecurity.IntellISense.Common
 {
     internal class CommandTermCommonUser : CommandTermBase
     {

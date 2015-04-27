@@ -1,7 +1,7 @@
 using System;
 using IntellISenseSecurity;
 using IntellISenseSecurity.Base;
-using WebSecurity.IntellISense.CommandTermCommon;
+using WebSecurity.IntellISense.Common;
 using WebSecurity.IntellISense.Set;
 
 namespace WebSecurity.IntellISense.Triggers.Set.Group

@@ -5,6 +5,7 @@ using WebSecurity.IntellISense.Grant.AccessTypes.Base;
 
 namespace WebSecurity.IntellISense.Grant
 {
+    //TODO: Написать триггер после окончания каждого AccessType
     public class CommandTermGrant : CommandTermBase
     {
         private readonly CommandTermBase _commandTermExec = new CommandTermExec();

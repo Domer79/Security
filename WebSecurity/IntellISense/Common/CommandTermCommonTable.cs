@@ -1,15 +1,13 @@
-using System;
 using System.Collections.Generic;
 using IntellISenseSecurity.Base;
-using WebSecurity.IntellISense.Grant;
 
-namespace WebSecurity.IntellISense.CommandTermCommon
+namespace WebSecurity.IntellISense.Common
 {
-    internal class CommandTermTo : CommandTermBase
+    internal class CommandTermCommonTable : CommandTermBase
     {
         protected override string GetCommandTerm()
         {
-            return "to";
+            return "table";
         }
 
         protected override IEnumerable<CommandTermBase> GetNextCommandTerms(params object[] @params)
@@ -18,7 +16,5 @@ namespace WebSecurity.IntellISense.CommandTermCommon
         }
 
         public IEnumerable<CommandTermBase> NextCommandTermList { get; set; }
-
-        //TODO: Реализовать SetTrigger
     }
 }

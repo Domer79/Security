@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using IntellISenseSecurity.Base;
-using WebSecurity.IntellISense.CommandTermCommon;
+using WebSecurity.IntellISense.Common;
 
 namespace WebSecurity.IntellISense.Delete
 {
@@ -11,6 +11,7 @@ namespace WebSecurity.IntellISense.Delete
         private readonly CommandTermBase _commandTermGroup = new CommandTermCommonGroup();
         private readonly CommandTermBase _commandTermController = new CommandTermCommonController();
         private readonly CommandTermBase _commandTermTable = new CommandTermCommonTable();
+        private readonly CommandTermBase _commandTermGrantTo = new CommandTermGrantTo();
 
         protected override string GetCommandTerm()
         {
@@ -24,6 +25,7 @@ namespace WebSecurity.IntellISense.Delete
             yield return _commandTermGroup;
             yield return _commandTermController;
             yield return _commandTermTable;
+            yield return _commandTermGrantTo;
         }
     }
 }
