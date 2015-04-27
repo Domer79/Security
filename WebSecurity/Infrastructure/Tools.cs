@@ -5,6 +5,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using SystemTools.WebTools.Attributes;
+using SystemTools.WebTools.Helpers;
+using SystemTools.WebTools.Infrastructure;
 using DataRepository.Infrastructure;
 
 namespace WebSecurity.Infrastructure
@@ -25,7 +27,7 @@ namespace WebSecurity.Infrastructure
 
         internal static IEnumerable<AliasAttributeBase> GetControllerActionAliases()
         {
-            return ControllerCollection.GetControllerCollection().Select(ci => ci.ActionAliasAttribute);
+            return ControllerHelper.ControllerCollection.Select(ci => ci.ActionAliasAttribute);
         }
 
         internal static IEnumerable<AliasAttributeBase> GetEntityAliases()

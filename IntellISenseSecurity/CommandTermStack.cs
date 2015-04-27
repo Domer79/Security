@@ -78,7 +78,7 @@ namespace IntellISenseSecurity
                 foreach (var types in commandTermTrigger.CommandTermTypes)
                 {
                     if (types.SequenceEqual(commandTermTypes, new CommandTermTypeComparer()))
-                        commandTermTrigger.Trigger(LastCommandTerm);
+                        commandTermTrigger.Trigger(this);
                 }
             }
         }
@@ -167,7 +167,7 @@ namespace IntellISenseSecurity
             return LastCommandTerm.Any(ct => ct.CommandTerm == commandString);
         }
 
-        internal CommandTermBase LastCommandTerm
+        public CommandTermBase LastCommandTerm
         {
             get { return _list.Last(); }
         }

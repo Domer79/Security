@@ -1,19 +1,25 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Management.Instrumentation;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using SystemTools.Extensions;
 using SystemTools.WebTools.Attributes;
 using SystemTools.WebTools.Infrastructure;
 using IntellISenseSecurity;
 using IntellISenseSecurity.Base;
+using SecurityDataModel.Models;
 using SecurityDataModel.Repositories;
 using WebSecurity.Data;
+using WebSecurity.Exceptions;
 using WebSecurity.Infrastructure;
 using WebSecurity.IntellISense;
 using WebSecurity.IntellISense.CommandTermCommon;
+using WebSecurity.IntellISense.Delete;
 using WebSecurity.IntellISense.Grant.AccessTypes;
 using WebSecurity.IntellISense.Grant.AccessTypes.Base;
 using WebSecurity.Repositories;
@@ -79,6 +85,17 @@ namespace WebSecurity.CmdRun
 
                     return stack[1].CommandTerm;
                 }
+                case "delete":
+                {
+                    if (stack.GetCommandTerm<CommandTermFrom>() != null)
+                    {
+                        methodParams = new[] {stack[3], stack[5]}.Select(ct => ct.CommandTerm).ToArray();
+                        return string.Format("delete{0}from", stack[2]);
+                    }
+
+                    methodParams = new []{stack[3]}.Select(ct => ct.CommandTerm).ToArray();
+                    return string.Format("delete{0}", stack[2]);
+                }
                 default:
                 {
                     throw new NotImplementedException(string.Format("Метод {0} не реализован", stack[0]));
@@ -125,16 +142,32 @@ namespace WebSecurity.CmdRun
 
         private void AddAllSecurityObjects()
         {
-            var actionResultRepository = new ActionResultRepository();
-            var tableObjectRepository = new TableObjectRepository();
+            var existObjects = new List<string>();
             foreach (var alias in Tools.GetSecurityObjects())
             {
-                if (alias is ActionAliasAttribute)
-                    actionResultRepository.Add(new ActionResultObject(){ActionAlias = alias.Alias, Description = alias.Description});
-                
-                if (alias is EntityAliasAttribute)
-                    tableObjectRepository.Add(new TableObject(){EntityName = alias.Alias, Description = alias.Description});
+                var secObject = alias is ActionAliasAttribute
+                    ? (SecObject)new ActionResultObject() { ActionAlias = alias.Alias, Description = alias.Description }
+                    : new TableObject() { EntityName = alias.Alias, Description = alias.Description };
+
+                try
+                {
+                    SecObjectRepository.Add(secObject);
+                }
+                catch (Exception e)
+                {
+                    SecObjectRepository.DeleteFromContext(secObject);
+
+                    if (e.GetErrorMessage().IndexOf("UQ_SecObject_ObjectName", StringComparison.Ordinal) != -1)
+                        existObjects.Add(alias.Alias);
+                    else
+                    {
+                        throw;
+                    }
+                }
             }
+
+            if (existObjects.Count != 0)
+                throw new InfoException(string.Format("Объекты {0} уже присутствуют в базе данных", existObjects.Aggregate((current, next) => string.Format("{0}, {1}", current, next))));
         }
 
         #endregion
@@ -179,7 +212,30 @@ namespace WebSecurity.CmdRun
 
         #region Delete
 
-        private void DeleteMember()
+        private void DeleteMemberFrom(string memberName, string roleName)
+        {
+            Security.Instance.DeleteMemberFromRole(memberName, roleName);
+        }
+
+        private void DeleteUserFrom(string username, string groupName)
+        {
+            Security.Instance.DeleteUserFromGroup(username, groupName);
+        }
+
+        private void DeleteGroup(string groupName)
+        {
+            Security.Instance.DeleteGroup(groupName);
+        }
+
+        private void DeleteController(string controllerName)
+        {
+            Security.Instance.DeleteController(controllerName);
+        }
+
+        private void DeleteTable(string tableName)
+        {
+            Security.Instance.DeleteTable(tableName);
+        }
 
         #endregion
 

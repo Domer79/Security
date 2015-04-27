@@ -71,6 +71,17 @@ namespace DataRepository
             return Set.Find(keys);
         }
 
+        public void DeleteFromContext(T item)
+        {
+            Set.Remove(item);
+        }
+
+        public EntityState this[T item]
+        {
+            get { return Context.Entry(item).State; }
+            set { Context.Entry(item).State = value; }
+        }
+
         public T Create()
         {
             return Set.Create();

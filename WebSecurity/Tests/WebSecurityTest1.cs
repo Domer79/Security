@@ -155,7 +155,7 @@ namespace WebSecurity.Tests
             var query = repo.GetQueryableCollection();
             foreach (var roleOfMember in query)
             {
-                Debug.WriteLine(roleOfMember.MemberName, roleOfMember.RoleName);
+                Debug.WriteLine(roleOfMember.Name, roleOfMember.RoleName);
             }
         }
 
@@ -174,7 +174,7 @@ namespace WebSecurity.Tests
             var query = repo.GetQueryableCollection();
             foreach (var roleOfMember in query)
             {
-                Debug.WriteLine(roleOfMember.MemberName, roleOfMember.RoleName);
+                Debug.WriteLine(roleOfMember.Name, roleOfMember.RoleName);
             }
         }
 
@@ -185,15 +185,15 @@ namespace WebSecurity.Tests
             var userRepo = new SecurityRepository<User>();
             var roleRepo = new SecurityRepository<Role>();
 
-            var elina = userRepo.FirstOrDefault(u => u.Login == "Elina");
-            var role1 = roleRepo.FirstOrDefault(r => r.RoleName == "Role2");
+            var elina = userRepo.First(u => u.Login == "Elina");
+            var role1 = roleRepo.First(r => r.RoleName == "Role2");
 
             repo.DeleteMemberFromRole(((IMember) elina).IdMember, role1.IdRole);
 
             var query = repo.GetQueryableCollection();
             foreach (var roleOfMember in query)
             {
-                Debug.WriteLine(roleOfMember.MemberName, roleOfMember.RoleName);
+                Debug.WriteLine(roleOfMember.Name, roleOfMember.RoleName);
             }
         }
 

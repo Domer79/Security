@@ -66,7 +66,16 @@ namespace SecurityDataModel.Repositories
 
         public void DeleteFromGroup(string userName, string groupName)
         {
-            throw new NotImplementedException();
+            if (userName == null)
+                throw new ArgumentNullException("userName");
+
+            if (groupName == null)
+                throw new ArgumentNullException("groupName");
+
+            var user = _userRepo.First(m => m.Login == userName);
+            var group = _groupRepo.First(r => r.GroupName == groupName);
+
+            DeleteFromGroup(user, group);
         }
 
         public void DeleteFromGroup(int idUser, int idGroup)

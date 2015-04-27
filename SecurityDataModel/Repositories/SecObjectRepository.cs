@@ -10,16 +10,16 @@ using SecurityDataModel.Models;
 namespace SecurityDataModel.Repositories
 {
     public abstract class SecObjectRepository<TSecObject> : ISecObjectRepository<TSecObject> 
-        where TSecObject : class, ISecObject
+        where TSecObject : ModelBase, ISecObject
     {
-        private readonly SecurityRepository<SecObject> _repo;
+        private readonly SecurityRepository<TSecObject> _repo;
 
         /// <summary>
         /// Инициализирует новый экземпляр класса <see cref="T:System.Object"/>.
         /// </summary>
         protected SecObjectRepository()
         {
-            _repo = new SecurityRepository<SecObject>();
+            _repo = new SecurityRepository<TSecObject>();
         }
 
         public IQueryable<TSecObject> GetQueryableCollection()
@@ -32,13 +32,43 @@ namespace SecurityDataModel.Repositories
             if (secObject == null) 
                 throw new ArgumentNullException("secObject");
 
-            _repo.InsertOrUpdate(secObject as SecObject);
+            _repo.InsertOrUpdate(secObject);
+            _repo.SaveChanges();
+        }
+
+        public void DeleteSecObject(string objectName)
+        {
+            var secObject = _repo.First(so => so.ObjectName == objectName);
+            DeleteSecObject(secObject);
+        }
+
+        public void DeleteSecObject(int idSecObject)
+        {
+            var secObject = _repo.Find(idSecObject);
+
+            if (secObject == null)
+                throw new InvalidOperationException("ОБъект безопасности не найден");
+
+            DeleteSecObject(secObject);
+        }
+
+        public void DeleteSecObject(TSecObject secObject)
+        {
+            if (secObject == null) 
+                throw new ArgumentNullException("secObject");
+
+            _repo.Delete(secObject);
             _repo.SaveChanges();
         }
 
         public TSecObject GetSecObject(string objectName)
         {
             return _repo.Cast<TSecObject>().FirstOrDefault(so => so.ObjectName == objectName);
+        }
+
+        public void DeleteFromContext(TSecObject secObject)
+        {
+            _repo.DeleteFromContext(secObject);
         }
     }
 
@@ -89,6 +119,19 @@ namespace SecurityDataModel.Repositories
         public static IQueryable<ISecObject> GetSecObjects()
         {
             return Instance.AsQueryable();
+        }
+
+        public static void Add<TSecObject>(TSecObject secObject) where TSecObject : ModelBase
+        {
+            var repo = new SecurityRepository<TSecObject>();
+            repo.InsertOrUpdate(secObject);
+            repo.SaveChanges();
+        }
+
+        public static void DeleteFromContext<TSecObject>(TSecObject secObject) where TSecObject : ModelBase
+        {
+            var repo = new SecurityRepository<TSecObject>();
+            repo.DeleteFromContext(secObject);
         }
     }
 }

@@ -61,7 +61,7 @@ namespace WebSecurity.IntellISense.Triggers.Grant
             }
         }
 
-        public Action<CommandTermBase> Trigger
+        public Action<CommandTermStack> Trigger
         {
             get { return TriggerActions.GrantToRoleNameTrigger; }
         }

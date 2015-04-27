@@ -110,6 +110,36 @@ namespace WebSecurity
             repo.AddToGroup(login, groupName);
         }
 
+        public void DeleteMemberFromRole(string memberName, string roleName)
+        {
+            var repo = new RoleOfMemberRepository();
+            repo.DeleteMemberFromRole(memberName, roleName);
+        }
+
+        public void DeleteUserFromGroup(string userName, string groupName)
+        {
+            var repo = new UserGroupsDetailRepository();
+            repo.DeleteFromGroup(userName, groupName);
+        }
+
+        public void DeleteGroup(string groupName)
+        {
+            var repo = new GroupRepository();
+            repo.Delete(groupName);
+        }
+
+        public void DeleteController(string controllerName)
+        {
+            var repo = new ActionResultRepository();
+            repo.DeleteSecObject(controllerName);
+        }
+
+        public void DeleteTable(string tableName)
+        {
+            var repo = new TableObjectRepository();
+            repo.DeleteSecObject(tableName);
+        }
+
         public bool Sign(string login, string password)
         {
             var repo = new UserRepository();
@@ -237,7 +267,7 @@ namespace WebSecurity
             var repo = new RoleOfMemberRepository();
             var query = repo.GetQueryableCollection();
 
-            return query.Where(e => e.MemberName == Identity.Name && e.RoleName == role).Select(e => 1).Any();
+            return query.Where(e => e.Name == Identity.Name && e.RoleName == role).Select(e => 1).Any();
         }
 
         /// <summary>

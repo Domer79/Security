@@ -6,6 +6,6 @@ namespace IntellISenseSecurity
     public interface ICommandTermTrigger
     {
         Type[][] CommandTermTypes { get; }
-        Action<CommandTermBase> Trigger { get; }
+        Action<CommandTermStack> Trigger { get; }
     }
 }

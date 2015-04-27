@@ -23,7 +23,7 @@ namespace WebSecurity.IntellISense.Triggers.Delete
             }
         }
 
-        public Action<CommandTermBase> Trigger
+        public Action<CommandTermStack> Trigger
         {
             get { return TriggerActions.DeleteGroupTrigger; }
         }
@@ -46,7 +46,7 @@ namespace WebSecurity.IntellISense.Triggers.Delete
             }
         }
 
-        public Action<CommandTermBase> Trigger
+        public Action<CommandTermStack> Trigger
         {
             get { return TriggerActions.DeleteControllerTrigger; }
         }
@@ -69,7 +69,7 @@ namespace WebSecurity.IntellISense.Triggers.Delete
             }
         }
 
-        public Action<CommandTermBase> Trigger
+        public Action<CommandTermStack> Trigger
         {
             get { return TriggerActions.DeleteTableTrigger; }
         }

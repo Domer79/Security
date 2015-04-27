@@ -25,7 +25,7 @@ namespace WebSecurity.IntellISense.Triggers.Delete.User
             }
         }
 
-        public Action<CommandTermBase> Trigger
+        public Action<CommandTermStack> Trigger
         {
             get { return TriggerActions.DeleteUserFromTrigger; }
         }

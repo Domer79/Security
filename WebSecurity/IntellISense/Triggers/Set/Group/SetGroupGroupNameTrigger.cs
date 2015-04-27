@@ -24,7 +24,7 @@ namespace WebSecurity.IntellISense.Triggers.Set.Group
             }
         }
 
-        public Action<CommandTermBase> Trigger
+        public Action<CommandTermStack> Trigger
         {
             get { return TriggerActions.SetGroupGroupNameTrigger; }
         }

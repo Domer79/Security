@@ -87,7 +87,7 @@ namespace SecurityDataModel.Repositories
 
         public bool IsAccess(string login, string objectName, string accessType)
         {
-            return _repo.SqlQuery<bool>("select sec.IsAllowByAccessName(@p0, @p1, @p2)", objectName, login, accessType).FirstOrDefault();
+            return _repo.SqlQuery<bool>("select sec.IsAllowByName(@p0, @p1, @p2)", objectName, login, accessType).FirstOrDefault();
         }
 
         public IQueryable<IGrant> GetQueryableCollection()

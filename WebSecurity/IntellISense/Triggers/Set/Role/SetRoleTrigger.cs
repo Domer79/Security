@@ -23,7 +23,7 @@ namespace WebSecurity.IntellISense.Triggers.Set.Role
             }
         }
 
-        public Action<CommandTermBase> Trigger
+        public Action<CommandTermStack> Trigger
         {
             get { return TriggerActions.SetRoleTrigger; }
         }
