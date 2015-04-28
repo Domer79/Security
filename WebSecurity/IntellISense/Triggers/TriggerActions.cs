@@ -1,15 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using SystemTools.Interfaces;
 using IntellISenseSecurity;
 using IntellISenseSecurity.Base;
 using SecurityDataModel.Models;
+using SecurityDataModel.Repositories;
 using WebSecurity.IntellISense.Common;
 using WebSecurity.IntellISense.Delete;
-using WebSecurity.IntellISense.Grant;
 using WebSecurity.IntellISense.Grant.AccessTypes;
+using WebSecurity.IntellISense.Grant.AccessTypes.Base;
 using WebSecurity.Repositories;
+using GroupRepository = WebSecurity.Repositories.GroupRepository;
+using RoleOfMemberRepository = WebSecurity.Repositories.RoleOfMemberRepository;
+using RoleRepository = WebSecurity.Repositories.RoleRepository;
+using UserGroupsDetailRepository = WebSecurity.Repositories.UserGroupsDetailRepository;
+using UserRepository = WebSecurity.Repositories.UserRepository;
 
 namespace WebSecurity.IntellISense.Triggers
 {
@@ -18,31 +23,29 @@ namespace WebSecurity.IntellISense.Triggers
         #region GRANT trigger actions
 
         /// <summary>
-        /// Триггер на терм exec для <see cref="CommandTermOnGrant"/>
+        /// Триггер на терм exec для <see cref="CommandTermOn"/>
         /// </summary>
         /// <param name="stack">Стек команды</param>
         public static void GrantExecTrigger(CommandTermStack stack)
         {
             var commandTerm = stack.LastCommandTerm;
-            if (commandTerm as CommandTermOnGrant == null)
-                throw new InvalidOperationException("commandTerm as CommandTermOnGrant == null");
+            if (commandTerm as CommandTermOn == null)
+                throw new InvalidOperationException("commandTerm as CommandTermOn == null");
 
-            var ct = commandTerm as CommandTermOnGrant;
-            ct.SecObjectCollection = new ActionResultRepository().GetQueryableCollection();
+            commandTerm.NextCommandTerms = new ActionResultRepository().GetQueryableCollection().ToList().Select(so => new CommandTermSecObjectName(so.ObjectName));;
         }
 
         /// <summary>
-        /// Триггер на термы select insert update delete для <see cref="CommandTermOnGrant"/>
+        /// Триггер на термы select insert update delete для <see cref="CommandTermOn"/>
         /// </summary>
         /// <param name="stack">Стек команды</param>
         public static void DoTableTrigger(CommandTermStack stack)
         {
             var commandTerm = stack.LastCommandTerm;
-            if (commandTerm as CommandTermOnGrant == null)
-                throw new InvalidOperationException("commandTerm as CommandTermOnGrant == null");
+            if (commandTerm as CommandTermOn == null)
+                throw new InvalidOperationException("commandTerm as CommandTermOn == null");
 
-            var ct = commandTerm as CommandTermOnGrant;
-            ct.SecObjectCollection = new TableObjectRepository().GetQueryableCollection();
+            commandTerm.NextCommandTerms = new TableObjectRepository().GetQueryableCollection().ToList().Select(so => new CommandTermSecObjectName(so.ObjectName)); ;
         }
 
         /// <summary>
@@ -55,8 +58,7 @@ namespace WebSecurity.IntellISense.Triggers
             if (commandTerm as CommandTermTo == null)
                 throw new InvalidOperationException("commandTerm as CommandTermTo == null");
 
-            var ct = commandTerm as CommandTermTo;
-            ct.NextCommandTermList = RoleRepository.GetRoleCollection().ToList().Select(r => new CommandTermRoleName{RoleName = r.RoleName});
+            commandTerm.NextCommandTerms = RoleRepository.GetRoleCollection().ToList().Select(r => new CommandTermRoleName{RoleName = r.RoleName});
         }
 
         public static void GrantToRoleNameTrigger(CommandTermStack stack)
@@ -65,8 +67,7 @@ namespace WebSecurity.IntellISense.Triggers
             if (commandTerm as CommandTermRoleName == null)
                 throw new InvalidOperationException("commandTerm as CommandTermRoleName == null");
 
-            var ct = commandTerm as CommandTermRoleName;
-            ct.NextCommandTermList = new List<CommandTermBase> { new CommandTermOnGrant() };
+            commandTerm.NextCommandTerms = new List<CommandTermBase> { new CommandTermOn() };
         }
 
         #endregion
@@ -83,9 +84,8 @@ namespace WebSecurity.IntellISense.Triggers
             if (commandTerm as CommandTermTo == null)
                 throw new InvalidOperationException("commandTerm as CommandTermTo == null");
 
-            var ct = commandTerm as CommandTermTo;
             var userQuery = UserRepository.GetUserCollection();
-            ct.NextCommandTermList = userQuery.ToList().Select(u => new CommandTermUserName{UserName = u.Login});
+            commandTerm.NextCommandTerms = userQuery.ToList().Select(u => new CommandTermUserName{UserName = u.Login});
         }
 
         /// <summary>
@@ -98,9 +98,8 @@ namespace WebSecurity.IntellISense.Triggers
             if (commandTerm as CommandTermCommonGroup == null)
                 throw new InvalidOperationException("commandTerm as CommandTermCommonGroup == null");
 
-            var ct = commandTerm as CommandTermCommonGroup;
             var groupQuery = GroupRepository.GetGroupCollection();
-            ct.NextCommandTermList = groupQuery.ToList().Select(gr => new CommandTermGroupName {GroupName = gr.GroupName});
+            commandTerm.NextCommandTerms = groupQuery.ToList().Select(gr => new CommandTermGroupName {GroupName = gr.GroupName});
         }
 
         public static void SetGroupGroupNameTrigger(CommandTermStack stack)
@@ -109,8 +108,7 @@ namespace WebSecurity.IntellISense.Triggers
             if (commandTerm as CommandTermGroupName == null)
                 throw new InvalidOperationException("commandTerm as CommandTermGroupName == null");
 
-            var ct = commandTerm as CommandTermGroupName;
-            ct.NextCommandTermList = new List<CommandTermBase> {new CommandTermTo()};
+            commandTerm.NextCommandTerms = new List<CommandTermBase> {new CommandTermTo()};
         }
 
         #endregion
@@ -123,8 +121,7 @@ namespace WebSecurity.IntellISense.Triggers
             if (commandTerm as CommandTermCommonRole == null)
                 throw new InvalidOperationException("commandTerm as CommandTermCommonRole == null");
 
-            var ct = commandTerm as CommandTermCommonRole;
-            ct.NextCommandTermList = RoleRepository.GetRoleCollection().ToList().Select(gr => new CommandTermRoleName { RoleName = gr.RoleName });
+            commandTerm.NextCommandTerms = RoleRepository.GetRoleCollection().ToList().Select(gr => new CommandTermRoleName { RoleName = gr.RoleName });
         }
 
         public static void SetRoleRoleNameTrigger(CommandTermStack stack)
@@ -133,8 +130,7 @@ namespace WebSecurity.IntellISense.Triggers
             if (commandTerm as CommandTermRoleName == null)
                 throw new InvalidOperationException("commandTerm as CommandTermRoleName == null");
 
-            var ct = commandTerm as CommandTermRoleName;
-            ct.NextCommandTermList = new List<CommandTermBase> { new CommandTermTo() };
+            commandTerm.NextCommandTerms = new List<CommandTermBase> { new CommandTermTo() };
         }
 
         public static void SetRoleToTrigger(CommandTermStack stack)
@@ -143,9 +139,8 @@ namespace WebSecurity.IntellISense.Triggers
             if (commandTerm as CommandTermTo == null)
                 throw new InvalidOperationException("commandTerm as CommandTermTo == null");
 
-            var ct = commandTerm as CommandTermTo;
             var query = UserRepository.GetUserCollection().Select(u => u.Login).Union(GroupRepository.GetGroupCollection().Select(g => g.GroupName));
-            ct.NextCommandTermList = query.ToList().Select(u => new CommandTermMemberName { MemberName = u });
+            commandTerm.NextCommandTerms = query.ToList().Select(u => new CommandTermMemberName { MemberName = u });
         }
 
         #endregion
@@ -160,8 +155,7 @@ namespace WebSecurity.IntellISense.Triggers
             if (commandTerm as CommandTermMemberName == null)
                 throw new InvalidOperationException("commandTerm as CommandTermMemberName == null");
 
-            var ct = commandTerm as CommandTermMemberName;
-            ct.NextCommandTermList = new List<CommandTermBase> {new CommandTermFrom()};
+            commandTerm.NextCommandTerms = new List<CommandTermBase> {new CommandTermFrom()};
         }
 
         public static void DeleteMemberFromTrigger(CommandTermStack stack)
@@ -176,10 +170,9 @@ namespace WebSecurity.IntellISense.Triggers
                 throw new InvalidOperationException("Отсутствует имя участника безопасности");
 
             var memberName = commandTermMemberName.CommandTerm;
-            var ct = commandTerm as CommandTermFrom;
 //            var query = RoleRepository.GetRoleCollection();
             var query = new RoleOfMemberRepository().GetQueryableCollection().Cast<RoleOfMember>().Where(rm => rm.MemberName == memberName);
-            ct.NextCommandTermList = query.ToList().Select(r => new CommandTermRoleName { RoleName = r.RoleName });
+            commandTerm.NextCommandTerms = query.ToList().Select(r => new CommandTermRoleName { RoleName = r.RoleName });
         }
 
         #endregion
@@ -192,9 +185,8 @@ namespace WebSecurity.IntellISense.Triggers
             if (commandTerm as CommandTermCommonUser == null)
                 throw new InvalidOperationException("commandTerm as CommandTermCommonUser == null");
 
-            var ct = commandTerm as CommandTermCommonUser;
             var query = UserRepository.GetUserCollection();
-            ct.NextCommandTermList = query.ToList().Select(u => new CommandTermUserName { UserName = u.Login });
+            commandTerm.NextCommandTerms = query.ToList().Select(u => new CommandTermUserName { UserName = u.Login });
         }
 
         public static void DeleteUserUserNameTrigger(CommandTermStack stack)
@@ -203,8 +195,7 @@ namespace WebSecurity.IntellISense.Triggers
             if (commandTerm as CommandTermUserName == null)
                 throw new InvalidOperationException("commandTerm as CommandTermUserName == null");
 
-            var ct = commandTerm as CommandTermUserName;
-            ct.NextCommandTermList = new List<CommandTermBase> { new CommandTermFrom() };
+            commandTerm.NextCommandTerms = new List<CommandTermBase> { new CommandTermFrom() };
         }
 
         public static void DeleteUserFromTrigger(CommandTermStack stack)
@@ -219,10 +210,9 @@ namespace WebSecurity.IntellISense.Triggers
                 throw new InvalidOperationException("Отсутствует имя пользователя");
 
             var userName = commandTermUserName.CommandTerm;
-            var ct = commandTerm as CommandTermFrom;
 //            var query = GroupRepository.GetGroupCollection();
             var query = new UserGroupsDetailRepository().GetQueryableCollection().Where(ug => ug.Login == userName);
-            ct.NextCommandTermList = query.ToList().Select(g => new CommandTermGroupName { GroupName = g.GroupName });
+            commandTerm.NextCommandTerms = query.ToList().Select(g => new CommandTermGroupName { GroupName = g.GroupName });
         }
 
         #endregion
@@ -233,9 +223,8 @@ namespace WebSecurity.IntellISense.Triggers
             if (commandTerm as CommandTermCommonGroup == null)
                 throw new InvalidOperationException("commandTerm as CommandTermCommonGroup == null");
 
-            var ct = commandTerm as CommandTermCommonGroup;
             var query = GroupRepository.GetGroupCollection();
-            ct.NextCommandTermList = query.ToList().Select(g => new CommandTermGroupName { GroupName = g.GroupName });
+            commandTerm.NextCommandTerms = query.ToList().Select(g => new CommandTermGroupName { GroupName = g.GroupName });
         }
 
         public static void DeleteControllerTrigger(CommandTermStack stack)
@@ -244,9 +233,8 @@ namespace WebSecurity.IntellISense.Triggers
             if (commandTerm as CommandTermCommonController == null)
                 throw new InvalidOperationException("commandTerm as CommandTermCommonController == null");
 
-            var ct = commandTerm as CommandTermCommonController;
             var query = new ActionResultRepository().GetQueryableCollection();
-            ct.NextCommandTermList = query.ToList().Select(so => new CommandTermSecObjectName(so.ObjectName));
+            commandTerm.NextCommandTerms = query.ToList().Select(so => new CommandTermSecObjectName(so.ObjectName));
         }
 
         public static void DeleteTableTrigger(CommandTermStack stack)
@@ -255,43 +243,60 @@ namespace WebSecurity.IntellISense.Triggers
             if (commandTerm as CommandTermCommonTable == null)
                 throw new InvalidOperationException("commandTerm as CommandTermCommonTable == null");
 
-            var ct = commandTerm as CommandTermCommonTable;
             var query = new TableObjectRepository().GetQueryableCollection();
-            ct.NextCommandTermList = query.ToList().Select(so => new CommandTermSecObjectName(so.ObjectName));
+            commandTerm.NextCommandTerms = query.ToList().Select(so => new CommandTermSecObjectName(so.ObjectName));
         }
 
         #region delete grant to
-
-        public static void DeleteGrantToRoleName(CommandTermStack stack)
-        {
-            var commandTerm = stack.LastCommandTerm;
-            if (commandTerm as CommandTermRoleName == null)
-                throw new InvalidOperationException("commandTerm as CommandTermRoleName == null");
-
-            var ct = commandTerm as CommandTermRoleName;
-            ct.NextCommandTermList = new CommandTermOnGrant();
-        }
-
-        public static void DeleteGrantAfterSecObject(CommandTermStack stack)
-        {
-            var commandTerm = stack.LastCommandTerm;
-            if (commandTerm as CommandTermSecObjectName == null)
-                throw new InvalidOperationException("commandTerm as CommandTermSecObjectName == null");
-
-            var ct = commandTerm as CommandTermSecObjectName;
-            ct.NextCommandTermList = new List<CommandTermBase> {new CommandTermFor()};
-        }
-
-        public static void DeleteGrantAfterFor(CommandTermStack stack)
-        {
-            var commandTerm = stack.LastCommandTerm;
-            if (commandTerm as CommandTermFor == null)
-                throw new InvalidOperationException("commandTerm as CommandTermFor == null");
-
-            var ct = commandTerm as CommandTermFor;
-            ct.NextCommandTermList = new List<CommandTermBase> { new CommandTermTo(), new CommandTermSelect(), new CommandTermInsert(), new CommandTermUpdate(), new IntellISense.Grant.AccessTypes.CommandTermDelete() };
-        }
-
+//
+//        public static void DeleteGrantToRoleName(CommandTermStack stack)
+//        {
+//            var commandTerm = stack.LastCommandTerm;
+//            if (commandTerm as CommandTermRoleName == null)
+//                throw new InvalidOperationException("commandTerm as CommandTermRoleName == null");
+//
+//            var commandTerm = commandTerm as CommandTermRoleName;
+//            commandTerm.NextCommandTerms = new CommandTermOn();
+//        }
+//
+//        public static void DeleteGrantAfterSecObject(CommandTermStack stack)
+//        {
+//            var commandTerm = stack.LastCommandTerm;
+//            if (commandTerm as CommandTermSecObjectName == null)
+//                throw new InvalidOperationException("commandTerm as CommandTermSecObjectName == null");
+//
+//            var commandTerm = commandTerm as CommandTermSecObjectName;
+//            commandTerm.NextCommandTerms = new List<CommandTermBase> {new CommandTermFor()};
+//        }
+//
+//        public static void DeleteGrantAfterFor(CommandTermStack stack)
+//        {
+//            var commandTerm = stack.LastCommandTerm;
+//            if (commandTerm as CommandTermFor == null)
+//                throw new InvalidOperationException("commandTerm as CommandTermFor == null");
+//
+//            var commandTerm = commandTerm as CommandTermFor;
+//            commandTerm.NextCommandTerms = new List<CommandTermBase> 
+//            { 
+//                new CommandTermExec(),
+//                new CommandTermSelect(), 
+//                new CommandTermInsert(), 
+//                new CommandTermUpdate(), 
+//                new IntellISense.Grant.AccessTypes.CommandTermDelete(),
+//                new CommandTermTo(), 
+//            };
+//        }
+//
+//        public static void DeleteGrantAfterOn(CommandTermStack stack)
+//        {
+//            var commandTerm = stack.LastCommandTerm;
+//            if (commandTerm as CommandTermOn == null)
+//                throw new InvalidOperationException("commandTerm as CommandTermOn == null");
+//
+//            var commandTerm = commandTerm as CommandTermOn;
+//            commandTerm.NextCommandTerms = 
+//        }
+//
         #endregion
 
         #endregion

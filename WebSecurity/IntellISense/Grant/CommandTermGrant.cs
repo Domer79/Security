@@ -14,12 +14,17 @@ namespace WebSecurity.IntellISense.Grant
         private readonly CommandTermAccessTypeBase _commandTermUpdate = new CommandTermUpdate();
         private readonly CommandTermAccessTypeBase _commandTermDelete = new CommandTermDelete();
 
+        public CommandTermGrant()
+        {
+            NextCommandTerms = new List<CommandTermBase>(GetNextCommandTerms());
+        }
+
         protected override string GetCommandTerm()
         {
             return "grant";
         }
 
-        protected override IEnumerable<CommandTermBase> GetNextCommandTerms(params object[] @params)
+        private IEnumerable<CommandTermBase> GetNextCommandTerms()
         {
             yield return _commandTermExec;
             yield return _commandTermSelect;

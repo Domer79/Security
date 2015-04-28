@@ -18,7 +18,12 @@ namespace WebSecurity.IntellISense.Set
             return "set";
         }
 
-        protected override IEnumerable<CommandTermBase> GetNextCommandTerms(params object[] @params)
+        public CommandTermSet()
+        {
+            NextCommandTerms = new List<CommandTermBase>(GetNextCommandTerms());
+        }
+
+        private IEnumerable<CommandTermBase> GetNextCommandTerms()
         {
             yield return _commandTermRole;
             yield return _commandTermGroup;

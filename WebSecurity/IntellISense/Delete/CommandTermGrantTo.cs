@@ -8,16 +8,16 @@ using WebSecurity.Repositories;
 
 namespace WebSecurity.IntellISense.Delete
 {
-    internal class CommandTermGrantTo : CommandTermBase
-    {
-        protected override string GetCommandTerm()
-        {
-            return "grant to";
-        }
-
-        protected override IEnumerable<CommandTermBase> GetNextCommandTerms(params object[] @params)
-        {
-            return RoleRepository.GetRoleCollection().Select(r => new CommandTermRoleName(r.RoleName));
-        }
-    }
+//    internal class CommandTermGrantTo : CommandTermBase
+//    {
+//        protected override string GetCommandTerm()
+//        {
+//            return "grant_to";
+//        }
+//
+//        protected override IEnumerable<CommandTermBase> GetNextCommandTerms(params object[] @params)
+//        {
+//            return RoleRepository.GetRoleCollection().ToList().Select(r => new CommandTermRoleName(r.RoleName));
+//        }
+//    }
 }

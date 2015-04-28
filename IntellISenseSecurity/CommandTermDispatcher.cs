@@ -85,7 +85,13 @@ namespace IntellISenseSecurity
 
         private IEnumerable<string> GetCommandTerms3()
         {
-            return Stack.GetLastCommandsNextNotAdditional().Where(t => t.CommandTerm.ToLower().Contains(LastTerm.ToLower())).Select(t => t.ToString());
+//            var lastCommandsNextNotAdditional = Stack.GetLastCommandsNextNotAdditional();
+            var lastCommandsNextNotAdditional = Stack[Stack.Count - 2];
+
+//            if (lastCommandsNextNotAdditional.ToString() == LastTerm)
+//                return new string[] {};
+
+            return lastCommandsNextNotAdditional.Where(t => t.CommandTerm.ToLower().Contains(LastTerm.ToLower())).Select(t => t.ToString());
         }
 
         public string LastTerm

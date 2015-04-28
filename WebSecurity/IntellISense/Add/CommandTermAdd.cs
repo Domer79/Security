@@ -16,12 +16,17 @@ namespace WebSecurity.IntellISense.Add
         private readonly CommandTermCommonTable _commandTermTable = new CommandTermCommonTable();
         private readonly CommandTermBase _commandTermAllSecurityObjects = new CommandTermAllSecurityObjects();
 
+        public CommandTermAdd()
+        {
+            NextCommandTerms = new List<CommandTermBase>(GetNextCommandTerms());
+        }
+
         protected override string GetCommandTerm()
         {
             return "add";
         }
 
-        protected override IEnumerable<CommandTermBase> GetNextCommandTerms(params object[] @params)
+        private IEnumerable<CommandTermBase> GetNextCommandTerms()
         {
             yield return _commandTermCommonUser;
             yield return _commandTermCommonGroup;

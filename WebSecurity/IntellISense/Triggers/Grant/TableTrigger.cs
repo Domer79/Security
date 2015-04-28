@@ -21,7 +21,7 @@ namespace WebSecurity.IntellISense.Triggers.Grant
                         typeof (CommandTermAccessTypeBase),
                         typeof (CommandTermTo),
                         typeof (CommandTermRoleName),
-                        typeof (CommandTermOnGrant)
+                        typeof (CommandTermOn)
                     },
                     new []
                     {
@@ -30,7 +30,7 @@ namespace WebSecurity.IntellISense.Triggers.Grant
                         typeof (CommandTermAccessTypeBase),
                         typeof (CommandTermTo),
                         typeof (CommandTermRoleName),
-                        typeof (CommandTermOnGrant)
+                        typeof (CommandTermOn)
                     },
                     new []
                     {
@@ -40,7 +40,7 @@ namespace WebSecurity.IntellISense.Triggers.Grant
                         typeof (CommandTermAccessTypeBase),
                         typeof (CommandTermTo),
                         typeof (CommandTermRoleName),
-                        typeof (CommandTermOnGrant)
+                        typeof (CommandTermOn)
                     },
                     new []
                     {
@@ -51,7 +51,7 @@ namespace WebSecurity.IntellISense.Triggers.Grant
                         typeof (CommandTermAccessTypeBase),
                         typeof (CommandTermTo),
                         typeof (CommandTermRoleName),
-                        typeof (CommandTermOnGrant)
+                        typeof (CommandTermOn)
                     },
                 };
             }

@@ -90,6 +90,7 @@
     <Compile Include="IntellISense\Common\CommandTermCommonTable.cs" />
     <Compile Include="IntellISense\Common\CommandTermCommonUser.cs" />
     <Compile Include="IntellISense\Common\CommandTermFor.cs" />
+    <Compile Include="IntellISense\Common\CommandTermOn.cs" />
     <Compile Include="IntellISense\Common\CommandTermTo.cs" />
     <Compile Include="IntellISense\CommandTermGroupName.cs" />
     <Compile Include="IntellISense\CommandTermMain.cs" />
@@ -108,10 +109,10 @@
     <Compile Include="IntellISense\Grant\AccessTypes\CommandTermSelect.cs" />
     <Compile Include="IntellISense\Grant\AccessTypes\CommandTermUpdate.cs" />
     <Compile Include="IntellISense\Grant\CommandTermGrant.cs" />
-    <Compile Include="IntellISense\Grant\CommandTermOnGrant.cs" />
     <Compile Include="IntellISense\Set\CommandTermSet.cs" />
     <Compile Include="IntellISense\Triggers\Delete\DeleteGroupTrigger.cs" />
     <Compile Include="IntellISense\Triggers\Delete\GrantTo\DeleteGrantAfterFor.cs" />
+    <Compile Include="IntellISense\Triggers\Delete\GrantTo\DeleteGrantAfterOn.cs" />
     <Compile Include="IntellISense\Triggers\Delete\GrantTo\DeleteGrantAfterSecObject.cs" />
     <Compile Include="IntellISense\Triggers\Delete\GrantTo\DeleteGrantToRoleName.cs" />
     <Compile Include="IntellISense\Triggers\Delete\Member\DeleteMemberFromTrigger.cs" />

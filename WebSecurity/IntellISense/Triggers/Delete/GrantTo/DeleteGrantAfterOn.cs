@@ -4,11 +4,12 @@
 //using System.Text;
 //using System.Threading.Tasks;
 //using IntellISenseSecurity;
+//using WebSecurity.IntellISense.Common;
 //using WebSecurity.IntellISense.Delete;
 //
 //namespace WebSecurity.IntellISense.Triggers.Delete.GrantTo
 //{
-//    internal class DeleteGrantToRoleName //: ICommandTermTrigger
+//    public class DeleteGrantAfterOn //: ICommandTermTrigger
 //    {
 //        public Type[][] CommandTermTypes
 //        {
@@ -20,7 +21,8 @@
 //                    {
 //                        typeof (CommandTermDelete),
 //                        typeof (CommandTermGrantTo),
-//                        typeof (CommandTermRoleName)
+//                        typeof (CommandTermRoleName),
+//                        typeof (CommandTermOn),
 //                    }
 //                };
 //            }
@@ -28,7 +30,7 @@
 //
 //        public Action<CommandTermStack> Trigger
 //        {
-//            get { return TriggerActions.DeleteGrantToRoleName; }
+//            get { return TriggerActions.DeleteGrantAfterOn; }
 //        }
 //    }
 //}

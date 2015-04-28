@@ -21,7 +21,7 @@ namespace WebSecurity.IntellISense.Triggers.Grant
                         typeof (CommandTermExec),
                         typeof (CommandTermTo),
                         typeof (CommandTermRoleName),
-                        typeof (CommandTermOnGrant)
+                        typeof (CommandTermOn)
                     }
                 };
             }

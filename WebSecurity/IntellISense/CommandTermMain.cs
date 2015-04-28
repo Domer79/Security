@@ -15,18 +15,15 @@ namespace WebSecurity.IntellISense
         private readonly CommandTermBase _commandTermSet = new CommandTermSet();
         private readonly CommandTermBase _commandTermDelete = new CommandTermDelete();
 
-        protected override IEnumerable<CommandTermBase> GetNextCommandTerms(params object[] @params)
+        public CommandTermMain()
         {
-            yield return _commandTermGrant;
-            yield return _commandTermAdd;
-            yield return _commandTermSet;
-            yield return _commandTermDelete;
-        }
-
-        public override ICommandTermTrigger[] Triggers
-        {
-//            get { return new ICommandTermTrigger[] {new ExecTrigger(), new TableTrigger(), new GrantToTrigger(), }; }
-            get { return base.Triggers; }
+            NextCommandTerms = new List<CommandTermBase>
+            {
+                _commandTermGrant,
+                _commandTermAdd,
+                _commandTermSet,
+                _commandTermDelete
+            };
         }
     }
 }

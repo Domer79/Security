@@ -12,8 +12,6 @@ namespace IntellISenseSecurity.Base
             return null;
         }
 
-        protected override abstract IEnumerable<CommandTermBase> GetNextCommandTerms(params object[] @params);
-
         public virtual ICommandTermTrigger[] Triggers
         {
             get

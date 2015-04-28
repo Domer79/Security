@@ -16,10 +16,5 @@ namespace IntellISenseSecurity
         {
             return _term;
         }
-
-        protected override IEnumerable<CommandTermBase> GetNextCommandTerms(params object[] @params)
-        {
-            return null;
-        }
     }
 }

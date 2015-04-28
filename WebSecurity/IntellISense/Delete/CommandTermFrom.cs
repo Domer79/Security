@@ -9,12 +9,5 @@ namespace WebSecurity.IntellISense.Delete
         {
             return "from";
         }
-
-        protected override IEnumerable<CommandTermBase> GetNextCommandTerms(params object[] @params)
-        {
-            return NextCommandTermList;
-        }
-
-        public IEnumerable<CommandTermBase> NextCommandTermList { get; set; }
     }
 }

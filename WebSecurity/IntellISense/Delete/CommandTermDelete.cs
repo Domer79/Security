@@ -11,21 +11,24 @@ namespace WebSecurity.IntellISense.Delete
         private readonly CommandTermBase _commandTermGroup = new CommandTermCommonGroup();
         private readonly CommandTermBase _commandTermController = new CommandTermCommonController();
         private readonly CommandTermBase _commandTermTable = new CommandTermCommonTable();
-        private readonly CommandTermBase _commandTermGrantTo = new CommandTermGrantTo();
 
         protected override string GetCommandTerm()
         {
             return "delete";
         }
 
-        protected override IEnumerable<CommandTermBase> GetNextCommandTerms(params object[] @params)
+        public CommandTermDelete()
+        {
+            NextCommandTerms = new List<CommandTermBase>(GetNextCommandTerms());
+        }
+
+        private IEnumerable<CommandTermBase> GetNextCommandTerms()
         {
             yield return _commandTermMember;
             yield return _commandTermUser;
             yield return _commandTermGroup;
             yield return _commandTermController;
             yield return _commandTermTable;
-            yield return _commandTermGrantTo;
         }
     }
 }

@@ -9,12 +9,5 @@ namespace WebSecurity.IntellISense.Common
         {
             return "user";
         }
-
-        protected override IEnumerable<CommandTermBase> GetNextCommandTerms(params object[] @params)
-        {
-            return NextCommandTermList;
-        }
-
-        public IEnumerable<CommandTermBase> NextCommandTermList { get; set; }
     }
 }

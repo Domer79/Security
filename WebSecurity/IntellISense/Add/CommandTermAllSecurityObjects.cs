@@ -9,10 +9,5 @@ namespace WebSecurity.IntellISense.Add
         {
             return "allsecurityobjects";
         }
-
-        protected override IEnumerable<CommandTermBase> GetNextCommandTerms(params object[] @params)
-        {
-            return null;
-        }
     }
 }

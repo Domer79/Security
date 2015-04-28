@@ -9,25 +9,16 @@ namespace WebSecurity.IntellISense.Grant.AccessTypes.Base
         private const int OptionalDepth = 4;
         private readonly int _depth;
 
-        private readonly CommandTermAccessTypeBase _commandTermSelect;
-        private readonly CommandTermAccessTypeBase _commandTermInsert;
-        private readonly CommandTermAccessTypeBase _commandTermUpdate;
-        private readonly CommandTermAccessTypeBase _commandTermDelete;
-
         protected CommandTermAccessTypeBase()
         {
+//            NextCommandTerms = new List<CommandTermBase>(GetNextCommandTerms());
         }
 
         internal CommandTermAccessTypeBase(int depth)
         {
             _depth = depth;
-            if (depth == OptionalDepth)
-                return;
 
-            _commandTermSelect = new CommandTermSelect(depth+1);
-            _commandTermInsert = new CommandTermInsert(depth+1);
-            _commandTermUpdate = new CommandTermUpdate(depth+1);
-            _commandTermDelete = new CommandTermDelete(depth+1);
+            NextCommandTerms = new List<CommandTermBase>(GetNextCommandTerms());
         }
 
         protected override int GetMaxOptionalDepth()
@@ -35,18 +26,16 @@ namespace WebSecurity.IntellISense.Grant.AccessTypes.Base
             return OptionalDepth;
         }
 
-        protected sealed override IEnumerable<CommandTermBase> GetNextCommandTerms(params object[] @params)
+        private IEnumerable<CommandTermBase> GetNextCommandTerms()
         {
             if (_depth < OptionalDepth)
             {
-                yield return _commandTermSelect;
-                yield return _commandTermInsert;
-                yield return _commandTermUpdate;
-                yield return _commandTermDelete;
+                yield return new CommandTermSelect(_depth + 1);
+                yield return new CommandTermInsert(_depth + 1);
+                yield return new CommandTermUpdate(_depth + 1);
+                yield return new CommandTermDelete(_depth + 1);
             }
-            yield return NextCommandTermList;
+            yield return new CommandTermTo();
         }
-
-        public CommandTermBase NextCommandTermList { get; set; }
     }
 }

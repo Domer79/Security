@@ -11,11 +11,5 @@ namespace WebSecurity.IntellISense.Delete
         {
             return "member";
         }
-
-        protected override IEnumerable<CommandTermBase> GetNextCommandTerms(params object[] @params)
-        {
-            var query = UserRepository.GetUserCollection().Select(u => u.Login).Union(GroupRepository.GetGroupCollection().Select(g => g.GroupName));
-            return query.ToList().Select(u => new CommandTermMemberName { MemberName = u });
-        }
     }
 }

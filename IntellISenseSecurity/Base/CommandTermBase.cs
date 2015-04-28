@@ -7,32 +7,13 @@ namespace IntellISenseSecurity.Base
     public abstract class CommandTermBase : IEnumerable<CommandTermBase>
     {
         private string _commandTerm;
-        private List<CommandTermBase> _nextCommandTerms;
 
         public string CommandTerm
         {
             get { return _commandTerm ?? (_commandTerm = GetCommandTerm()); }
         }
 
-        private IEnumerable<CommandTermBase> NextCommandTerms
-        {
-            get
-            {
-                if (_nextCommandTerms != null)
-                    return _nextCommandTerms;
-
-                var nextCommandTerms = GetNextCommandTerms();
-//                if (nextCommandTerms == null)
-//                    return null;
-
-                var commandTerms = nextCommandTerms == null ? new CommandTermBase[]{}: nextCommandTerms.ToArray();
-//                if (!commandTerms.Any())
-//                    return null;
-
-//                return _nextCommandTerms ?? (_nextCommandTerms = new List<CommandTermBase>(commandTerms));
-                return _nextCommandTerms ?? (_nextCommandTerms = new List<CommandTermBase>(commandTerms));
-            }
-        }
+        public IEnumerable<CommandTermBase> NextCommandTerms { get; set; }
 
         internal int MaxOptionalDepth
         {
@@ -56,7 +37,7 @@ namespace IntellISenseSecurity.Base
 
         protected abstract string GetCommandTerm();
 
-        protected abstract IEnumerable<CommandTermBase> GetNextCommandTerms(params object[] @params);
+//        protected abstract IEnumerable<CommandTermBase> GetNextCommandTerms(params object[] @params);
 
         /// <summary>
         /// Возвращает перечислитель, выполняющий итерацию в коллекции.
@@ -66,7 +47,7 @@ namespace IntellISenseSecurity.Base
         /// </returns>
         public IEnumerator<CommandTermBase> GetEnumerator()
         {
-            return NextCommandTerms.GetEnumerator();
+            return (NextCommandTerms ?? new CommandTermBase[] {}).GetEnumerator();
         }
 
         /// <summary>
