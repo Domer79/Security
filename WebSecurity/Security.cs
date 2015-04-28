@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Security.Principal;
 using System.Web;
 using System.Web.Security;
@@ -7,10 +8,10 @@ using SystemTools.Exceptions;
 using SystemTools.Extensions;
 using SystemTools.Interfaces;
 using SystemTools.WebTools.Infrastructure;
-using SecurityDataModel.Infrastructure;
 using SecurityDataModel.Models;
 using SecurityDataModel.Repositories;
 using WebSecurity.Data;
+using WebSecurity.Infrastructure;
 using WebSecurity.Repositories;
 using AccessTypeRepository = WebSecurity.Repositories.AccessTypeRepository;
 using GrantRepository = WebSecurity.Repositories.GrantRepository;
@@ -30,7 +31,7 @@ namespace WebSecurity
 
         private Security()
         {
-            Tools.SetContext(WebMvcSecurityContext.Create);
+            SecurityDataModel.Infrastructure.Tools.SetContext(WebMvcSecurityContext.Create);
             WebSecurity.PublicRole.SetPublic();
 //            _repo = new UserRepository();
         }
@@ -70,8 +71,7 @@ namespace WebSecurity
 
         public void AddUser(string userName, string password, string email, string displayName, string sid)
         {
-            var repo = new UserRepository();
-            repo.Add(userName, password, displayName, email, sid);
+            CreateUser(userName, password, email, displayName, sid);
         }
 
         public void AddGroup(string groupName, string description)
@@ -146,10 +146,10 @@ namespace WebSecurity
             return repo.SignUser(login, password);
         }
 
-        public void CreateUser(string login, string password, bool withPublic = true)
+        internal void CreateUser(string login, string password, string displayName, string email, string sid, bool withPublic = true)
         {
             var repo = new UserRepository();
-            repo.Add(login, password);
+            repo.Add(login, password, displayName, email, sid);
             var newUser = repo.GetUser(login);
             if (withPublic)
             {
@@ -187,7 +187,10 @@ namespace WebSecurity
         public IPrincipal GetWindowsPrincipal(string name)
         {
             var repo = new UserRepository();
-            return repo.GetUserPrincipal(name);
+            if (Tools.IsWindowsUser(name))
+                return repo.GetUserPrincipal(name);
+
+            return new UserProvider(null);
         }
 
         /// <summary>
@@ -234,7 +237,7 @@ namespace WebSecurity
 
         public static void RenewContext()
         {
-            Tools.RenewContext();
+            SecurityDataModel.Infrastructure.Tools.RenewContext();
         }
 
         #endregion
