@@ -53,6 +53,12 @@ namespace IntellISenseSecurity
             throw new NotSupportedException("Не поддерживается. Используйте Add(string commandString)");
         }
 
+        public void AddAdditionCommandTerm(string term)
+        {
+            _list.Add(new CommandTermAdditionalParam(term));
+            DoTrigger();
+        }
+
         /// <summary>
         /// Ищет CommandTerm в следующих командах последнего CommandTerm и добавляет его в стек
         /// </summary>
@@ -199,15 +205,15 @@ namespace IntellISenseSecurity
             }
         }
 
+        public bool ExistCommandTerm<T>() where T : CommandTermBase
+        {
+            return GetCommandTerm<T>() != null;
+        }
+
         public T GetCommandTerm<T>(int index) where T : CommandTermBase
         {
             return this.OfType<T>().ElementAt(index);
 //            return (T)this.First(ct => ct.GetType() == typeof(T));
-        }
-
-        public void AddAdditionCommandTerm(string term)
-        {
-            _list.Add(new CommandTermAdditionalParam(term));
         }
 
         public CommandTermAdditionalParam[] GetAdditionalParams()

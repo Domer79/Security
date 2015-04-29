@@ -2,6 +2,7 @@
 using IntellISenseSecurity;
 using IntellISenseSecurity.Base;
 using WebSecurity.IntellISense.Common;
+using WebSecurity.IntellISense.Delete;
 using WebSecurity.IntellISense.Grant;
 using WebSecurity.IntellISense.Grant.AccessTypes;
 
@@ -22,7 +23,16 @@ namespace WebSecurity.IntellISense.Triggers.Grant
                         typeof (CommandTermTo),
                         typeof (CommandTermRoleName),
                         typeof (CommandTermOn)
-                    }
+                    },
+                    new[]
+                    {
+                        typeof (CommandTermRemove),
+                        typeof (CommandTermGrant),
+                        typeof (CommandTermExec),
+                        typeof (CommandTermTo),
+                        typeof (CommandTermRoleName),
+                        typeof (CommandTermOn)
+                    },
                 };
             }
         }

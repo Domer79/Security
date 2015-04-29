@@ -13,7 +13,7 @@ namespace WebSecurity.IntellISense
         private readonly CommandTermGrant _commandTermGrant = new CommandTermGrant();
         private readonly CommandTermAdd _commandTermAdd = new CommandTermAdd();
         private readonly CommandTermBase _commandTermSet = new CommandTermSet();
-        private readonly CommandTermBase _commandTermDelete = new CommandTermDelete();
+        private readonly CommandTermBase _commandTermDelete = new CommandTermRemove();
 
         public CommandTermMain()
         {

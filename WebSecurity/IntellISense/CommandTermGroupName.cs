@@ -5,6 +5,11 @@ namespace WebSecurity.IntellISense
 {
     public class CommandTermGroupName : CommandTermBase
     {
+        public CommandTermGroupName(string groupName)
+        {
+            GroupName = groupName;
+        }
+
         protected override string GetCommandTerm()
         {
             return GroupName;

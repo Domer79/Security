@@ -16,7 +16,7 @@ namespace WebSecurity.IntellISense.Triggers.Delete
                 {
                     new[]
                     {
-                        typeof(CommandTermDelete),
+                        typeof(CommandTermRemove),
                         typeof(CommandTermCommonGroup)
                     }
                 };
@@ -39,7 +39,7 @@ namespace WebSecurity.IntellISense.Triggers.Delete
                 {
                     new[]
                     {
-                        typeof (CommandTermDelete),
+                        typeof (CommandTermRemove),
                         typeof (CommandTermCommonController)
                     }
                 };
@@ -62,7 +62,7 @@ namespace WebSecurity.IntellISense.Triggers.Delete
                 {
                     new[]
                     {
-                        typeof (CommandTermDelete),
+                        typeof (CommandTermRemove),
                         typeof (CommandTermCommonTable)
                     }
                 };

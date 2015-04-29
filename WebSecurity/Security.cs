@@ -71,7 +71,8 @@ namespace WebSecurity
 
         public void AddUser(string userName, string password, string email, string displayName, string sid)
         {
-            CreateUser(userName, password, email, displayName, sid);
+            var repo = new UserRepository();
+            repo.Add(userName, password, displayName, email, sid);
         }
 
         public void AddGroup(string groupName, string description)
@@ -144,18 +145,6 @@ namespace WebSecurity
         {
             var repo = new UserRepository();
             return repo.SignUser(login, password);
-        }
-
-        internal void CreateUser(string login, string password, string displayName, string email, string sid, bool withPublic = true)
-        {
-            var repo = new UserRepository();
-            repo.Add(login, password, displayName, email, sid);
-            var newUser = repo.GetUser(login);
-            if (withPublic)
-            {
-                var roleOfMembersRepo = new RoleOfMemberRepository();
-                roleOfMembersRepo.AddMemberToRole(newUser, PublicRole);
-            }
         }
 
         public void CreateCookie(string login, bool isPersistent = false)

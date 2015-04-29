@@ -15,8 +15,10 @@ using WebSecurity.Exceptions;
 using WebSecurity.Infrastructure;
 using WebSecurity.IntellISense;
 using WebSecurity.IntellISense.Delete;
+using WebSecurity.IntellISense.Grant;
 using WebSecurity.IntellISense.Grant.AccessTypes;
 using WebSecurity.IntellISense.Grant.AccessTypes.Base;
+using WebSecurity.IntellISense.Set;
 
 namespace WebSecurity.CmdRun
 {
@@ -61,33 +63,39 @@ namespace WebSecurity.CmdRun
                 }
                 case "set":
                 {
-                    methodParams = new[] {stack[3], stack[5]}.Select(ct => ct.CommandTerm).ToArray();
+                    if (stack.ExistCommandTerm<CommandTermPassword>())
+                    {
+                        methodParams = new[] { stack[3], stack[6] }.Select(ct => ct.CommandTerm).ToArray();
+                    }
+                    else
+                    {
+                        methodParams = new[] { stack[3], stack[5] }.Select(ct => ct.CommandTerm).ToArray();    
+                    }
+                    
                     return string.Format("set{0}", stack[2]);
                 }
                 case "grant":
                 {
-                    var accessTypeParams = stack.OfType<CommandTermAccessTypeBase>().Count() != 0 ? (IEnumerable<CommandTermBase>) stack.OfType<CommandTermAccessTypeBase>() : stack.OfType<CommandTermExec>();
-
-                    methodParams = new CommandTermBase[]
-                    {
-                        stack.GetCommandTerm<CommandTermRoleName>(), 
-                        stack.GetCommandTerm<CommandTermSecObjectName>()
-                    }
-                    .Concat(accessTypeParams)
-                    .Select(ct => ct.CommandTerm)
-                    .ToArray();
-
+                    methodParams = GetGrantParams(stack);
                     return stack[1].CommandTerm;
                 }
                 case "delete":
                 {
-                    if (stack.GetCommandTerm<CommandTermFrom>() != null)
+                    if (stack.ExistCommandTerm<CommandTermFrom>())
                     {
                         methodParams = new[] {stack[3], stack[5]}.Select(ct => ct.CommandTerm).ToArray();
                         return string.Format("delete{0}from", stack[2]);
                     }
 
-                    methodParams = new []{stack[3]}.Select(ct => ct.CommandTerm).ToArray();
+                    if (stack.ExistCommandTerm<CommandTermGrant>())
+                    {
+                        methodParams = GetGrantParams(stack);
+                    }
+                    else
+                    {
+                        methodParams = new[] { stack[3] }.Select(ct => ct.CommandTerm).ToArray();
+                    }
+
                     return string.Format("delete{0}", stack[2]);
                 }
                 default:
@@ -181,6 +189,11 @@ namespace WebSecurity.CmdRun
             Security.Instance.SetGroup(groupName, login);
         }
 
+        private void SetPassword(string password, string login)
+        {
+//            Security.Instance.SetPassword(login, password);
+        }
+
         #endregion
 
         #region grant
@@ -188,26 +201,14 @@ namespace WebSecurity.CmdRun
         private void Grant(string roleName, string objectName, string accessType1, string accessType2,
             string accessType3, string accessType4)
         {
-            var at1 = (SecurityAccessType)Enum.Parse(typeof (SecurityAccessType), accessType1, true);
-            SecurityAccessType at2;
-            SecurityAccessType at3;
-            SecurityAccessType at4;
+            var accessType = GetSecurityAccessType(accessType1, accessType2, accessType3, accessType4);
 
-            if (Enum.TryParse(accessType2, true, out at2))
-                at1 |= at2;
-
-            if (Enum.TryParse(accessType3, true, out at3))
-                at1 |= at3;
-
-            if (Enum.TryParse(accessType4, true, out at4))
-                at1 |= at4;
-
-            Security.Instance.Grant(roleName, objectName, at1);
+            Security.Instance.Grant(roleName, objectName, accessType);
         }
 
         #endregion
 
-        #region Delete
+        #region Remove
 
         private void DeleteMemberFrom(string memberName, string roleName)
         {
@@ -234,7 +235,52 @@ namespace WebSecurity.CmdRun
             Security.Instance.DeleteTable(tableName);
         }
 
+        private void DeleteGrant(string roleName, string objectName, string accessType1, string accessType2,
+            string accessType3, string accessType4)
+        {
+            
+        }
+
         #endregion
+
+        #endregion
+
+        #region Tools
+
+        private static string[] GetGrantParams(CommandTermStack stack)
+        {
+            var accessTypeParams = stack.OfType<CommandTermAccessTypeBase>().Count() != 0
+                ? (IEnumerable<CommandTermBase>)stack.OfType<CommandTermAccessTypeBase>()
+                : stack.OfType<CommandTermExec>();
+
+            return new CommandTermBase[]
+            {
+                stack.GetCommandTerm<CommandTermRoleName>(),
+                stack.GetCommandTerm<CommandTermSecObjectName>()
+            }
+                .Concat(accessTypeParams)
+                .Select(ct => ct.CommandTerm)
+                .ToArray();
+        }
+
+        private static SecurityAccessType GetSecurityAccessType(string accessType1, string accessType2,
+            string accessType3, string accessType4)
+        {
+            var accessType = (SecurityAccessType) Enum.Parse(typeof (SecurityAccessType), accessType1, true);
+            SecurityAccessType at2;
+            SecurityAccessType at3;
+            SecurityAccessType at4;
+
+            if (Enum.TryParse(accessType2, true, out at2))
+                accessType |= at2;
+
+            if (Enum.TryParse(accessType3, true, out at3))
+                accessType |= at3;
+
+            if (Enum.TryParse(accessType4, true, out at4))
+                accessType |= at4;
+            return accessType;
+        }
 
         #endregion
     }

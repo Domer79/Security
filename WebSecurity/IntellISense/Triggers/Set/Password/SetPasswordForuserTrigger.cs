@@ -4,13 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IntellISenseSecurity;
-using IntellISenseSecurity.Base;
 using WebSecurity.IntellISense.Common;
-using WebSecurity.IntellISense.Delete;
+using WebSecurity.IntellISense.Set;
 
-namespace WebSecurity.IntellISense.Triggers.Delete.User
+namespace WebSecurity.IntellISense.Triggers.Set.Password
 {
-    public class DeleteUserTrigger : ICommandTermTrigger
+    public class SetPasswordForUserTrigger : ICommandTermTrigger
     {
         public Type[][] CommandTermTypes
         {
@@ -20,8 +19,11 @@ namespace WebSecurity.IntellISense.Triggers.Delete.User
                 {
                     new[]
                     {
-                        typeof(CommandTermRemove),
-                        typeof(CommandTermCommonUser)
+                        typeof (CommandTermSet),
+                        typeof (CommandTermPassword),
+                        typeof (CommandTermAdditionalParam),
+                        typeof (CommandTermFor),
+                        typeof (CommandTermCommonUser)
                     }
                 };
             }
@@ -29,7 +31,7 @@ namespace WebSecurity.IntellISense.Triggers.Delete.User
 
         public Action<CommandTermStack> Trigger
         {
-            get { return TriggerActions.DeleteUserTrigger; }
+            get { return TriggerActions.SetPasswordForUserTrigger; }
         }
     }
 }

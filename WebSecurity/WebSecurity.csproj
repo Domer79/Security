@@ -98,9 +98,8 @@
     <Compile Include="IntellISense\CommandTermRoleName.cs" />
     <Compile Include="IntellISense\CommandTermSecObjectName.cs" />
     <Compile Include="IntellISense\CommandTermUserName.cs" />
-    <Compile Include="IntellISense\Delete\CommandTermDelete.cs" />
+    <Compile Include="IntellISense\Delete\CommandTermRemove.cs" />
     <Compile Include="IntellISense\Delete\CommandTermFrom.cs" />
-    <Compile Include="IntellISense\Delete\CommandTermGrantTo.cs" />
     <Compile Include="IntellISense\Delete\CommandTermMember.cs" />
     <Compile Include="IntellISense\Grant\AccessTypes\Base\CommandTermAccessTypeBase.cs" />
     <Compile Include="IntellISense\Grant\AccessTypes\CommandTermDelete.cs" />
@@ -109,12 +108,9 @@
     <Compile Include="IntellISense\Grant\AccessTypes\CommandTermSelect.cs" />
     <Compile Include="IntellISense\Grant\AccessTypes\CommandTermUpdate.cs" />
     <Compile Include="IntellISense\Grant\CommandTermGrant.cs" />
+    <Compile Include="IntellISense\Set\CommandTermPassword.cs" />
     <Compile Include="IntellISense\Set\CommandTermSet.cs" />
     <Compile Include="IntellISense\Triggers\Delete\DeleteGroupTrigger.cs" />
-    <Compile Include="IntellISense\Triggers\Delete\GrantTo\DeleteGrantAfterFor.cs" />
-    <Compile Include="IntellISense\Triggers\Delete\GrantTo\DeleteGrantAfterOn.cs" />
-    <Compile Include="IntellISense\Triggers\Delete\GrantTo\DeleteGrantAfterSecObject.cs" />
-    <Compile Include="IntellISense\Triggers\Delete\GrantTo\DeleteGrantToRoleName.cs" />
     <Compile Include="IntellISense\Triggers\Delete\Member\DeleteMemberFromTrigger.cs" />
     <Compile Include="IntellISense\Triggers\Delete\Member\DeleteMemberMemberNameTrigger.cs" />
     <Compile Include="IntellISense\Triggers\Delete\User\DeleteUserFromTrigger.cs" />
@@ -127,6 +123,9 @@
     <Compile Include="IntellISense\Triggers\Set\Group\SetGroupGroupNameTrigger.cs" />
     <Compile Include="IntellISense\Triggers\Set\Group\SetGroupToTrigger.cs" />
     <Compile Include="IntellISense\Triggers\Set\Group\SetGroupTrigger.cs" />
+    <Compile Include="IntellISense\Triggers\Set\Password\SetPasswordAdditionalParamTrigger.cs" />
+    <Compile Include="IntellISense\Triggers\Set\Password\SetPasswordForTrigger.cs" />
+    <Compile Include="IntellISense\Triggers\Set\Password\SetPasswordForUserTrigger.cs" />
     <Compile Include="IntellISense\Triggers\Set\Role\SetRoleRoleNameTrigger.cs" />
     <Compile Include="IntellISense\Triggers\Set\Role\SetRoleToTrigger.cs" />
     <Compile Include="IntellISense\Triggers\Set\Role\SetRoleTrigger.cs" />

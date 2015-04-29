@@ -1,7 +1,7 @@
 ﻿using System;
 using IntellISenseSecurity;
-using IntellISenseSecurity.Base;
 using WebSecurity.IntellISense.Common;
+using WebSecurity.IntellISense.Delete;
 using WebSecurity.IntellISense.Grant;
 using WebSecurity.IntellISense.Grant.AccessTypes.Base;
 
@@ -44,6 +44,48 @@ namespace WebSecurity.IntellISense.Triggers.Grant
                     },
                     new []
                     {
+                        typeof (CommandTermGrant),
+                        typeof (CommandTermAccessTypeBase),
+                        typeof (CommandTermAccessTypeBase),
+                        typeof (CommandTermAccessTypeBase),
+                        typeof (CommandTermAccessTypeBase),
+                        typeof (CommandTermTo),
+                        typeof (CommandTermRoleName),
+                        typeof (CommandTermOn)
+                    },
+                    new[]
+                    {
+                        typeof (CommandTermRemove),
+                        typeof (CommandTermGrant),
+                        typeof (CommandTermAccessTypeBase),
+                        typeof (CommandTermTo),
+                        typeof (CommandTermRoleName),
+                        typeof (CommandTermOn)
+                    },
+                    new []
+                    {
+                        typeof (CommandTermRemove),
+                        typeof (CommandTermGrant),
+                        typeof (CommandTermAccessTypeBase),
+                        typeof (CommandTermAccessTypeBase),
+                        typeof (CommandTermTo),
+                        typeof (CommandTermRoleName),
+                        typeof (CommandTermOn)
+                    },
+                    new []
+                    {
+                        typeof (CommandTermRemove),
+                        typeof (CommandTermGrant),
+                        typeof (CommandTermAccessTypeBase),
+                        typeof (CommandTermAccessTypeBase),
+                        typeof (CommandTermAccessTypeBase),
+                        typeof (CommandTermTo),
+                        typeof (CommandTermRoleName),
+                        typeof (CommandTermOn)
+                    },
+                    new []
+                    {
+                        typeof (CommandTermRemove),
                         typeof (CommandTermGrant),
                         typeof (CommandTermAccessTypeBase),
                         typeof (CommandTermAccessTypeBase),

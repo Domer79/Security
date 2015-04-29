@@ -16,7 +16,7 @@ namespace WebSecurity.IntellISense.Triggers.Delete.User
                 {
                     new[]
                     {
-                        typeof(CommandTermDelete),
+                        typeof(CommandTermRemove),
                         typeof(CommandTermCommonUser),
                         typeof(CommandTermUserName)
                     }

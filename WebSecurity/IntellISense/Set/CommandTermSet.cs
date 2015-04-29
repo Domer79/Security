@@ -12,6 +12,7 @@ namespace WebSecurity.IntellISense.Set
     {
         private readonly CommandTermBase _commandTermRole = new CommandTermCommonRole();
         private readonly CommandTermBase _commandTermGroup = new CommandTermCommonGroup();
+        private readonly CommandTermBase _commandTermPassword = new CommandTermPassword();
 
         protected override string GetCommandTerm()
         {
@@ -27,6 +28,7 @@ namespace WebSecurity.IntellISense.Set
         {
             yield return _commandTermRole;
             yield return _commandTermGroup;
+            yield return _commandTermPassword;
         }
     }
 }
