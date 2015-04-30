@@ -14,12 +14,12 @@ namespace SecurityDataModel.Repositories
     public class UserRepository : IUserRepository
     {
         private readonly SecurityRepository<User> _repo;
+        private readonly object _lockObject = new object();
 
         public UserRepository()
         {
             _repo = new SecurityRepository<User>();
         }
-
 
         public IQueryable<IUser> GetQueryableCollection()
         {
@@ -66,14 +66,35 @@ namespace SecurityDataModel.Repositories
 
         public IUser GetUser(string login)
         {
-            var user = _repo.FirstOrDefault(u => u.Login == login);
-            return user;
+            lock (_lockObject)
+            {
+                var user = _repo.FirstOrDefault(u => u.Login == login);
+                return user;
+            }
         }
 
         public bool SignUser(string login, string password)
         {
             var user = _repo.FirstOrDefault(u => u.Login == login); 
             return user != null && user.Password.SequenceEqual(password.GetHashBytes());
+        }
+
+        public void SetPassword(string login, string password)
+        {
+            var user = _repo.First(u => u.Login == login);
+            if (user == null)
+                throw new ArgumentException("login");
+
+            user.Password = password.GetHashBytes();
+
+            _repo.SaveChanges();
+        }
+
+        public void DeleteUser(string login)
+        {
+            var user = _repo.First(u => u.Login == login);
+            _repo.Delete(user);
+            _repo.SaveChanges();
         }
     }
 }

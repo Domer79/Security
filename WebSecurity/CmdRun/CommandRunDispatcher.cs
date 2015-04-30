@@ -79,7 +79,7 @@ namespace WebSecurity.CmdRun
                     methodParams = GetGrantParams(stack);
                     return stack[1].CommandTerm;
                 }
-                case "delete":
+                case "remove":
                 {
                     if (stack.ExistCommandTerm<CommandTermFrom>())
                     {
@@ -191,7 +191,7 @@ namespace WebSecurity.CmdRun
 
         private void SetPassword(string password, string login)
         {
-//            Security.Instance.SetPassword(login, password);
+            Security.Instance.SetPassword(login, password);
         }
 
         #endregion
@@ -209,6 +209,11 @@ namespace WebSecurity.CmdRun
         #endregion
 
         #region Remove
+
+        private void DeleteUser(string userName)
+        {
+            Security.Instance.DeleteUser(userName);
+        }
 
         private void DeleteMemberFrom(string memberName, string roleName)
         {
@@ -238,7 +243,9 @@ namespace WebSecurity.CmdRun
         private void DeleteGrant(string roleName, string objectName, string accessType1, string accessType2,
             string accessType3, string accessType4)
         {
-            
+            var accessType = GetSecurityAccessType(accessType1, accessType2, accessType3, accessType4);
+
+            Security.Instance.DeleteGrant(roleName, objectName, accessType);
         }
 
         #endregion

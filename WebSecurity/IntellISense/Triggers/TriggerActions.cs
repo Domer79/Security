@@ -3,18 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using IntellISenseSecurity;
 using IntellISenseSecurity.Base;
+using SecurityDataModel.Infrastructure;
 using SecurityDataModel.Models;
-using SecurityDataModel.Repositories;
 using WebSecurity.IntellISense.Common;
 using WebSecurity.IntellISense.Delete;
-using WebSecurity.IntellISense.Grant.AccessTypes;
-using WebSecurity.IntellISense.Grant.AccessTypes.Base;
 using WebSecurity.Repositories;
 using GroupRepository = WebSecurity.Repositories.GroupRepository;
 using RoleOfMemberRepository = WebSecurity.Repositories.RoleOfMemberRepository;
 using RoleRepository = WebSecurity.Repositories.RoleRepository;
 using UserGroupsDetailRepository = WebSecurity.Repositories.UserGroupsDetailRepository;
 using UserRepository = WebSecurity.Repositories.UserRepository;
+using WebSecurityTools = WebSecurity.Infrastructure.Tools;
 
 namespace WebSecurity.IntellISense.Triggers
 {
@@ -173,7 +172,11 @@ namespace WebSecurity.IntellISense.Triggers
             if (commandTerm as CommandTermCommonUser == null)
                 throw new InvalidOperationException("commandTerm as CommandTermCommonUser == null");
 
-            commandTerm.NextCommandTerms = UserRepository.GetUserCollection().ToList().Select(u => new CommandTermUserName(u.Login));
+            commandTerm.NextCommandTerms = UserRepository.GetUserCollection()
+                .Select(u => u.Login)
+                .ToList()
+                .Where(login => !WebSecurityTools.IsWindowsUser(login))
+                .Select(login => new CommandTermUserName(login));
         }
 
         #endregion
@@ -206,8 +209,8 @@ namespace WebSecurity.IntellISense.Triggers
 
             var memberName = commandTermMemberName.CommandTerm;
 //            var query = RoleRepository.GetRoleCollection();
-            var query = new RoleOfMemberRepository().GetQueryableCollection().Cast<RoleOfMember>().Where(rm => rm.MemberName == memberName);
-            commandTerm.NextCommandTerms = query.ToList().Select(r => new CommandTermRoleName(r.RoleName));
+            var query = new RoleOfMemberRepository().GetQueryableCollection().Cast<RoleOfMember>().Where(rm => rm.MemberName == memberName).Select(rm => rm.RoleName);
+            commandTerm.NextCommandTerms = query.ToList().Select(roleName => new CommandTermRoleName(roleName));
         }
 
         #endregion

@@ -25,7 +25,8 @@ namespace SecurityDataModel.Repositories
             if (string.IsNullOrEmpty(groupName))
                 throw new ArgumentException("groupName");
 
-            if (_repo.Any(g => String.Equals(g.GroupName, groupName, StringComparison.CurrentCultureIgnoreCase)))
+//            if (_repo.Any(g => String.Equals(g.GroupName, groupName, StringComparison.CurrentCultureIgnoreCase)))
+            if (_repo.Any(g => g.GroupName == groupName))
                 throw new GroupExistsException();
 
             _repo.InsertOrUpdate(new Group {GroupName = groupName, Description = description});

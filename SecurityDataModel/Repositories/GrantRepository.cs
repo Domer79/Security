@@ -67,6 +67,17 @@ namespace SecurityDataModel.Repositories
             _repo.SaveChanges();
         }
 
+        public void RemoveGrant(ISecObject secObject, IRole role, IAccessType accessType)
+        {
+            var grant = _repo.Find(secObject.IdSecObject, role.IdRole, accessType.IdAccessType);
+
+            if (grant == null)
+                throw new GrantNotFoundException(secObject.IdSecObject, role.IdRole, accessType.IdAccessType);
+
+            _repo.Delete(grant);
+            _repo.SaveChanges();
+        }
+
         private bool CheckSecObject(int idSecObject)
         {
             var results = _repo.SqlQuery<int>("select 1 from sec.SecObject where idSecObject = @p0", idSecObject);

@@ -33,7 +33,5 @@ namespace WebSecurity.Repositories
         {
             return new UserRepository().GetQueryableCollection();
         }
-
-        
     }
 }

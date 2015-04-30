@@ -141,6 +141,43 @@ namespace WebSecurity
             repo.DeleteSecObject(tableName);
         }
 
+        public void SetPassword(string login, string password)
+        {
+            if (Tools.IsWindowsUser(login))
+                return;
+
+            var repo = new UserRepository();
+            repo.SetPassword(login, password);
+        }
+
+        public void DeleteGrant(string roleName, string objectName, SecurityAccessType accessType)
+        {
+            var grantRepo = new GrantRepository();
+            var role = RoleRepository.GetRoleObject(roleName);
+            var secObject = SecObjectRepository.GetSecurityObject(objectName);
+            var accessTypes = AccessTypeRepository.GetAccessTypes(accessType);
+
+            if (secObject == null)
+                throw new ArgumentException("objectName");
+
+            if (role == null)
+                throw new ArgumentException("roleName");
+
+            if (accessTypes == null || accessTypes.Length == 0)
+                throw new InvalidOperationException(string.Format("Тип доступа {0} отсутствует в базе данных", accessType));
+
+            foreach (var access in accessTypes)
+            {
+                grantRepo.RemoveGrant(secObject, role, access);
+            }
+        }
+
+        public void DeleteUser(string userName)
+        {
+            var repo = new UserRepository();
+            repo.DeleteUser(userName);
+        }
+
         public bool Sign(string login, string password)
         {
             var repo = new UserRepository();
