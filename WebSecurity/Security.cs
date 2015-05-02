@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Security.Principal;
@@ -176,6 +177,11 @@ namespace WebSecurity
         {
             var repo = new UserRepository();
             repo.DeleteUser(userName);
+        }
+
+        public IEnumerable<IUser> GetUsers()
+        {
+            return UserRepository.GetUserCollection();
         }
 
         public bool Sign(string login, string password)
