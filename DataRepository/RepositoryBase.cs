@@ -144,17 +144,26 @@ namespace DataRepository
 
         public virtual Expression Expression
         {
-            get { return ((IQueryable<T>) Set).Expression; }
+            get
+            {
+                return ((IQueryable<T>) Set).Expression;
+            }
         }
 
         public Type ElementType
         {
-            get { return ((IQueryable<T>)Set).ElementType; }
+            get
+            {
+                return ((IQueryable<T>)Set).ElementType;
+            }
         }
 
         public IQueryProvider Provider
         {
-            get { return ((IQueryable) Set).Provider; }
+            get
+            {
+                return ((IQueryable) Set).Provider;
+            }
         }
 
         public static bool RepositoryForWeb
