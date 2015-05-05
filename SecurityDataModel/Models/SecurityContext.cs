@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using SystemTools;
 using SystemTools.Extensions;
+using DataRepository;
 using DataRepository.Infrastructure;
 using SecurityDataModel.Attributes;
 using SecurityDataModel.EntityConfigurations;
@@ -13,7 +14,7 @@ using SecurityDataModel.Exceptions;
 
 namespace SecurityDataModel.Models
 {
-    public abstract class SecurityContext : DbContext
+    public abstract class SecurityContext : RepositoryDataContext
     {
         protected SecurityContext()
             : base(ApplicationCustomizer.SecurityConnectionString)

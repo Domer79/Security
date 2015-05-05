@@ -83,7 +83,7 @@ namespace SecurityDataModel.Repositories
         {
         }
 
-        protected override DbContext GetContext()
+        protected override RepositoryDataContext GetContext()
         {
             return Tools.CreateContext();
         }

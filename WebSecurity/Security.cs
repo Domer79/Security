@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Security.Principal;
 using System.Web;
 using System.Web.Security;
@@ -9,7 +8,6 @@ using SystemTools.Exceptions;
 using SystemTools.Extensions;
 using SystemTools.Interfaces;
 using SystemTools.WebTools.Infrastructure;
-using SecurityDataModel.Models;
 using SecurityDataModel.Repositories;
 using WebSecurity.Data;
 using WebSecurity.Infrastructure;
@@ -29,12 +27,12 @@ namespace WebSecurity
         public const string AnonymousUser = "anonymous";
 //        private readonly UserRepository _repo;
         private static Security _instance;
+        private IPrincipal _principal;
 
         private Security()
         {
-            SecurityDataModel.Infrastructure.Tools.SetContext(WebMvcSecurityContext.Create);
+            SecurityDataModel.Service.SetContext(WebMvcSecurityContext.Create);
             WebSecurity.PublicRole.SetPublic();
-//            _repo = new UserRepository();
         }
 
         #region ISecurity members
@@ -70,6 +68,17 @@ namespace WebSecurity
             get { return WebSecurity.PublicRole.Instance; }
         }
 
+        public string UserName
+        {
+            get { return Principal.Identity.Name; }
+        }
+
+        public IPrincipal Principal
+        {
+            get { return _principal ?? (_principal = new UserProvider(null)); }
+            set { _principal = value; }
+        }
+
         public void AddUser(string userName, string password, string email, string displayName, string sid)
         {
             var repo = new UserRepository();
@@ -97,7 +106,8 @@ namespace WebSecurity
         public void AddTable(string tableName)
         {
             var repo = new TableObjectRepository();
-            repo.Add(new TableObject(){ObjectName = tableName});
+            if (repo.GetSecObject(tableName) == null)
+                repo.Add(new TableObject(){ObjectName = tableName});
         }
 
         public void SetRole(string roleName, string memberName)
@@ -269,7 +279,7 @@ namespace WebSecurity
 
         public static void RenewContext()
         {
-            SecurityDataModel.Infrastructure.Tools.RenewContext();
+            SecurityDataModel.Service.RenewContext();
         }
 
         #endregion
@@ -277,97 +287,6 @@ namespace WebSecurity
         public static ISecurity Instance
         {
             get { return _instance ?? (_instance = new Security()); }
-        }
-    }
-
-    public class UserProvider : IPrincipal
-    {
-        private readonly IUser _user;
-        private IIdentity _identity;
-
-        public UserProvider(IUser user)
-        {
-            _user = user;
-        }
-
-        /// <summary>
-        /// Определяет, относится ли текущий участник к указанной роли.
-        /// </summary>
-        /// <returns>
-        /// true, если текущий участник является элементом указанной роли; в противном случае — false.
-        /// </returns>
-        /// <param name="role">Имя роли, для которой требуется проверить членство.</param>
-        public bool IsInRole(string role)
-        {
-            var repo = new RoleOfMemberRepository();
-            var query = repo.GetQueryableCollection();
-
-            return query.Where(e => e.Name == Identity.Name && e.RoleName == role).Select(e => 1).Any();
-        }
-
-        /// <summary>
-        /// Возвращает удостоверение текущего участника.
-        /// </summary>
-        /// <returns>
-        /// Объект <see cref="T:System.Security.Principal.IIdentity"/>, связанный с текущим участником.
-        /// </returns>
-        public IIdentity Identity
-        {
-            get { return _identity ?? (_identity = new UserIdentity(_user)); }
-        }
-    }
-
-    public class UserIdentity : IIdentity
-    {
-        private readonly IUser _user;
-
-        public UserIdentity(IUser user)
-        {
-            _user = user;
-        }
-
-        /// <summary>
-        /// Получает имя текущего пользователя.
-        /// </summary>
-        /// <returns>
-        /// Имя пользователя, от лица которого выполняется код программы.
-        /// </returns>
-        public string Name
-        {
-            get { return IsAuthenticated ? _user.Login : Security.AnonymousUser; }
-        }
-
-        /// <summary>
-        /// Получает тип используемой проверки подлинности.
-        /// </summary>
-        /// <returns>
-        /// Тип проверки подлинности, применяемой для идентификации пользователя.
-        /// </returns>
-        public string AuthenticationType
-        {
-            get { return typeof(User).ToString(); }
-        }
-
-        /// <summary>
-        /// Получает значение, определяющее, прошел ли пользователь проверку подлинности.
-        /// </summary>
-        /// <returns>
-        /// true, если пользователь прошел проверку подлинности; в противном случае — false.
-        /// </returns>
-        public bool IsAuthenticated
-        {
-            get { return _user != null; }
-        }
-
-        /// <summary>
-        /// Возвращает строку, которая представляет текущий объект.
-        /// </summary>
-        /// <returns>
-        /// Строка, представляющая текущий объект.
-        /// </returns>
-        public override string ToString()
-        {
-            return Name;
         }
     }
 }

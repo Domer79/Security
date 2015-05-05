@@ -17,7 +17,7 @@ namespace DataRepository
     public abstract class RepositoryBase<T> : IRepository<T>
         where T : ModelBase
     {
-        private DbContext _context;
+        private RepositoryDataContext _context;
         private DbSet<T> _set;
         private readonly Dictionary<Type, object> _entityInfos = new Dictionary<Type, object>();
         private readonly object _lockObject = new object();
@@ -124,7 +124,7 @@ namespace DataRepository
             if (item == null)
                 throw new ArgumentNullException("item");
 
-            var pi = typeof(T).GetProperties().FirstOrDefault(p => Attribute.IsDefined(p, typeof(KeyAttribute))) ?? GetEntityInfo<T>().GetKeyInfo();
+            var pi = typeof(T).GetProperties().FirstOrDefault(p => Attribute.IsDefined(p, typeof(KeyAttribute))) ?? EntityInfo.GetKeyInfo();
 
             return pi.GetValue(item, null);
         }
@@ -171,18 +171,15 @@ namespace DataRepository
             get { return ApplicationCustomizer.ApplicationType == ApplicationType.Web; }
         }
 
-        public DbContext Context
+        public RepositoryDataContext Context
         {
             get
             {
-//                if (RepositoryForWeb)
-//                    return GetContext();
-
                 return _context ?? (_context = GetContext());
             }
         }
 
-        protected abstract DbContext GetContext();
+        protected abstract RepositoryDataContext GetContext();
 
         #endregion
 
@@ -191,62 +188,43 @@ namespace DataRepository
             return ((IObjectContextAdapter) Context).ObjectContext;
         }
 
+        public EntityInfo<T> EntityInfo
+        {
+            get { return GetEntityInfo(); }
+        }
+
         public string GetKeyName()
         {
-            return GetKeyName<T>();
+            return EntityInfo.KeyName;
         }
 
-        public string GetKeyName<TEntity>() where TEntity : ModelBase
+        public string GetTableName()
         {
-            if (_entityInfos.Keys.Contains(typeof(TEntity)))
-                return ((EntityInfo<TEntity>)_entityInfos[typeof(TEntity)]).KeyName;
-
-            var entityInfo = new EntityInfo<TEntity>(Context);
-            _entityInfos.Add(typeof(TEntity), entityInfo);
-
-            return entityInfo.KeyName;
+            return EntityInfo.TableName;
         }
 
-        public string GetTableName<TEntity>() where TEntity : ModelBase
+        public Expression<Func<T, TKey>> GetExpression<TKey>()
         {
-            var entityInfo = new EntityInfo<TEntity>(Context);
-            return entityInfo.TableName;
+            return GetExpression<TKey>(null);
         }
 
-        public Expression<Func<TEntity, TKey>> GetExpression<TEntity, TKey>() where TEntity : ModelBase
+        public Expression<Func<T, TKey>> GetExpression<TKey>(string columnName)
         {
-            return GetExpression<TEntity, TKey>(null);
+            return EntityInfo.GetMemberAccess<TKey>(columnName);
         }
 
-        public Expression<Func<TEntity, TKey>> GetExpression<TEntity, TKey>(string columnName) where TEntity : ModelBase
+        public Expression<Func<T, object>> GetExpression(string columnName)
         {
-            if (_entityInfos.Keys.Contains(typeof(TEntity)))
-                return ((EntityInfo<TEntity>)_entityInfos[typeof(TEntity)]).GetMemberAccess<TKey>(columnName);
-
-            var entityInfo = new EntityInfo<TEntity>(Context);
-            _entityInfos.Add(typeof(TEntity), entityInfo);
-
-            return entityInfo.GetMemberAccess<TKey>(columnName);
+            return EntityInfo.GetMemberAccess(columnName);
         }
 
-        public Expression<Func<TEntity, object>> GetExpression<TEntity>(string columnName) where TEntity : ModelBase
+        public EntityInfo<T> GetEntityInfo()
         {
-            if (_entityInfos.Keys.Contains(typeof(TEntity)))
-                return ((EntityInfo<TEntity>)_entityInfos[typeof(TEntity)]).GetMemberAccess(columnName);
+            if (_entityInfos.Keys.Contains(typeof(T)))
+                return ((EntityInfo<T>)_entityInfos[typeof(T)]);
 
-            var entityInfo = new EntityInfo<TEntity>(Context);
-            _entityInfos.Add(typeof(TEntity), entityInfo);
-
-            return entityInfo.GetMemberAccess(columnName);
-        }
-
-        public EntityInfo<TEntity> GetEntityInfo<TEntity>() where TEntity : ModelBase
-        {
-            if (_entityInfos.Keys.Contains(typeof(TEntity)))
-                return ((EntityInfo<TEntity>)_entityInfos[typeof(TEntity)]);
-
-            var entityInfo = new EntityInfo<TEntity>(Context);
-            _entityInfos.Add(typeof(TEntity), entityInfo);
+            var entityInfo = new EntityInfo<T>(Context);
+            _entityInfos.Add(typeof(T), entityInfo);
 
             return entityInfo;
         }

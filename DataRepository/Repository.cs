@@ -8,14 +8,14 @@ namespace DataRepository
     public class Repository<TEntity> : RepositoryBase<TEntity> 
         where TEntity : ModelBase
     {
-        private readonly DbContext _dbContext;
+        private readonly RepositoryDataContext _dbContext;
 
-        public Repository(DbContext dbContext)
+        public Repository(RepositoryDataContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        protected override DbContext GetContext()
+        protected override RepositoryDataContext GetContext()
         {
             return _dbContext;
         }

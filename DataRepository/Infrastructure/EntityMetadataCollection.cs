@@ -2,8 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SystemTools.Extensions;
 
 namespace DataRepository.Infrastructure
 {
@@ -21,9 +20,12 @@ namespace DataRepository.Infrastructure
         /// <summary>
         /// Инициализирует новый экземпляр класса <see cref="T:System.Object"/>.
         /// </summary>
-        internal EntityMetadataCollection(Type[] entityTypes)
+        internal EntityMetadataCollection(Type contextType)
         {
-            foreach (var entityType in entityTypes)
+            if (!contextType.Is<RepositoryDataContext>())
+                throw new ArgumentException("contextType");
+
+            foreach (var entityType in ContextInfo.GetContextEntities(contextType))
             {
                 Add(entityType);
             }
@@ -34,9 +36,14 @@ namespace DataRepository.Infrastructure
             _metadataCollection.Add(entityType, new EntityMetadata(entityType));
         }
 
-        public EntityMetadata this[Type entityType]
+        internal EntityMetadata this[Type entityType]
         {
             get { return _metadataCollection[entityType]; }
+        }
+
+        internal EntityMetadata this[string tableName]
+        {
+            get { return _metadataCollection.Values.FirstOrDefault(em => em.TableName == tableName); }
         }
 
         /// <summary>

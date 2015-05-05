@@ -1,23 +1,20 @@
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Text.RegularExpressions;
-using SystemTools.WebTools.Attributes;
 
 namespace DataRepository.Infrastructure
 {
     public class EntityInfo<TEntity> where TEntity : ModelBase
     {
-        private readonly DbContext _context;
+        private readonly RepositoryDataContext _context;
         private string _keyName;
-        private EntityMetadata _entityMetadata;
+        private readonly EntityMetadata _entityMetadata;
 
-        public EntityInfo(DbContext context)
+        public EntityInfo(RepositoryDataContext context)
         {
             if (context == null) 
                 throw new ArgumentNullException("context");

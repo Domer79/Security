@@ -8,7 +8,7 @@ namespace SecurityDataModel.Repositories
     public abstract class SecurityRepositoryBase<TEntity> : RepositoryBase<TEntity> 
         where TEntity : ModelBase
     {
-        protected sealed override DbContext GetContext()
+        protected sealed override RepositoryDataContext GetContext()
         {
             return Tools.Context;
         }

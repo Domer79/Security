@@ -40,6 +40,17 @@ namespace DataRepository.Infrastructure
             }
         }
 
+        internal string TableName { get; set; }
 
+        /// <summary>
+        /// Возвращает строку, которая представляет текущий объект.
+        /// </summary>
+        /// <returns>
+        /// Строка, представляющая текущий объект.
+        /// </returns>
+        public override string ToString()
+        {
+            return string.Format("Entity: {0}, Table: {1}", EntityAlias, TableName);
+        }
     }
 }

@@ -117,6 +117,7 @@
     <Compile Include="Repositories\UserGroupsDetailRepository.cs" />
     <Compile Include="Repositories\UserGroupsDetailRepositoryLocal.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
+    <Compile Include="Service.cs" />
     <Compile Include="Tests\SecurityDataModelTest1.cs" />
   </ItemGroup>
   <ItemGroup>

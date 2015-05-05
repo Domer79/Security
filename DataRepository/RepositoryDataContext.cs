@@ -5,8 +5,8 @@ using System.Data.Entity;
 using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Linq.Expressions;
+using SystemTools;
 using SystemTools.Extensions;
 using DataRepository.Infrastructure;
 
@@ -14,12 +14,13 @@ namespace DataRepository
 {
     public class RepositoryDataContext : DbContext
     {
+        private ContextInfo _contextInfo;
         /// <summary>
         /// Создает новый экземпляр контекста с использованием соглашений для создания имени базы данных,     с которой будет установлено соединение.Имя по соглашению представляет собой полное имя (пространство имен + имя класса) производного класса контекста.Как это используется при создании соединения, см. в примечаниях к классу.
         /// </summary>
         protected RepositoryDataContext()
         {
-            ContextInfo.ContextInfoCollection.Add(GetType());
+            Init();
         }
 
         /// <summary>
@@ -29,7 +30,7 @@ namespace DataRepository
         protected RepositoryDataContext(DbCompiledModel model) 
             : base(model)
         {
-            ContextInfo.ContextInfoCollection.Add(GetType());
+            Init();
         }
 
         /// <summary>
@@ -39,7 +40,7 @@ namespace DataRepository
         public RepositoryDataContext(string nameOrConnectionString) 
             : base(nameOrConnectionString)
         {
-            ContextInfo.ContextInfoCollection.Add(GetType());
+            Init();
         }
 
         /// <summary>
@@ -49,7 +50,7 @@ namespace DataRepository
         public RepositoryDataContext(string nameOrConnectionString, DbCompiledModel model) 
             : base(nameOrConnectionString, model)
         {
-            ContextInfo.ContextInfoCollection.Add(GetType());
+            Init();
         }
 
         /// <summary>
@@ -59,7 +60,7 @@ namespace DataRepository
         public RepositoryDataContext(DbConnection existingConnection, bool contextOwnsConnection) 
             : base(existingConnection, contextOwnsConnection)
         {
-            ContextInfo.ContextInfoCollection.Add(GetType());
+            Init();
         }
 
         /// <summary>
@@ -69,7 +70,7 @@ namespace DataRepository
         public RepositoryDataContext(DbConnection existingConnection, DbCompiledModel model, bool contextOwnsConnection) 
             : base(existingConnection, model, contextOwnsConnection)
         {
-            ContextInfo.ContextInfoCollection.Add(GetType());
+            Init();
         }
 
         /// <summary>
@@ -79,7 +80,21 @@ namespace DataRepository
         public RepositoryDataContext(ObjectContext objectContext, bool dbContextOwnsObjectContext) 
             : base(objectContext, dbContextOwnsObjectContext)
         {
-            ContextInfo.ContextInfoCollection.Add(GetType());
+            Init();
+        }
+
+        private void Init()
+        {
+            _contextInfo = ContextInfo.ContextInfoCollection[GetType()];
+            _contextInfo.DatabaseName = Tools.GetDatabaseNameFromConnectionString(Database.Connection.ConnectionString);
+
+            if (ApplicationCustomizer.EnableSecurity)
+            {
+                foreach(var entityType in ContextInfo.GetContextEntities(GetType()))
+                {
+                    _contextInfo.EntityMetadataCollection[entityType].TableName = GetTableName(entityType);
+                }
+            }
         }
 
         public string[] GetTableNames()
@@ -96,6 +111,59 @@ namespace DataRepository
             return Tools.GetTableNameFromSqlQuery(sqlQuery);
         }
 
+        #region EntityInfo members
 
+        public string GetKeyName<TEntity>() where TEntity : ModelBase
+        {
+            if (_entityInfos.Keys.Contains(typeof(TEntity)))
+                return ((EntityInfo<TEntity>)_entityInfos[typeof(TEntity)]).KeyName;
+
+            var entityInfo = new EntityInfo<TEntity>(this);
+            _entityInfos.Add(typeof(TEntity), entityInfo);
+
+            return entityInfo.KeyName;
+        }
+
+        public Expression<Func<TEntity, TKey>> GetExpression<TEntity, TKey>() where TEntity : ModelBase
+        {
+            return GetExpression<TEntity, TKey>(null);
+        }
+
+        public Expression<Func<TEntity, TKey>> GetExpression<TEntity, TKey>(string columnName) where TEntity : ModelBase
+        {
+            if (_entityInfos.Keys.Contains(typeof(TEntity)))
+                return ((EntityInfo<TEntity>)_entityInfos[typeof(TEntity)]).GetMemberAccess<TKey>(columnName);
+
+            var entityInfo = new EntityInfo<TEntity>(this);
+            _entityInfos.Add(typeof(TEntity), entityInfo);
+
+            return entityInfo.GetMemberAccess<TKey>(columnName);
+        }
+
+        public Expression<Func<TEntity, object>> GetExpression<TEntity>(string columnName) where TEntity : ModelBase
+        {
+            if (_entityInfos.Keys.Contains(typeof(TEntity)))
+                return ((EntityInfo<TEntity>)_entityInfos[typeof(TEntity)]).GetMemberAccess(columnName);
+
+            var entityInfo = new EntityInfo<TEntity>(this);
+            _entityInfos.Add(typeof(TEntity), entityInfo);
+
+            return entityInfo.GetMemberAccess(columnName);
+        }
+
+        public EntityInfo<TEntity> GetEntityInfo<TEntity>() where TEntity : ModelBase
+        {
+            if (_entityInfos.Keys.Contains(typeof(TEntity)))
+                return ((EntityInfo<TEntity>)_entityInfos[typeof(TEntity)]);
+
+            var entityInfo = new EntityInfo<TEntity>(this);
+            _entityInfos.Add(typeof(TEntity), entityInfo);
+
+            return entityInfo;
+        }
+
+        private readonly Dictionary<Type, object> _entityInfos = new Dictionary<Type, object>();        
+        
+        #endregion
     }
 }

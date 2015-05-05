@@ -22,14 +22,14 @@ namespace SecurityDataModel.Infrastructure
             }
         }
 
-        public static bool ContextDisposed { get; private set; }
+        internal static bool ContextDisposed { get; private set; }
 
         internal static SecurityContext CreateContext()
         {
             return _createContext();
         }
 
-        public static void SetContext(Func<SecurityContext> createContext)
+        internal static void SetContext(Func<SecurityContext> createContext)
         {
             if (createContext == null) 
                 throw new ArgumentNullException("createContext");
@@ -43,7 +43,7 @@ namespace SecurityDataModel.Infrastructure
             _createContext = createContext;
         }
 
-        public static void RenewContext()
+        internal static void RenewContext()
         {
             if (_createContext == null)
                 throw new NullReferenceException("Делегат CreateContext не проинициализирован");
