@@ -28,6 +28,12 @@ namespace DataRepository.Infrastructure
 
         public void ReaderExecuting(DbCommand command, DbCommandInterceptionContext<DbDataReader> interceptionContext)
         {
+            if (!ApplicationCustomizer.EnableSecurity)
+                return;
+
+            if (ApplicationCustomizer.Security == null)
+                return;
+
             var databaseName = Tools.GetDatabaseNameFromConnectionString(command.Connection.ConnectionString);
             var tableName = Tools.GetTableNameFromSqlQuery(command.CommandText);
 
@@ -37,10 +43,10 @@ namespace DataRepository.Infrastructure
             if (entityMetadata == null)
                 return;
 
-            if (ApplicationCustomizer.Security == null)
-                return;
+            if (ApplicationCustomizer.Security.Principal == null)
+                throw new EntityAccessDenied(entityMetadata);
 
-            if (!ApplicationCustomizer.Security.IsAccess(entityMetadata.EntityAlias, ApplicationCustomizer.Security.Identity.Name, SecurityAccessType.Select))
+            if (!ApplicationCustomizer.Security.IsAccess(entityMetadata.EntityAlias, ApplicationCustomizer.Security.Principal.Identity.Name, SecurityAccessType.Select))
                 throw new EntityAccessDenied(entityMetadata);
         }
 
