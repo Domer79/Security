@@ -45,6 +45,9 @@ namespace DataRepository.Infrastructure
             if (entityMetadata == null)
                 return;
 
+            if (entityMetadata.AuthorizeSkip)
+                return;
+
             if (ApplicationCustomizer.Security.Principal == null)
                 throw new EntityAccessDeniedException(entityMetadata);
 

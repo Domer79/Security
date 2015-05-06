@@ -35,9 +35,19 @@ namespace DataRepository.Infrastructure
         {
             get
             {
-                var aliasAttribute = (EntityAliasAttribute)Attribute.GetCustomAttribute(_entityType, typeof(EntityAliasAttribute));
+                var aliasAttribute = GetCustomAttribute<EntityAliasAttribute>();
                 return aliasAttribute ?? new EntityAliasAttribute(EntityName);
             }
+        }
+
+        public bool AuthorizeSkip
+        {
+            get { return Attribute.IsDefined(_entityType, typeof (AuthorizeSkipAttribute)); }
+        }
+
+        private TAttribute GetCustomAttribute<TAttribute>() where TAttribute : Attribute
+        {
+            return (TAttribute)Attribute.GetCustomAttribute(_entityType, typeof(TAttribute));
         }
 
         internal string TableName { get; set; }

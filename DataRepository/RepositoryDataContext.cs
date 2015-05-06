@@ -205,6 +205,10 @@ namespace DataRepository
             }
 
             var em = ContextInfo.ContextInfoCollection[GetType()].EntityMetadataCollection[entityEntry.Entity.GetType()];
+
+            if (em.AuthorizeSkip) 
+                return result;
+
             if (!ApplicationCustomizer.Security.IsAccess(em.EntityAlias, ApplicationCustomizer.Security.UserName, securityAccessType))
                 result.ValidationErrors.Add(new DbValidationError("", string.Format("Отсутствуют права доступа на операцию {0} для объекта {1}", securityAccessType, em)));
 
