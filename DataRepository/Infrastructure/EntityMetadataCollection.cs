@@ -36,12 +36,12 @@ namespace DataRepository.Infrastructure
             _metadataCollection.Add(entityType, new EntityMetadata(entityType));
         }
 
-        internal EntityMetadata this[Type entityType]
+        public EntityMetadata this[Type entityType]
         {
             get { return _metadataCollection[entityType]; }
         }
 
-        internal EntityMetadata this[string tableName]
+        public EntityMetadata this[string tableName]
         {
             get { return _metadataCollection.Values.FirstOrDefault(em => em.TableName == tableName); }
         }

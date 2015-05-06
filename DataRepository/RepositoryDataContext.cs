@@ -4,10 +4,13 @@ using System.Data.Common;
 using System.Data.Entity;
 using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Linq.Expressions;
 using SystemTools;
+using SystemTools.Exceptions;
 using SystemTools.Extensions;
+using SystemTools.WebTools.Infrastructure;
 using DataRepository.Infrastructure;
 
 namespace DataRepository
@@ -165,5 +168,65 @@ namespace DataRepository
         private readonly Dictionary<Type, object> _entityInfos = new Dictionary<Type, object>();        
         
         #endregion
+
+        /// <summary>
+        /// Расширение, позволяющее пользователю настраивать проверку сущности или отфильтровать результаты проверки.Вызывается методом <see cref="M:System.Data.Entity.DbContext.GetValidationErrors"/>.
+        /// </summary>
+        /// <returns>
+        /// Результат проверки сущности.Может содержать значение NULL при переопределении.
+        /// </returns>
+        /// <param name="entityEntry">Экземпляр DbEntityEntry, который должен быть проверен.
+        /// </param><param name="items">Определяемый пользователем словарь, который содержит дополнительные сведения для пользовательской проверки.Он будет передан в объект     <see cref="T:System.ComponentModel.DataAnnotations.ValidationContext"/>     и предоставлен в качестве     свойства <see cref="P:System.ComponentModel.DataAnnotations.ValidationContext.Items"/>.Это необязательный параметр, он может содержать значение NULL.</param>
+        protected override DbEntityValidationResult ValidateEntity(DbEntityEntry entityEntry, IDictionary<object, object> items)
+        {
+            var result = base.ValidateEntity(entityEntry, items);
+
+            if (!ApplicationCustomizer.EnableSecurity)
+                return result;
+
+            if (ApplicationCustomizer.Security == null)
+                throw new SecurityException2();
+
+            SecurityAccessType securityAccessType;
+
+            switch (entityEntry.State)
+            {
+                case EntityState.Added:
+                    securityAccessType = SecurityAccessType.Insert;
+                    break;
+                case EntityState.Modified:
+                    securityAccessType = SecurityAccessType.Update;
+                    break;
+                case EntityState.Deleted:
+                    securityAccessType = SecurityAccessType.Delete;
+                    break;
+                default:
+                    throw new SecurityException2(new InvalidOperationException("SecurityAccessType не инициализирован"));
+            }
+
+            var em = ContextInfo.ContextInfoCollection[GetType()].EntityMetadataCollection[entityEntry.Entity.GetType()];
+            if (!ApplicationCustomizer.Security.IsAccess(em.EntityAlias, ApplicationCustomizer.Security.UserName, securityAccessType))
+                result.ValidationErrors.Add(new DbValidationError("", string.Format("Отсутствуют права доступа на операцию {0} для объекта {1}", securityAccessType, em)));
+
+            return result;
+        }
+
+        /// <summary>
+        /// Расширение, позволяющее пользователю переопределить поведение по умолчанию, предполагающее проверку только добавленных и измененных сущностей.
+        /// </summary>
+        /// <returns>
+        /// Значение true, если проверку следует продолжить. В противном случае — значение false.
+        /// </returns>
+        /// <param name="entityEntry">Проверяемый экземпляр DbEntityEntry.</param>
+        protected override bool ShouldValidateEntity(DbEntityEntry entityEntry)
+        {
+            if (!ApplicationCustomizer.EnableSecurity)
+                return base.ShouldValidateEntity(entityEntry);
+
+            if (entityEntry.State == EntityState.Deleted)
+                return true;
+
+            return base.ShouldValidateEntity(entityEntry);
+        }
     }
 }

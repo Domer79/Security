@@ -8,6 +8,7 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Linq.Expressions;
 using SystemTools;
+using SystemTools.WebTools.Infrastructure;
 using DataRepository.Exceptions;
 using DataRepository.Infrastructure;
 using DataRepository.Interfaces;
@@ -96,10 +97,12 @@ namespace DataRepository
         {
             if (!item.TheKey.Equals(GetDefaultKeyValue()))
             {
+//                CheckAccess(SecurityAccessType.Update);
                 Context.Entry(item).State = EntityState.Modified;
             }
             else
             {
+//                CheckAccess(SecurityAccessType.Insert);
                 Set.Add(item);
             }
         }

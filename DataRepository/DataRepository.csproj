@@ -47,7 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Exceptions\EntityAccessDenied.cs" />
+    <Compile Include="Exceptions\EntityAccessDeniedException.cs" />
     <Compile Include="Exceptions\RepositoryValidationException.cs" />
     <Compile Include="Infrastructure\ContextInfoCollection.cs" />
     <Compile Include="Infrastructure\EntityMetadata.cs" />

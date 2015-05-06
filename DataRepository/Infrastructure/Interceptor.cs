@@ -2,7 +2,9 @@ using System.Data.Common;
 using System.Data.Entity.Infrastructure.Interception;
 using System.Diagnostics;
 using System.Linq;
+using System.Security;
 using SystemTools;
+using SystemTools.Exceptions;
 using SystemTools.Interfaces;
 using SystemTools.WebTools.Infrastructure;
 using DataRepository.Exceptions;
@@ -32,7 +34,7 @@ namespace DataRepository.Infrastructure
                 return;
 
             if (ApplicationCustomizer.Security == null)
-                return;
+                throw new SecurityException2();
 
             var databaseName = Tools.GetDatabaseNameFromConnectionString(command.Connection.ConnectionString);
             var tableName = Tools.GetTableNameFromSqlQuery(command.CommandText);
@@ -44,10 +46,10 @@ namespace DataRepository.Infrastructure
                 return;
 
             if (ApplicationCustomizer.Security.Principal == null)
-                throw new EntityAccessDenied(entityMetadata);
+                throw new EntityAccessDeniedException(entityMetadata);
 
             if (!ApplicationCustomizer.Security.IsAccess(entityMetadata.EntityAlias, ApplicationCustomizer.Security.Principal.Identity.Name, SecurityAccessType.Select))
-                throw new EntityAccessDenied(entityMetadata);
+                throw new EntityAccessDeniedException(entityMetadata);
         }
 
         public void ReaderExecuted(DbCommand command, DbCommandInterceptionContext<DbDataReader> interceptionContext)
