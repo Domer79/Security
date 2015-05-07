@@ -15,7 +15,7 @@ using DataRepository.Infrastructure;
 
 namespace DataRepository
 {
-    public class RepositoryDataContext : DbContext
+    public abstract class RepositoryDataContext : DbContext
     {
         private ContextInfo _contextInfo;
         /// <summary>
@@ -181,6 +181,9 @@ namespace DataRepository
         {
             var result = base.ValidateEntity(entityEntry, items);
 
+            if (!ShouldValidate())
+                return result;
+
             if (!ApplicationCustomizer.EnableSecurity)
                 return result;
 
@@ -204,7 +207,8 @@ namespace DataRepository
                     throw new SecurityException2(new InvalidOperationException("SecurityAccessType не инициализирован"));
             }
 
-            var em = ContextInfo.ContextInfoCollection[GetType()].EntityMetadataCollection[entityEntry.Entity.GetType()];
+            var entityType = ObjectContext.GetObjectType(entityEntry.Entity.GetType());
+            var em = _contextInfo.EntityMetadataCollection[entityType];
 
             if (em.AuthorizeSkip) 
                 return result;
@@ -231,6 +235,11 @@ namespace DataRepository
                 return true;
 
             return base.ShouldValidateEntity(entityEntry);
+        }
+
+        protected virtual bool ShouldValidate()
+        {
+            return true;
         }
     }
 }

@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Security.Cryptography;
 using SystemTools.Interfaces;
 using SecurityDataModel.Exceptions;
-using SecurityDataModel.Infrastructure;
 using SecurityDataModel.Models;
 
 namespace SecurityDataModel.Repositories
@@ -99,6 +96,20 @@ namespace SecurityDataModel.Repositories
         public bool IsAccess(string login, string objectName, string accessType)
         {
             return _repo.SqlQuery<bool>("select sec.IsAllowByName(@p0, @p1, @p2)", objectName, login, accessType).FirstOrDefault();
+        }
+
+        public void DeleteFromContext(ISecObject secObject, IRole role, IAccessType accessType)
+        {
+            if (secObject == null) 
+                throw new ArgumentNullException("secObject");
+
+            if (role == null) 
+                throw new ArgumentNullException("role");
+
+            if (accessType == null) 
+                throw new ArgumentNullException("accessType");
+
+            _repo.DeleteFromContext(_repo.Find(secObject.IdSecObject, role.IdRole, accessType.IdAccessType));
         }
 
         public IQueryable<IGrant> GetQueryableCollection()

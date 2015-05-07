@@ -31,7 +31,10 @@ namespace WebSecurity.IntellISense.Triggers
             if (commandTerm as CommandTermOn == null)
                 throw new InvalidOperationException("commandTerm as CommandTermOn == null");
 
-            commandTerm.NextCommandTerms = new ActionResultRepository().GetQueryableCollection().ToList().Select(so => new CommandTermSecObjectName(so.ObjectName));;
+            commandTerm.NextCommandTerms = new ActionResultRepository().GetQueryableCollection()
+                .ToList()
+                .Select(so => new CommandTermSecObjectName(so.ObjectName))
+                .Concat(new []{new CommandTermSecObjectName(Infrastructure.Tools.AllSecurityObjects)});
         }
 
         /// <summary>
@@ -44,7 +47,10 @@ namespace WebSecurity.IntellISense.Triggers
             if (commandTerm as CommandTermOn == null)
                 throw new InvalidOperationException("commandTerm as CommandTermOn == null");
 
-            commandTerm.NextCommandTerms = new TableObjectRepository().GetQueryableCollection().ToList().Select(so => new CommandTermSecObjectName(so.ObjectName)); ;
+            commandTerm.NextCommandTerms = new TableObjectRepository().GetQueryableCollection()
+                    .ToList()
+                    .Select(so => new CommandTermSecObjectName(so.ObjectName))
+                    .Concat(new[] {new CommandTermSecObjectName(Infrastructure.Tools.AllSecurityObjects)});
         }
 
         /// <summary>
@@ -272,7 +278,9 @@ namespace WebSecurity.IntellISense.Triggers
                 throw new InvalidOperationException("commandTerm as CommandTermCommonController == null");
 
             var query = new ActionResultRepository().GetQueryableCollection();
-            commandTerm.NextCommandTerms = query.ToList().Select(so => new CommandTermSecObjectName(so.ObjectName));
+            commandTerm.NextCommandTerms = query.ToList()
+                    .Select(so => new CommandTermSecObjectName(so.ObjectName))
+                    .Concat(new[] {new CommandTermSecObjectName(Infrastructure.Tools.AllSecurityObjects)});
         }
 
         public static void DeleteTableTrigger(CommandTermStack stack)
@@ -282,7 +290,9 @@ namespace WebSecurity.IntellISense.Triggers
                 throw new InvalidOperationException("commandTerm as CommandTermCommonTable == null");
 
             var query = new TableObjectRepository().GetQueryableCollection();
-            commandTerm.NextCommandTerms = query.ToList().Select(so => new CommandTermSecObjectName(so.ObjectName));
+            commandTerm.NextCommandTerms = query.ToList()
+                    .Select(so => new CommandTermSecObjectName(so.ObjectName))
+                    .Concat(new[] {new CommandTermSecObjectName(Infrastructure.Tools.AllSecurityObjects)});
         }
 
         #endregion

@@ -254,8 +254,9 @@ namespace WebSecurity
         /// <param name="roleName">Имя роли</param>
         /// <param name="objectName">имя объекта</param>
         /// <param name="accessType">Тип доступа</param>
+        /// <param name="skipError">Если True метод пропускает возникшие ошибки и продолжает работу</param>
         /// <exception cref="ArgumentException">Возникает в случае отсутствия значений какого-либо из входных параметров в базе данных</exception>
-        public void Grant(string roleName, string objectName, SecurityAccessType accessType)
+        public void Grant(string roleName, string objectName, SecurityAccessType accessType, bool skipError = false)
         {
             var grantRepo = new GrantRepository();
             var roleObject = RoleRepository.GetRoleObject(roleName);
@@ -273,7 +274,38 @@ namespace WebSecurity
 
             foreach (var access in accessTypes)
             {
-                grantRepo.AddGrant(secObject, roleObject, access);
+                try
+                {
+                    grantRepo.AddGrant(secObject, roleObject, access);
+                }
+                catch
+                {
+                    if (skipError)
+                    {
+                        grantRepo.DeleteFromContext(secObject, roleObject, access);
+                        continue;
+                    }
+
+                    throw;
+                }
+            }
+        }
+
+        public void GrantToObjectCollection(string roleName, IEnumerable<string> objectNames,
+            SecurityAccessType accessType)
+        {
+            if (objectNames == null) 
+                throw new ArgumentNullException("objectNames");
+
+            foreach (var objectName in objectNames)
+            {
+                try
+                {
+                    Grant(roleName, objectName, accessType, skipError: true);
+                }
+                catch
+                {
+                }
             }
         }
 

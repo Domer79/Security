@@ -11,8 +11,10 @@ using DataRepository.Infrastructure;
 
 namespace WebSecurity.Infrastructure
 {
-    public class Tools
+    internal class Tools
     {
+        private const string AllSecurityObjectsName = "allsecurityobjects";
+        private static string _allSecurityObjects = AllSecurityObjectsName;
         internal static bool IsWindowsUser(string login)
         {
             var rx = new Regex(@"^(?<login>[\w][-_\w.]*[\w])\\(?<domain>[\w][-_\w.]*[\w])$");
@@ -33,6 +35,21 @@ namespace WebSecurity.Infrastructure
         internal static IEnumerable<AliasAttributeBase> GetEntityAliases()
         {
             return ContextInfo.ContextInfoCollection.SelectMany(ci => ci.EntityMetadataCollection).Select(em => em.EntityAliasAttribute);
+        }
+
+        internal static string AllSecurityObjects
+        {
+            get
+            {
+                if (GetSecurityObjects().All(on => on.Alias != _allSecurityObjects))
+                    return _allSecurityObjects;
+
+                var indexValue = Regex.Match(AllSecurityObjectsName, @"\d*").Value;
+                var index = string.IsNullOrEmpty(indexValue) ? default(int) : int.Parse(indexValue);
+
+                _allSecurityObjects = string.Format("{0}_{1}", _allSecurityObjects, index);
+                return AllSecurityObjects;
+            }
         }
     }
 }

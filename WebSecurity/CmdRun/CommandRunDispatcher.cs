@@ -203,6 +203,17 @@ namespace WebSecurity.CmdRun
         {
             var accessType = GetSecurityAccessType(accessType1, accessType2, accessType3, accessType4);
 
+            if (objectName == Tools.AllSecurityObjects)
+            {
+                var collectionObjects = Tools.GetControllerActionAliases();
+
+                if (accessType != SecurityAccessType.Exec)
+                    collectionObjects = Tools.GetEntityAliases();
+
+                ((Security)Security.Instance).GrantToObjectCollection(roleName, collectionObjects.Select(o => o.Alias), accessType);
+                return;
+            }
+
             Security.Instance.Grant(roleName, objectName, accessType);
         }
 
@@ -232,11 +243,31 @@ namespace WebSecurity.CmdRun
 
         private void DeleteController(string controllerName)
         {
+            if (controllerName == Tools.AllSecurityObjects)
+            {
+                foreach (var actionAliase in Tools.GetControllerActionAliases().Select(alias => alias.Alias))
+                {
+                    Security.Instance.DeleteController(actionAliase);
+                }
+
+                return;
+            }
+            
             Security.Instance.DeleteController(controllerName);
         }
 
         private void DeleteTable(string tableName)
         {
+            if (tableName == Tools.AllSecurityObjects)
+            {
+                foreach (var actionAliase in Tools.GetEntityAliases().Select(alias => alias.Alias))
+                {
+                    Security.Instance.DeleteTable(actionAliase);
+                }
+
+                return;
+            }
+
             Security.Instance.DeleteTable(tableName);
         }
 

@@ -61,6 +61,11 @@ namespace SecurityDataModel.Models
             }
         }
 
+        protected override bool ShouldValidate()
+        {
+            return !ApplicationCustomizer.EnableSecurity;
+        }
+
         static void SetAttributes(PropertyDescriptor propertyDescriptor)
         {
             if (propertyDescriptor == null) 
