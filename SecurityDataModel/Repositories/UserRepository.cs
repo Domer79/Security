@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using SystemTools.Extensions;
 using SystemTools.Interfaces;
 using DataRepository;
@@ -66,12 +69,20 @@ namespace SecurityDataModel.Repositories
 
         public IUser GetUser(string login)
         {
+            while (_locked)
+            {
+                Debug.WriteLine("User locked");
+            }
             lock (_lockObject)
             {
+                _locked = true;
                 var user = _repo.FirstOrDefault(u => u.Login == login);
+                _locked = false;
                 return user;
             }
         }
+
+        public static bool _locked;
 
         public bool SignUser(string login, string password)
         {

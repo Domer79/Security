@@ -26,7 +26,8 @@ namespace WebSecurity.Repositories
 
         public IPrincipal GetUserPrincipal(string name)
         {
-            return new UserProvider(GetUser(name));
+            var user = GetUser(name);
+            return new UserProvider(user);
         }
 
         public static IQueryable<IUser> GetUserCollection()

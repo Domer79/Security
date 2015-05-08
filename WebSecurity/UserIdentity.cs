@@ -1,3 +1,4 @@
+using System;
 using System.Security.Principal;
 using SystemTools.Interfaces;
 using SecurityDataModel.Models;
@@ -21,7 +22,7 @@ namespace WebSecurity
         /// </returns>
         public string Name
         {
-            get { return IsAuthenticated ? _user.Login : Security.AnonymousUser; }
+            get { return User.Login; }
         }
 
         /// <summary>
@@ -43,7 +44,12 @@ namespace WebSecurity
         /// </returns>
         public bool IsAuthenticated
         {
-            get { return _user != null; }
+            get { return User != AnonymousUser.Instance; }
+        }
+
+        public IUser User
+        {
+            get { return _user ?? AnonymousUser.Instance; }
         }
 
         /// <summary>

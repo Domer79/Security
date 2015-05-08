@@ -76,6 +76,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnonymousUser.cs" />
     <Compile Include="CmdRun\CommandRunDispatcher.cs" />
     <Compile Include="Data\ActionResultObject.cs" />
     <Compile Include="Data\WebMvcSecurityContext.cs" />

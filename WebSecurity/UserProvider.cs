@@ -7,12 +7,11 @@ namespace WebSecurity
 {
     public class UserProvider : IPrincipal
     {
-        private readonly IUser _user;
-        private IIdentity _identity;
+        private readonly IIdentity _identity;
 
         public UserProvider(IUser user)
         {
-            _user = user;
+            _identity = new UserIdentity(user);
         }
 
         /// <summary>
@@ -38,7 +37,7 @@ namespace WebSecurity
         /// </returns>
         public IIdentity Identity
         {
-            get { return _identity ?? (_identity = new UserIdentity(_user)); }
+            get { return _identity; }
         }
     }
 }
