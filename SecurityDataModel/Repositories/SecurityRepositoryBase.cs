@@ -10,7 +10,8 @@ namespace SecurityDataModel.Repositories
     {
         protected sealed override RepositoryDataContext GetContext()
         {
-            return Tools.Context;
+//            return Tools.Context;
+            return Tools.CreateContext();
         }
     }
 }
