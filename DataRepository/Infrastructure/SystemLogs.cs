@@ -11,10 +11,11 @@ namespace DataRepository.Infrastructure
     {
         public static async void SaveLogTaskAsync(string log)
         {
-            await TaskToSaveLog(log);
+//            await TaskToSaveLog(log);
+            await Task.Run(() => SaveLog(log));
         }
 
-        [DebuggerStepThrough]
+//        [DebuggerStepThrough]
         public static void SaveLog(string log)
         {
             if (log == Environment.NewLine)

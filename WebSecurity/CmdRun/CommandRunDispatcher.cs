@@ -160,7 +160,7 @@ namespace WebSecurity.CmdRun
                 }
                 catch (Exception e)
                 {
-                    SecObjectRepository.DeleteFromContext(secObject);
+//                    SecObjectRepository.DeleteFromContext(secObject);
 
                     if (e.GetErrorMessage().IndexOf("UQ_SecObject_ObjectName", StringComparison.Ordinal) != -1)
                         existObjects.Add(alias.Alias);
