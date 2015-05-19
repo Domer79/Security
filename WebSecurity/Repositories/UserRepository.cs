@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Web;
 using SystemTools.Interfaces;
+using DataRepository;
 using SecurityDataModel.Events.EventArgs;
 using WebSecurity.Data;
 using WebSecurity.Infrastructure;
@@ -15,6 +16,11 @@ namespace WebSecurity.Repositories
         public UserRepository()
         {
             UserAdded += UserRepository_UserAdded;
+        }
+
+        public UserRepository(RepositoryDataContext context)
+        {
+            SetContext(context);
         }
 
         void UserRepository_UserAdded(object sender, UserAddedEventArgs args)

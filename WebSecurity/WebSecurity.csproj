@@ -114,6 +114,7 @@
     <Compile Include="IntellISense\Triggers\Delete\DeleteGroupTrigger.cs" />
     <Compile Include="IntellISense\Triggers\Delete\Member\DeleteMemberFromTrigger.cs" />
     <Compile Include="IntellISense\Triggers\Delete\Member\DeleteMemberMemberNameTrigger.cs" />
+    <Compile Include="IntellISense\Triggers\Delete\Member\DeleteMemberTrigger.cs" />
     <Compile Include="IntellISense\Triggers\Delete\User\DeleteUserFromTrigger.cs" />
     <Compile Include="IntellISense\Triggers\Delete\User\DeleteUserTrigger.cs" />
     <Compile Include="IntellISense\Triggers\Delete\User\DeleteUserUserName.cs" />

@@ -5,6 +5,7 @@ using IntellISenseSecurity;
 using IntellISenseSecurity.Base;
 using SecurityDataModel.Infrastructure;
 using SecurityDataModel.Models;
+using WebSecurity.Data;
 using WebSecurity.IntellISense.Common;
 using WebSecurity.IntellISense.Delete;
 using WebSecurity.Repositories;
@@ -146,7 +147,10 @@ namespace WebSecurity.IntellISense.Triggers
             if (commandTerm as CommandTermTo == null)
                 throw new InvalidOperationException("commandTerm as CommandTermTo == null");
 
-            var query = UserRepository.GetUserCollection().Select(u => u.Login).Union(GroupRepository.GetGroupCollection().Select(g => g.GroupName));
+            var context = new WebMvcSecurityContext();
+            var userRepo = new UserRepository(context);
+            var groupRepo = new GroupRepository(context);
+            var query = userRepo.GetQueryableCollection().Select(u => u.Login).Union(groupRepo.GetQueryableCollection().Select(g => g.GroupName));
             commandTerm.NextCommandTerms = query.ToList().Select(u => new CommandTermMemberName(u));
         }
 
@@ -192,6 +196,19 @@ namespace WebSecurity.IntellISense.Triggers
         #region delete triggers
 
         #region DELETE MEMBER triggers
+
+        public static void DeleteMemberTrigger(CommandTermStack stack)
+        {
+            var commandTerm = stack.LastCommandTerm;
+            if (commandTerm as CommandTermMember == null)
+                throw new InvalidOperationException("commandTerm as CommandTermMember == null");
+
+            var context = new WebMvcSecurityContext();
+            var userRepo = new UserRepository(context);
+            var groupRepo = new GroupRepository(context);
+            var query = userRepo.GetQueryableCollection().Select(u => u.Login).Union(groupRepo.GetQueryableCollection().Select(g => g.GroupName));
+            commandTerm.NextCommandTerms = query.ToList().Select(u => new CommandTermMemberName(u));
+        }
 
         public static void DeleteMemberMemberName(CommandTermStack stack)
         {

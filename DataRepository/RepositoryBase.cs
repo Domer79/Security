@@ -180,6 +180,13 @@ namespace DataRepository
             {
                 return _context ?? (_context = GetContext());
             }
+            protected set
+            {
+                if (value == null)
+                    throw new ArgumentNullException("value");
+
+                _context = value;
+            }
         }
 
         protected abstract RepositoryDataContext GetContext();

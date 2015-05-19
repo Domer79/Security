@@ -13,5 +13,10 @@ namespace SecurityDataModel.Repositories
 //            return Tools.Context;
             return Tools.CreateContext();
         }
+
+        protected void SetContext(RepositoryDataContext context)
+        {
+            Context = context;
+        }
     }
 }

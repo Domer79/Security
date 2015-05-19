@@ -24,6 +24,11 @@ namespace SecurityDataModel.Repositories
             _repo = new SecurityRepository<User>();
         }
 
+        public void SetContext(RepositoryDataContext context)
+        {
+            _repo.SetContext(context);
+        }
+
         public IQueryable<IUser> GetQueryableCollection()
         {
             return _repo;

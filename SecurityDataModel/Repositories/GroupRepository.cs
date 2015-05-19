@@ -20,6 +20,11 @@ namespace SecurityDataModel.Repositories
             _repo = new SecurityRepository<Group>();
         }
 
+        public void SetContext(RepositoryDataContext context)
+        {
+            _repo.SetContext(context);
+        }
+
         public void Add(string groupName, string description = null)
         {
             if (string.IsNullOrEmpty(groupName))
