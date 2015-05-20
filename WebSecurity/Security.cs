@@ -199,6 +199,11 @@ namespace WebSecurity
             return GroupRepository.GetGroupCollection();
         }
 
+        public IEnumerable<IRole> GetRoles()
+        {
+            return RoleRepository.GetRoleCollection();
+        }
+
         public bool Sign(string login, string password)
         {
             var repo = new UserRepository();
