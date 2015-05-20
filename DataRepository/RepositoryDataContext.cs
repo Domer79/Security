@@ -40,7 +40,7 @@ namespace DataRepository
         /// Создает новый экземпляр контекста с использованием соглашений для создания имени или строки подключения базы данных, с которой будет установлено соединение.Как это используется при создании соединения, см. в примечаниях к классу.
         /// </summary>
         /// <param name="nameOrConnectionString">Имя базы данных или строка подключения.</param>
-        public RepositoryDataContext(string nameOrConnectionString) 
+        protected RepositoryDataContext(string nameOrConnectionString) 
             : base(nameOrConnectionString)
         {
             Init();
@@ -50,7 +50,7 @@ namespace DataRepository
         /// Создает новый экземпляр контекста с использованием указанной строки в качестве имени или строки подключения с базой данных, с которой будет установлено соединение, и инициализирует его из заданной модели.Как это используется при создании соединения, см. в примечаниях к классу.
         /// </summary>
         /// <param name="nameOrConnectionString">Имя базы данных или строка подключения.</param><param name="model">Модель, которая будет поддерживать данный контекст.</param>
-        public RepositoryDataContext(string nameOrConnectionString, DbCompiledModel model) 
+        protected RepositoryDataContext(string nameOrConnectionString, DbCompiledModel model) 
             : base(nameOrConnectionString, model)
         {
             Init();
@@ -60,7 +60,7 @@ namespace DataRepository
         /// Создает новый экземпляр контекста с использованием существующего соединения с базой данных.Соединение не будет освобождено при освобождении контекста, если <paramref name="contextOwnsConnection"/> является false.
         /// </summary>
         /// <param name="existingConnection">Существующее соединение, которое будет использоваться новым контекстом.</param><param name="contextOwnsConnection">Если задано значение true, соединение освобождается при освобождении контекста. В противном случае за освобождение соединения отвечает вызывающая сторона.</param>
-        public RepositoryDataContext(DbConnection existingConnection, bool contextOwnsConnection) 
+        protected RepositoryDataContext(DbConnection existingConnection, bool contextOwnsConnection) 
             : base(existingConnection, contextOwnsConnection)
         {
             Init();
@@ -70,7 +70,7 @@ namespace DataRepository
         /// Создает новый экземпляр контекста с использованием существующего соединения с базой данных и инициализирует его из заданной модели.Соединение не будет освобождено при освобождении контекста, если <paramref name="contextOwnsConnection"/> является false.
         /// </summary>
         /// <param name="existingConnection">Существующее соединение, которое будет использоваться новым контекстом.</param><param name="model">Модель, которая будет поддерживать данный контекст.</param><param name="contextOwnsConnection">Если задано значение true, соединение освобождается при освобождении контекста. В противном случае за освобождение соединения отвечает вызывающая сторона.</param>
-        public RepositoryDataContext(DbConnection existingConnection, DbCompiledModel model, bool contextOwnsConnection) 
+        protected RepositoryDataContext(DbConnection existingConnection, DbCompiledModel model, bool contextOwnsConnection) 
             : base(existingConnection, model, contextOwnsConnection)
         {
             Init();
@@ -80,7 +80,7 @@ namespace DataRepository
         /// Создает новый экземпляр контекста на основе существующего объекта ObjectContext.
         /// </summary>
         /// <param name="objectContext">Существующий объект ObjectContext, который будет заключен в новый контекст.</param><param name="dbContextOwnsObjectContext">Если задано значение true, ObjectContext освобождается при освобождении DbContext. В противном случае за освобождение соединения отвечает вызывающая сторона.</param>
-        public RepositoryDataContext(ObjectContext objectContext, bool dbContextOwnsObjectContext) 
+        protected RepositoryDataContext(ObjectContext objectContext, bool dbContextOwnsObjectContext) 
             : base(objectContext, dbContextOwnsObjectContext)
         {
             Init();
