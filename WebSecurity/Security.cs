@@ -194,6 +194,11 @@ namespace WebSecurity
             return UserRepository.GetUserCollection();
         }
 
+        public IEnumerable<IGroup> GetGroups()
+        {
+            return GroupRepository.GetGroupCollection();
+        }
+
         public bool Sign(string login, string password)
         {
             var repo = new UserRepository();
