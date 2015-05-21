@@ -36,7 +36,8 @@ namespace IntellISenseSecurity
         {
             var rx = new Regex(CommandStringPattern);
 //            var commandStrings = rx.Matches(command).OfType<Match>().Select(m => m.Groups["term"].Value).Union(GetEndSpace(command)).ToArray();
-            var commandStrings = rx.Matches(command).OfType<Match>().Select(m => m.Value).Union(GetEndSpace(command)).ToArray();
+            var enumerable = rx.Matches(command).OfType<Match>().Select(m => m.Value);
+            var commandStrings = enumerable.Concat(GetEndSpace(command)).ToArray();
             return commandStrings.Length == 0 ? new []{""} : commandStrings;
         }
 

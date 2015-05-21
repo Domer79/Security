@@ -204,6 +204,24 @@ namespace WebSecurity
             return RoleRepository.GetRoleCollection();
         }
 
+        public IEnumerable<IUserGroupsDetail> GetUserGroups()
+        {
+            var repo = new UserGroupsDetailRepository();
+            return repo.GetQueryableCollection();
+        }
+
+        public IEnumerable<IRole> GetUserRoles(int id)
+        {
+            var repo = new RoleOfMemberRepository();
+            return repo.GetQueryableCollection().Where(rm => rm.IdMember == id);
+        }
+
+        public IEnumerable<IRoleOfMember> GetMembersByRole(int idRole)
+        {
+            var repo = new RoleOfMemberRepository();
+            return repo.GetQueryableCollection().Where(rm => rm.IdRole == idRole);
+        }
+
         public bool Sign(string login, string password)
         {
             var repo = new UserRepository();
