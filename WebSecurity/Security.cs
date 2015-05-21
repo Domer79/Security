@@ -222,6 +222,12 @@ namespace WebSecurity
             return repo.GetQueryableCollection().Where(rm => rm.IdRole == idRole);
         }
 
+        public IEnumerable<IGrant> GetGrants(int id)
+        {
+            var repo = new GrantRepository();
+            return repo.GetQueryableCollection().Where(g => g.IdRole == id);
+        }
+
         public bool Sign(string login, string password)
         {
             var repo = new UserRepository();

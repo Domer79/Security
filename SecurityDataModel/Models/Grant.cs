@@ -6,7 +6,7 @@ using DataRepository;
 namespace SecurityDataModel.Models
 {
     [Table("sec.Grants")]
-    public class Grant : ModelBase, IGrant, IRole, IAccessType, ISecObject
+    public class Grant : ModelBase, IGrant, IRole, IAccessType, ISecObject, IGrantDetail
     {
         [Key]
         [Column(Order = 0)]
@@ -15,6 +15,13 @@ namespace SecurityDataModel.Models
 
         [StringLength(200)]
         public string ObjectName { get; set; }
+
+        [NotMapped]
+        public string ObjectDescription
+        {
+            get { return Type1; }
+            set { Type1 = value; }
+        }
 
         string ISecObject.Description
         {

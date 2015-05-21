@@ -5,7 +5,7 @@ using SecurityDataModel.Models;
 
 namespace SecurityDataModel.Repositories
 {
-    public class GrantRepositoryLocal : SecurityRepository<Grant>
+    internal class GrantRepositoryLocal : SecurityRepository<Grant>
     {
         public override void InsertOrUpdate(Grant item)
         {
